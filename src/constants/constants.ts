@@ -9,6 +9,7 @@ export enum ApiRoutes {
   boardsSet = '/boardsSet',
   columns = '/columns',
   columnsSet = '/columnsSet',
+  tasks = '/tasks',
 }
 
 export const TOKEN = 'token';
