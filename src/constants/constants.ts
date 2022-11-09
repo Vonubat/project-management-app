@@ -7,3 +7,8 @@ export enum ApiRoutes {
 }
 
 export const TOKEN = 'token';
+
+export enum LangType {
+  ru = 'ru',
+  en = 'en',
+}
