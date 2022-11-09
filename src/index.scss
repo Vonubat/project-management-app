@@ -1,4 +1,4 @@
-@import-normalize;
+// @import-normalize;
 
 body {
   margin: 0;
@@ -10,4 +10,10 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
