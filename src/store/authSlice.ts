@@ -56,6 +56,10 @@ const authSlice = createSlice({
     clearAuthError: (state) => {
       state.error = null;
     },
+    logOut: (state) => {
+      state.isAuth = false;
+      localStorage.removeItem(TOKEN);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(signUp.fulfilled, (state, { payload }) => {
@@ -90,6 +94,6 @@ const authSlice = createSlice({
 
 export default authSlice.reducer;
 
-export const { removeCreated, clearAuthError } = authSlice.actions;
+export const { removeCreated, clearAuthError, logOut } = authSlice.actions;
 
 export const authSelector = (state: { authStore: AuthState }) => state.authStore;

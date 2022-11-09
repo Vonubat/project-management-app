@@ -1,7 +1,9 @@
 import { styled } from '@mui/material';
 import { Path } from 'constants/routing';
+import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { authSelector, logOut } from 'store/authSlice';
 
 const StyledHeader = styled('header')({
   display: 'flex',
@@ -10,12 +12,30 @@ const StyledHeader = styled('header')({
 });
 
 const Header = () => {
+  const { isAuth } = useAppSelector(authSelector);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const logOutUser = () => {
+    dispatch(logOut());
+    navigate(Path.home);
+  };
+
   return (
     <StyledHeader>
       <Link to={Path.home}>Home</Link>
       <p>Lang</p>
-      <Link to={Path.signIn}>Sing In</Link>
-      <Link to={Path.signUp}>Sign Up</Link>
+      {isAuth ? (
+        <>
+          <Link to={Path.boards}>Boards</Link>
+          <button onClick={logOutUser}>Log out </button>
+        </>
+      ) : (
+        <>
+          <Link to={Path.signIn}>Sing In</Link>
+          <Link to={Path.signUp}>Sign Up</Link>
+        </>
+      )}
     </StyledHeader>
   );
 };
