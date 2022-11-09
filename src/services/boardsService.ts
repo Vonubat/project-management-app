@@ -24,14 +24,15 @@ export default class BoardsService {
     return api.delete(`${ApiRoutes.boards}/${boardId}`);
   }
 
-  static getListOfBoards(boardIds: string[]): Promise<AxiosResponse<BoardData[]>> {
+  static getBoardsSet(boardIds: string[]): Promise<AxiosResponse<BoardData[]>> {
     return api.get(ApiRoutes.boardsSet, {
       params: {
         ids: boardIds.join(','),
       },
     });
   }
-  static getUserBoards(userId: string): Promise<AxiosResponse<BoardData[]>> {
+
+  static getUserBoardsSet(userId: string): Promise<AxiosResponse<BoardData[]>> {
     return api.get(`${ApiRoutes.boardsSet}/${userId}`);
   }
 }
