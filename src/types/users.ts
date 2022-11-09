@@ -1,5 +1,5 @@
 export type UserData = {
-  _id: 'string';
-  name: 'string';
-  login: 'string';
+  _id: string;
+  name: string;
+  login: string;
 };
