@@ -1,3 +1,16 @@
+export type AuthState = {
+  isLoading: boolean;
+  isAuth: boolean;
+  name: string | null;
+  login: string | null;
+  userId: string | null;
+  created: {
+    name: string;
+    login: string;
+  } | null;
+  error: string | null;
+};
+
 export type SignUpRequestData = {
   name: string;
   login: string;

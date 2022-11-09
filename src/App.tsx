@@ -6,15 +6,37 @@ import SignIn from 'pages/SignIn';
 import SignUp from 'pages/SignUp';
 import { Path } from 'constants/routing';
 import Boards from 'pages/Boards';
+import ProtectedRoute from 'components/ProtectedRoute';
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path={Path.signIn} element={<SignIn />} />
-        <Route path={Path.signUp} element={<SignUp />} />
-        <Route path={Path.boards} element={<Boards />} />
+        <Route
+          path={Path.signIn}
+          element={
+            <ProtectedRoute redirect={Path.boards} isAuthState={true}>
+              <SignIn />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={Path.signUp}
+          element={
+            <ProtectedRoute redirect={Path.boards} isAuthState={true}>
+              <SignUp />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={Path.boards}
+          element={
+            <ProtectedRoute redirect={Path.home} isAuthState={false}>
+              <Boards />
+            </ProtectedRoute>
+          }
+        />
       </Route>
     </Routes>
   );
