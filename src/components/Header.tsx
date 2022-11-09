@@ -3,7 +3,16 @@ import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import React from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { authSelector, logOut } from 'store/authSlice';
-import { Home, Key, Language, ExitToApp, Dashboard, PersonAdd } from '@mui/icons-material';
+import {
+  Home,
+  Key,
+  Language,
+  ExitToApp,
+  Dashboard,
+  PersonAdd,
+  ManageAccounts,
+  DashboardCustomize,
+} from '@mui/icons-material';
 import {
   AppBar,
   Box,
@@ -20,7 +29,7 @@ export default function Header() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [langMenuAnchor, setLangMenuAnchor] = React.useState<null | HTMLElement>(null);
-  const isLargeScreen = useMediaQuery('(min-width:420px)');
+  const isLargeScreen = useMediaQuery('(min-width:690px)');
   const trigger = useScrollTrigger();
 
   const logOutUser = () => {
@@ -38,27 +47,48 @@ export default function Header() {
 
   return (
     <AppBar color={trigger ? 'default' : 'primary'} position="sticky">
-      <Toolbar>
+      <Toolbar sx={{ justifyContent: 'space-between' }}>
         <Button
           color="inherit"
           startIcon={isLargeScreen ? <Home /> : null}
+          sx={{ minWidth: 'min-content' }}
           component={RouterLink}
           to={Path.home}
         >
-          Home
+          {isLargeScreen ? 'Home' : <Home />}
         </Button>
-        <Box sx={{ flexGrow: 1 }} />
-
+        {isAuth ? (
+          <Box sx={{ display: { md: 'flex', gap: '20px' } }}>
+            <Button
+              color="inherit"
+              startIcon={isLargeScreen ? <Dashboard /> : null}
+              sx={{ minWidth: 'min-content' }}
+              component={RouterLink}
+              to={Path.boards}
+            >
+              {isLargeScreen ? 'Boards' : <Dashboard />}
+            </Button>
+            <Button
+              color="inherit"
+              startIcon={isLargeScreen ? <DashboardCustomize /> : null}
+              sx={{ minWidth: 'min-content' }}
+              component={RouterLink}
+              to={Path.boards}
+            >
+              {isLargeScreen ? 'New board' : <DashboardCustomize />}
+            </Button>
+          </Box>
+        ) : null}
         <Box sx={{ display: { md: 'flex', gap: '20px' } }}>
           <Button
             color="inherit"
             startIcon={isLargeScreen ? <Language /> : null}
+            sx={{ minWidth: 'min-content' }}
             onClick={langMenuBtnClick}
           >
-            Lang
+            {isLargeScreen ? 'Lang' : <Language />}
           </Button>
           <Menu
-            id="simple-menu"
             anchorEl={langMenuAnchor}
             keepMounted
             open={Boolean(langMenuAnchor)}
@@ -71,18 +101,18 @@ export default function Header() {
             <>
               <Button
                 color="inherit"
-                startIcon={isLargeScreen ? <Dashboard /> : null}
-                component={RouterLink}
-                to={Path.boards}
+                startIcon={isLargeScreen ? <ManageAccounts /> : null}
+                sx={{ minWidth: 'min-content' }}
               >
-                Boards
+                {isLargeScreen ? 'Edit profile' : <ManageAccounts />}
               </Button>
               <Button
                 color="inherit"
                 startIcon={isLargeScreen ? <ExitToApp /> : null}
+                sx={{ minWidth: 'min-content' }}
                 onClick={logOutUser}
               >
-                Log out
+                {isLargeScreen ? 'Log out' : <ExitToApp />}
               </Button>
             </>
           ) : (
@@ -90,18 +120,20 @@ export default function Header() {
               <Button
                 color="inherit"
                 startIcon={isLargeScreen ? <Key /> : null}
+                sx={{ minWidth: 'min-content' }}
                 component={RouterLink}
                 to={Path.signIn}
               >
-                Sing In
+                {isLargeScreen ? 'Sing In' : <Key />}
               </Button>
               <Button
                 color="inherit"
                 startIcon={isLargeScreen ? <PersonAdd /> : null}
+                sx={{ minWidth: 'min-content' }}
                 component={RouterLink}
                 to={Path.signUp}
               >
-                Sign Up
+                {isLargeScreen ? 'Sign Up' : <PersonAdd />}
               </Button>
             </>
           )}
