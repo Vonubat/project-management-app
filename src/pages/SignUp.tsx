@@ -10,11 +10,12 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Page from 'components/Page';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { authSelector, clearAuthError, removeCreated, signUp } from 'store/authSlice';
+import { authSelector, clearAuthError, clearAuthPageData, signUp } from 'store/authSlice';
+import Loader from 'components/Loader';
 
 export default function SignUp() {
   const dispatch = useAppDispatch();
-  const { error, created } = useAppSelector(authSelector);
+  const { error, created, isLoading } = useAppSelector(authSelector);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -37,9 +38,17 @@ export default function SignUp() {
 
   useEffect(() => {
     return () => {
-      dispatch(removeCreated());
+      dispatch(clearAuthPageData());
     };
   }, [dispatch]);
+
+  if (isLoading) {
+    return (
+      <Page>
+        <Loader />
+      </Page>
+    );
+  }
 
   return (
     <Page>

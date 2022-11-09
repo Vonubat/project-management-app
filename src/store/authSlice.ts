@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { Action, AnyAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 import { TOKEN } from 'constants/constants';
 import { AuthService } from 'services/authService';
 import {
@@ -9,7 +10,22 @@ import {
 } from 'types/auth';
 import { parseJwt } from 'utils/parseJwt';
 
+interface RejectedAction extends Action {
+  error: Error | AxiosError;
+}
+
+type PendingAction = Action;
+
+function isRejectedAction(action: AnyAction): action is RejectedAction {
+  return action.type.endsWith('rejected');
+}
+
+function isPendingAction(action: AnyAction): action is PendingAction {
+  return action.type.endsWith('pending');
+}
+
 type AuthState = {
+  isLoading: boolean;
   isAuth: boolean;
   name: string | null;
   login: string | null;
@@ -21,6 +37,7 @@ type AuthState = {
 };
 
 const authInitialState: AuthState = {
+  isLoading: false,
   isAuth: false,
   name: null,
   login: null,
@@ -50,8 +67,10 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: authInitialState,
   reducers: {
-    removeCreated: (state) => {
+    clearAuthPageData: (state) => {
+      state.error = null;
       state.created = null;
+      state.isLoading = false;
     },
     clearAuthError: (state) => {
       state.error = null;
@@ -65,10 +84,7 @@ const authSlice = createSlice({
     builder.addCase(signUp.fulfilled, (state, { payload }) => {
       const { login, name } = payload;
       state.created = { login, name };
-    });
-
-    builder.addCase(signUp.rejected, (state, action) => {
-      state.error = action.error.message || 'Some error occoured';
+      state.isLoading = false;
     });
 
     builder.addCase(signIn.fulfilled, (state, { payload }) => {
@@ -77,6 +93,7 @@ const authSlice = createSlice({
       if (jwtBody) {
         state.login = jwtBody && jwtBody.login;
         state.isAuth = true;
+        state.isLoading = false;
 
         localStorage.setItem(TOKEN, payload.token);
 
@@ -86,7 +103,13 @@ const authSlice = createSlice({
       console.log('invalid jwt'); // TODO handle this case
     });
 
-    builder.addCase(signIn.rejected, (state, action) => {
+    builder.addMatcher(isPendingAction, (state) => {
+      state.error = null;
+      state.isLoading = true;
+    });
+
+    builder.addMatcher(isRejectedAction, (state, action) => {
+      state.isLoading = false;
       state.error = action.error.message || 'Some error occoured';
     });
   },
@@ -94,6 +117,6 @@ const authSlice = createSlice({
 
 export default authSlice.reducer;
 
-export const { removeCreated, clearAuthError, logOut } = authSlice.actions;
+export const { clearAuthPageData, clearAuthError, logOut } = authSlice.actions;
 
 export const authSelector = (state: { authStore: AuthState }) => state.authStore;
