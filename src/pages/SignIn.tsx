@@ -10,13 +10,14 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Page from 'components/Page';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { authSelector, clearAuthError, signIn } from 'store/authSlice';
+import { authSelector, clearAuthError, clearAuthPageData, signIn } from 'store/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { Path } from 'constants/routing';
+import Loader from 'components/Loader';
 
 const SignIn = () => {
   const dispatch = useAppDispatch();
-  const { isAuth, error } = useAppSelector(authSelector);
+  const { isAuth, error, isLoading } = useAppSelector(authSelector);
   const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -38,10 +39,24 @@ const SignIn = () => {
   };
 
   useEffect(() => {
+    return () => {
+      dispatch(clearAuthPageData());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     if (isAuth) {
       navigate(Path.boards);
     }
   }, [isAuth]);
+
+  if (isLoading) {
+    return (
+      <Page>
+        <Loader />
+      </Page>
+    );
+  }
 
   return (
     <Page>
