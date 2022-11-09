@@ -4,6 +4,7 @@ export const BASE_URL = 'https://pms-app.adaptable.app'; // back-end url
 export enum ApiRoutes {
   sighUp = 'auth/signup',
   signIn = 'auth/signin',
+  users = '/users',
 }
 
 export const TOKEN = 'token';
