@@ -5,6 +5,8 @@ export enum ApiRoutes {
   sighUp = 'auth/signup',
   signIn = 'auth/signin',
   users = '/users',
+  boards = '/boards',
+  boardsSet = '/boardsSet',
 }
 
 export const TOKEN = 'token';
