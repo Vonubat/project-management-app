@@ -3,11 +3,13 @@ import { AxiosError } from 'axios';
 import { TOKEN } from 'constants/constants';
 import { AuthService } from 'services/authService';
 import {
+  AuthState,
   SignInOkResponseData,
   SignInRequestData,
   SignUpOkResponseData,
   SignUpRequestData,
 } from 'types/auth';
+import { getAuthSliseInitialState } from 'utils/getAuthSliceInitialState';
 import { parseJwt } from 'utils/parseJwt';
 
 interface RejectedAction extends Action {
@@ -15,6 +17,10 @@ interface RejectedAction extends Action {
 }
 
 type PendingAction = Action;
+
+interface FulFilledActiion extends Action {
+  payload: SignUpOkResponseData | SignInOkResponseData;
+}
 
 function isRejectedAction(action: AnyAction): action is RejectedAction {
   return action.type.endsWith('rejected');
@@ -24,26 +30,9 @@ function isPendingAction(action: AnyAction): action is PendingAction {
   return action.type.endsWith('pending');
 }
 
-type AuthState = {
-  isLoading: boolean;
-  isAuth: boolean;
-  name: string | null;
-  login: string | null;
-  created: {
-    name: string;
-    login: string;
-  } | null;
-  error: string | null;
-};
-
-const authInitialState: AuthState = {
-  isLoading: false,
-  isAuth: false,
-  name: null,
-  login: null,
-  created: null,
-  error: null,
-};
+function isFullfiledAction(action: AnyAction): action is FulFilledActiion {
+  return action.type.endsWith('fulfilled');
+}
 
 export const signUp = createAsyncThunk<SignUpOkResponseData, SignUpRequestData>(
   'auth/signUp',
@@ -65,7 +54,7 @@ export const signIn = createAsyncThunk<SignInOkResponseData, SignInRequestData>(
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: authInitialState,
+  initialState: getAuthSliseInitialState(),
   reducers: {
     clearAuthPageData: (state) => {
       state.error = null;
@@ -84,23 +73,22 @@ const authSlice = createSlice({
     builder.addCase(signUp.fulfilled, (state, { payload }) => {
       const { login, name } = payload;
       state.created = { login, name };
-      state.isLoading = false;
     });
 
     builder.addCase(signIn.fulfilled, (state, { payload }) => {
       const jwtBody = parseJwt(payload.token);
 
       if (jwtBody) {
-        state.login = jwtBody && jwtBody.login;
+        state.login = jwtBody.login;
         state.isAuth = true;
-        state.isLoading = false;
+        state.userId = jwtBody.id;
 
         localStorage.setItem(TOKEN, payload.token);
 
         return;
       }
 
-      console.log('invalid jwt'); // TODO handle this case
+      state.error = 'invalid jwt';
     });
 
     builder.addMatcher(isPendingAction, (state) => {
@@ -111,6 +99,11 @@ const authSlice = createSlice({
     builder.addMatcher(isRejectedAction, (state, action) => {
       state.isLoading = false;
       state.error = action.error.message || 'Some error occoured';
+    });
+
+    builder.addMatcher(isFullfiledAction, (state) => {
+      state.error = null;
+      state.isLoading = false;
     });
   },
 });

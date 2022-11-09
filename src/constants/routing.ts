@@ -1,6 +1,6 @@
 export enum Path {
   home = '/',
-  signIn = 'singin',
+  signIn = 'signin',
   signUp = 'signup',
   boards = '/boards',
 }

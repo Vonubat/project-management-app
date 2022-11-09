@@ -4,3 +4,8 @@ export type JwtBody = {
   id: string;
   login: string;
 };
+
+export type LocalStorageUserData = {
+  id: string | null;
+  login: string | null;
+};
