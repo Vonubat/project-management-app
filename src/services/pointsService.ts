@@ -6,12 +6,12 @@ import api from './api';
 
 export default class PointsService {
   static getPointsByParams(
-    pointIds: string[],
-    userId: string
+    pointIds?: string[],
+    userId?: string
   ): Promise<AxiosResponse<PointsData[]>> {
     return api.get(ApiRoutes.points, {
       params: {
-        ids: pointIds.join(','),
+        ids: pointIds?.join(','),
         userId,
       },
     });

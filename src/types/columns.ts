@@ -1,8 +1,8 @@
-export type ColumnData = {
+import { BoardData } from './boards';
+
+export type ColumnData = ColumnParams & {
   _id: string;
-  title: string;
-  order: number;
-  boardId: string;
+  boardId: BoardData['_id'];
 };
 
 export type ColumnParams = {
@@ -18,5 +18,5 @@ export type ColumnsSetUpdateParams = {
 export type ColumnsSetCreateParams = {
   title: string;
   order: number;
-  boardId: string;
+  boardId: BoardData['_id'];
 };

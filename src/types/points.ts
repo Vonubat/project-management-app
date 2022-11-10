@@ -1,24 +1,17 @@
-export type PointsData = {
+import { BoardData } from './boards';
+import { TaskData } from './tasks';
+
+export type PointsData = PointsParams & {
   _id: string;
-  title: string;
-  taskId: string;
-  boardId: string;
-  done: boolean;
 };
+
+export type PointsSetParams = Pick<PointsData, '_id' | 'done'>;
+
+export type PointUpdateParams = Pick<PointsData, 'title' | 'done'>;
 
 export type PointsParams = {
   title: string;
-  taskId: string;
-  boardId: string;
-  done: boolean;
-};
-
-export type PointsSetParams = {
-  _id: string;
-  done: boolean;
-};
-
-export type PointUpdateParams = {
-  title: string;
+  taskId: TaskData['_id'];
+  boardId: BoardData['_id'];
   done: boolean;
 };

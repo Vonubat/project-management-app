@@ -33,11 +33,10 @@ export default class ColumnsService {
     return api.delete(`${ApiRoutes.boards}/${boardId}${ApiRoutes.columns}/${columnId}`);
   }
 
-  static getColumnsSet(columnIds: string[], userId: string): Promise<AxiosResponse<ColumnData[]>> {
+  static getColumnsSet(columnIds: string[]): Promise<AxiosResponse<ColumnData[]>> {
     return api.get(ApiRoutes.columnsSet, {
       params: {
-        ids: columnIds.join(','),
-        userId,
+        ids: columnIds?.join(','),
       },
     });
   }

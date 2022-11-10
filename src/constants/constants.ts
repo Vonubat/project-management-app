@@ -14,4 +14,6 @@ export enum ApiRoutes {
   points = '/points',
 }
 
+export const _ = undefined; // for skipping unnecessary fn params
+
 export const TOKEN = 'token';

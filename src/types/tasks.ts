@@ -1,18 +1,21 @@
-export type TaskData = {
+import { BoardData } from './boards';
+import { ColumnData } from './columns';
+import { UserData } from './users';
+
+export type TaskData = TaskParamsCreate & {
   _id: string;
-  title: string;
-  order: number;
-  boardId: string;
-  columnId: string;
-  description: string;
-  userId: string;
-  users: string[];
+  boardId: BoardData['_id'];
+  columnId: ColumnData['_id'];
 };
 
-export type TaskParams = {
+export type TaskParamsUpdate = TaskParamsCreate & {
+  columnId: string;
+};
+
+export type TaskParamsCreate = {
   title: string;
   order: number;
   description: string;
-  userId: string;
-  users: string[];
+  userId: UserData['_id'];
+  users: UserData['_id'][];
 };

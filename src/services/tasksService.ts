@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { ApiRoutes } from 'constants/constants';
-import { TaskData, TaskParams } from 'types/tasks';
+import { TaskData, TaskParamsCreate, TaskParamsUpdate } from 'types/tasks';
 import api from './api';
 
 export default class TasksService {
@@ -13,7 +13,7 @@ export default class TasksService {
   static createTask(
     boardId: string,
     columnId: string,
-    data: TaskParams
+    data: TaskParamsCreate
   ): Promise<AxiosResponse<TaskData>> {
     return api.post(
       `${ApiRoutes.boards}/${boardId}${ApiRoutes.columns}/${columnId}${ApiRoutes.tasks}`,
@@ -35,7 +35,7 @@ export default class TasksService {
     boardId: string,
     columnId: string,
     taskId: string,
-    data: TaskParams
+    data: TaskParamsUpdate
   ): Promise<AxiosResponse<TaskData>> {
     return api.put(
       `${ApiRoutes.boards}/${boardId}${ApiRoutes.columns}/${columnId}${ApiRoutes.tasks}/${taskId}`,
