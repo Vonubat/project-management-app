@@ -1,21 +1,22 @@
-import React, { useEffect } from 'react';
-import Avatar from '@mui/material/Avatar';
+import React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Page from 'components/Page';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { authSelector, clearAuthError, clearAuthPageData, signUp } from 'store/authSlice';
-import Loader from 'components/Loader';
+import { authSelector, clearAuthError, signUp } from 'store/authSlice';
+import AuthPage from 'components/AuthPage';
+import { Path } from 'constants/routing';
+import CreatedUserWindow from 'components/CreatedUserWindow';
 
 export default function SignUp() {
   const dispatch = useAppDispatch();
-  const { error, created, isLoading } = useAppSelector(authSelector);
+  const { created } = useAppSelector(authSelector);
+  const { t } = useTranslation();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -36,94 +37,50 @@ export default function SignUp() {
     }
   };
 
-  useEffect(() => {
-    return () => {
-      dispatch(clearAuthPageData());
-    };
-  }, [dispatch]);
-
-  if (isLoading) {
-    return (
-      <Page>
-        <Loader />
-      </Page>
-    );
-  }
-
   return (
-    <Page>
+    <AuthPage icon={<LockOutlinedIcon />} pageTitle={t('authPage.signUpTitle')}>
       {created ? (
-        <Box sx={{ diplay: 'flex' }}>
-          <p>User was created successfuly</p>
-          <p>name: {created.name}</p>
-          <p>login: {created.login}</p>
-        </Box>
+        <CreatedUserWindow userData={created} />
       ) : (
-        <Container maxWidth="xs">
-          <Box
-            sx={{
-              marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Sign up
-            </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="name"
-                    required
-                    fullWidth
-                    id="name"
-                    label="Name"
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="login"
-                    label="Login"
-                    name="login"
-                    autoComplete="login"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                  />
-                </Grid>
-              </Grid>
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                Sign Up
-              </Button>
-              <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    Already have an account? Sign in
-                  </Link>
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
-        </Container>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            autoComplete="off"
+            name="name"
+            required
+            fullWidth
+            label={t('authPage.name')}
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label={t('buttonText.signIn')}
+            name="login"
+            autoComplete="off"
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label={t('authPage.password')}
+            type="password"
+            autoComplete="off"
+          />
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            {t('buttonText.signUp')}
+          </Button>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link component={RouterLink} to={`/${Path.signIn}`} variant="body2">
+                {t('authPage.alreadyHaveAccount')}
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
       )}
-      {error && <h1>{error}</h1>}
-    </Page>
+    </AuthPage>
   );
 }

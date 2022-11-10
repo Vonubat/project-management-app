@@ -46,7 +46,6 @@ export default function Header() {
 
   const closeLangMenu = (langType: LangType) => {
     setLangMenuAnchor(null);
-    console.log(langType);
     i18n.changeLanguage(langType);
   };
 

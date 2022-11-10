@@ -20,6 +20,16 @@ const resources = {
       validationErrors: {
         userAlreadyExist: 'User allready exist',
       },
+      authPage: {
+        password: 'Password',
+        name: 'Name',
+        login: 'Login',
+        dontHaveAccount: "Don't have an account? Sign Up",
+        alreadyHaveAccount: 'Already have an account? Sign in',
+        signUpTitle: 'Sign Up',
+        createdSuccessfuly: 'User was created successfuly',
+        logInToAccount: 'Log in to account',
+      },
     },
   },
   ru: {
@@ -29,7 +39,7 @@ const resources = {
         en: 'Английский',
         lang: 'Язык',
         signIn: 'Логин',
-        signUp: 'Создать аккаунт',
+        signUp: 'Регистрация',
         logOut: 'Выход',
         boards: 'Доски',
         newBoard: 'Создать доску',
@@ -38,6 +48,16 @@ const resources = {
       },
       validationErrors: {
         userAlreadyExist: 'Пользователь уже существует',
+      },
+      authPage: {
+        password: 'Пароль',
+        name: 'Имя',
+        login: 'Логин',
+        dontHaveAccount: 'Нет аккаунта? Зарегистрируйтесь',
+        alreadyHaveAccount: 'Уже есть аккаунт? Войдите в него',
+        signUpTitle: 'Создать аккаунт',
+        createdSuccessfuly: 'Пользователь успешно зарегистрирован',
+        logInToAccount: 'Войти в аккаунт',
       },
     },
   },
