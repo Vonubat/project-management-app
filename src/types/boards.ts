@@ -1,12 +1,11 @@
-export type BoardData = {
+import { UserData } from './users';
+
+export type BoardData = BoardParams & {
   _id: string;
-  title: string;
-  owner: string;
-  users: string[];
 };
 
 export type BoardParams = {
   title: string;
   owner: string;
-  users: string[];
+  users: UserData['_id'][];
 };

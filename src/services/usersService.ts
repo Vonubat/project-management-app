@@ -18,6 +18,6 @@ export default class UsersService {
   }
 
   static deleteUser(userId: string): Promise<AxiosResponse<UserData>> {
-    return api.delete(`${ApiRoutes.users}}/${userId}`);
+    return api.delete(`${ApiRoutes.users}/${userId}`);
   }
 }
