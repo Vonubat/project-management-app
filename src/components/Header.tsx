@@ -1,6 +1,6 @@
 import { Path } from 'constants/routing';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import React from 'react';
+import React, { BaseSyntheticEvent } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { authSelector, logOut } from 'store/authSlice';
 import {
@@ -44,10 +44,12 @@ export default function Header() {
     setLangMenuAnchor(event.currentTarget);
   };
 
-  const closeLangMenu = (langType: LangType) => {
+  const closeLangMenu = (langType: LangType | BaseSyntheticEvent) => {
     setLangMenuAnchor(null);
     console.log(langType);
-    i18n.changeLanguage(langType);
+    if (typeof langType === 'string') {
+      i18n.changeLanguage(langType);
+    }
   };
 
   return (
