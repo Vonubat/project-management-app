@@ -23,6 +23,8 @@ import {
   useMediaQuery,
   useScrollTrigger,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { LangType } from 'constants/constants';
 
 export default function Header() {
   const { isAuth } = useAppSelector(authSelector);
@@ -31,6 +33,7 @@ export default function Header() {
   const [langMenuAnchor, setLangMenuAnchor] = React.useState<null | HTMLElement>(null);
   const isLargeScreen = useMediaQuery('(min-width:690px)');
   const trigger = useScrollTrigger();
+  const { t, i18n } = useTranslation('translation', { keyPrefix: 'buttonText' });
 
   const logOutUser = () => {
     dispatch(logOut());
@@ -41,8 +44,10 @@ export default function Header() {
     setLangMenuAnchor(event.currentTarget);
   };
 
-  const closeLangMenu = () => {
+  const closeLangMenu = (langType: LangType) => {
     setLangMenuAnchor(null);
+    console.log(langType);
+    i18n.changeLanguage(langType);
   };
 
   return (
@@ -55,7 +60,7 @@ export default function Header() {
           component={RouterLink}
           to={Path.home}
         >
-          {isLargeScreen ? 'Home' : <Home />}
+          {isLargeScreen ? t('home') : <Home />}
         </Button>
         {isAuth ? (
           <Box sx={{ display: { md: 'flex', gap: '20px' } }}>
@@ -66,7 +71,7 @@ export default function Header() {
               component={RouterLink}
               to={Path.boards}
             >
-              {isLargeScreen ? 'Boards' : <Dashboard />}
+              {isLargeScreen ? t('boards') : <Dashboard />}
             </Button>
             <Button
               color="inherit"
@@ -75,7 +80,7 @@ export default function Header() {
               component={RouterLink}
               to={Path.boards}
             >
-              {isLargeScreen ? 'New board' : <DashboardCustomize />}
+              {isLargeScreen ? t('newBoard') : <DashboardCustomize />}
             </Button>
           </Box>
         ) : null}
@@ -86,7 +91,7 @@ export default function Header() {
             sx={{ minWidth: 'min-content' }}
             onClick={langMenuBtnClick}
           >
-            {isLargeScreen ? 'Lang' : <Language />}
+            {isLargeScreen ? t('lang') : <Language />}
           </Button>
           <Menu
             anchorEl={langMenuAnchor}
@@ -94,8 +99,8 @@ export default function Header() {
             open={Boolean(langMenuAnchor)}
             onClose={closeLangMenu}
           >
-            <MenuItem onClick={closeLangMenu}>England</MenuItem>
-            <MenuItem onClick={closeLangMenu}>Russian</MenuItem>
+            <MenuItem onClick={() => closeLangMenu(LangType.en)}>{t('en')}</MenuItem>
+            <MenuItem onClick={() => closeLangMenu(LangType.ru)}>{t('ru')}</MenuItem>
           </Menu>
           {isAuth ? (
             <>
@@ -104,7 +109,7 @@ export default function Header() {
                 startIcon={isLargeScreen ? <ManageAccounts /> : null}
                 sx={{ minWidth: 'min-content' }}
               >
-                {isLargeScreen ? 'Edit profile' : <ManageAccounts />}
+                {isLargeScreen ? t('editProfile') : <ManageAccounts />}
               </Button>
               <Button
                 color="inherit"
@@ -112,7 +117,7 @@ export default function Header() {
                 sx={{ minWidth: 'min-content' }}
                 onClick={logOutUser}
               >
-                {isLargeScreen ? 'Log out' : <ExitToApp />}
+                {isLargeScreen ? t('logOut') : <ExitToApp />}
               </Button>
             </>
           ) : (
@@ -124,7 +129,7 @@ export default function Header() {
                 component={RouterLink}
                 to={Path.signIn}
               >
-                {isLargeScreen ? 'Sing In' : <Key />}
+                {isLargeScreen ? t('signIn') : <Key />}
               </Button>
               <Button
                 color="inherit"
@@ -133,7 +138,7 @@ export default function Header() {
                 component={RouterLink}
                 to={Path.signUp}
               >
-                {isLargeScreen ? 'Sign Up' : <PersonAdd />}
+                {isLargeScreen ? t('signUp') : <PersonAdd />}
               </Button>
             </>
           )}
