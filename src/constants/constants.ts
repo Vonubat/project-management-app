@@ -11,6 +11,7 @@ export enum ApiRoutes {
   columnsSet = '/columnsSet',
   tasks = '/tasks',
   file = '/file',
+  points = '/points',
 }
 
 export const TOKEN = 'token';
