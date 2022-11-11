@@ -2,37 +2,37 @@ import { AuthInputOptions } from 'types/auth';
 
 const VALIDATION_RULE_REQUIRED = {
   value: true,
-  message: 'this field is required',
+  message: 'required',
 };
 
 const VALIDATION_RULE_MAX_LENGTH_16 = {
   value: 16,
-  message: 'Max length 16 symbols',
+  message: 'maxLength16',
 };
 
 const VALIDATION_RULE_MIN_LENGTH_2 = {
   value: 2,
-  message: 'Min length 2 symbols',
+  message: 'minLength2',
 };
 
 const VALIDATION_RULE_MIN_LENGTH_3 = {
   value: 3,
-  message: 'Min length 3 symbols',
+  message: 'minLength3',
 };
 
 const VALIDATION_RULE_MIN_LENGTH_8 = {
   value: 8,
-  message: 'Min length 8 symbols',
+  message: 'minLength8',
 };
 
 const VALIDATION_RULE_PASSWORD_PATTERN = {
   value: /^[a-zA-Z0-9_.-]*$/,
-  message: 'Only following symbols allowed:  a-zA, A-Z, 0-9, _ . - ',
+  message: 'passwordPattern',
 };
 
 const VALIDATION_RULE_NAME_PATTERN = {
   value: /^[a-zA-zа-яА-Я]*$/,
-  message: 'Only following symbols allowed: a-z, A-Z, а-я, А-Я',
+  message: 'namePattern',
 };
 
 export const nameInput: AuthInputOptions = {

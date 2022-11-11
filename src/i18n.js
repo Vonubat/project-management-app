@@ -17,8 +17,17 @@ const resources = {
         editProfile: 'Edit profile',
         home: 'Home',
       },
-      validationErrors: {
+      responseErrors: {
         userAlreadyExist: 'User allready exist',
+      },
+      validationError: {
+        required: 'This field is required',
+        maxLength16: 'Input should be no more than 16 characters',
+        minLength2: 'Input should be no less than 2 characters',
+        minLength3: 'Input should be no less than 3 characters',
+        minLength8: 'Input should be no less than 8 characters',
+        passwordPattern: 'Allowed only latin alphabetical characters, digits and signs _, ., -',
+        namePattern: 'Allowed only alphabetical characters',
       },
       authPage: {
         password: 'Password',
@@ -46,8 +55,17 @@ const resources = {
         editProfile: 'Профиль',
         home: 'Домашняя',
       },
-      validationErrors: {
+      responseErrors: {
         userAlreadyExist: 'Пользователь уже существует',
+      },
+      validationError: {
+        required: 'Это поле обязательно для ввода',
+        maxLength16: 'Поле должно содержать не более 16 символов',
+        minLength2: 'Поле должно содержать не менее 2 символов',
+        minLength3: 'Поле должно содержать не менее 3 символов',
+        minLength8: 'Поле должно содержать не менее 8 символов',
+        passwordPattern: 'Допустимы только латинские буквы, цифры и символы _, ., -',
+        namePattern: 'Allowed only alphabetical characters',
       },
       authPage: {
         password: 'Пароль',

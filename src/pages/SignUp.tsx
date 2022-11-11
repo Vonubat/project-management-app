@@ -22,7 +22,7 @@ export default function SignUp() {
       password: '',
     },
     mode: 'onSubmit',
-    reValidateMode: 'onSubmit',
+    reValidateMode: 'onChange',
   });
   const { created } = useAppSelector(authSelector);
   const { t } = useTranslation();

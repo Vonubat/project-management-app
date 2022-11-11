@@ -15,6 +15,7 @@ const AuthFormInput: FC<Props> = ({
   control,
 }) => {
   const { t } = useTranslation();
+
   return (
     <Controller
       name={name}
@@ -26,13 +27,12 @@ const AuthFormInput: FC<Props> = ({
             fullWidth
             label={t(label)}
             autoComplete="off"
-            autoFocus
             type={type}
             {...field}
           />
           {error && (
             <Typography variant="caption" color={'red'}>
-              {error.message}
+              {t(`validationError.${error.message}`)}
             </Typography>
           )}
         </>

@@ -24,7 +24,7 @@ const SignIn = () => {
       password: '',
     },
     mode: 'onSubmit',
-    reValidateMode: 'onSubmit',
+    reValidateMode: 'onChange',
   });
 
   const onSubmit = (signInData: SignInFormFields) => {
@@ -37,6 +37,7 @@ const SignIn = () => {
     if (isAuth) {
       navigate(Path.boards);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuth]);
 
   return (
