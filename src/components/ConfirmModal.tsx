@@ -2,14 +2,14 @@ import React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-interface props {
+interface IConfirmModalProps {
   isOpen: boolean;
   title: string;
   agree: () => void;
   close: () => void;
 }
 
-export default function ConfirmModal(props: props) {
+export default function ConfirmModal(props: IConfirmModalProps) {
   const { t } = useTranslation('translation', { keyPrefix: 'confirmModal' });
   const { isOpen, title, agree, close } = props;
 
