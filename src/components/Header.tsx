@@ -44,10 +44,9 @@ export default function Header() {
     setLangMenuAnchor(event.currentTarget);
   };
 
-  const closeLangMenu = (langType: LangType) => {
+  const closeLangMenu = (langType?: LangType) => {
     setLangMenuAnchor(null);
-    console.log(langType);
-    i18n.changeLanguage(langType);
+    if (langType) i18n.changeLanguage(langType);
   };
 
   return (
@@ -97,7 +96,7 @@ export default function Header() {
             anchorEl={langMenuAnchor}
             keepMounted
             open={Boolean(langMenuAnchor)}
-            onClose={closeLangMenu}
+            onClose={() => closeLangMenu()}
           >
             <MenuItem onClick={() => closeLangMenu(LangType.en)}>{t('en')}</MenuItem>
             <MenuItem onClick={() => closeLangMenu(LangType.ru)}>{t('ru')}</MenuItem>
