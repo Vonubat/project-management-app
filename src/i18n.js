@@ -20,6 +20,13 @@ const resources = {
       validationErrors: {
         userAlreadyExist: 'User allready exist',
       },
+      boardList: {
+        edit: 'Edit',
+        open: 'Open',
+        remove: 'Remove',
+        add: 'Add board',
+        delBoard: 'Are you sure you want to delete the board?',
+      },
     },
   },
   ru: {
@@ -38,6 +45,13 @@ const resources = {
       },
       validationErrors: {
         userAlreadyExist: 'Пользователь уже существует',
+      },
+      boardList: {
+        edit: 'Изменить',
+        open: 'Открыть',
+        remove: 'Удалить',
+        add: 'Добавить доску',
+        delBoard: 'Вы действительно хотите удалить доску?',
       },
     },
   },
