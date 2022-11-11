@@ -50,9 +50,9 @@ const AuthPage: FC<Props> = ({ icon, children, pageTitle }) => {
                 {pageTitle}
               </Typography>
             </Box>
+            <AuthErrorContainer message={error} />
             {children}
           </Container>
-          <AuthErrorContainer message={error} />
         </>
       )}
     </Page>

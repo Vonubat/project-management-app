@@ -13,7 +13,8 @@ import { getAuthSliseInitialState } from 'utils/getAuthSliceInitialState';
 import { parseJwt } from 'utils/parseJwt';
 
 interface RejectedAction extends Action {
-  error: Error | AxiosError;
+  error: Error;
+  payload?: number;
 }
 
 type PendingAction = Action;
@@ -34,23 +35,45 @@ function isFullfiledAction(action: AnyAction): action is FulFilledActiion {
   return action.type.endsWith('fulfilled');
 }
 
-export const signUp = createAsyncThunk<SignUpOkResponseData, SignUpRequestData>(
-  'auth/signUp',
-  async (signUpData) => {
+export const signUp = createAsyncThunk<
+  SignUpOkResponseData,
+  SignUpRequestData,
+  { rejectValue: number }
+>('auth/signUp', async (signUpData, { rejectWithValue }) => {
+  try {
     const res = await AuthService.sighUp(signUpData);
 
     return res.data;
-  }
-);
+  } catch (err) {
+    const error = err as AxiosError;
 
-export const signIn = createAsyncThunk<SignInOkResponseData, SignInRequestData>(
-  'auth/signIn',
-  async (signInData) => {
+    if (!error.response) {
+      throw err;
+    }
+
+    return rejectWithValue(error.response.status);
+  }
+});
+
+export const signIn = createAsyncThunk<
+  SignInOkResponseData,
+  SignInRequestData,
+  { rejectValue: number }
+>('auth/signIn', async (signInData, { rejectWithValue }) => {
+  try {
     const res = await AuthService.sighIn(signInData);
 
     return res.data;
+  } catch (err) {
+    const error = err as AxiosError;
+
+    if (!error.response) {
+      throw err;
+    }
+
+    return rejectWithValue(error.response.status);
   }
-);
+});
 
 const authSlice = createSlice({
   name: 'auth',
@@ -60,9 +83,6 @@ const authSlice = createSlice({
       state.error = null;
       state.created = null;
       state.isLoading = false;
-    },
-    clearAuthError: (state) => {
-      state.error = null;
     },
     logOut: (state) => {
       state.isAuth = false;
@@ -98,7 +118,11 @@ const authSlice = createSlice({
 
     builder.addMatcher(isRejectedAction, (state, action) => {
       state.isLoading = false;
-      state.error = action.error.message || 'Some error occoured';
+      if (action.payload) {
+        state.error = `error${action.payload}`;
+      } else {
+        state.error = action.error.message;
+      }
     });
 
     builder.addMatcher(isFullfiledAction, (state) => {
@@ -110,6 +134,6 @@ const authSlice = createSlice({
 
 export default authSlice.reducer;
 
-export const { clearAuthPageData, clearAuthError, logOut } = authSlice.actions;
+export const { clearAuthPageData, logOut } = authSlice.actions;
 
 export const authSelector = (state: { authStore: AuthState }) => state.authStore;

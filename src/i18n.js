@@ -17,8 +17,10 @@ const resources = {
         editProfile: 'Edit profile',
         home: 'Home',
       },
-      responseErrors: {
-        userAlreadyExist: 'User allready exist',
+      responseError: {
+        error401: 'User does not exist or password is wrong',
+        error409: 'User with such login already exist',
+        error500: 'Server error',
       },
       validationError: {
         required: 'This field is required',
@@ -55,8 +57,10 @@ const resources = {
         editProfile: 'Профиль',
         home: 'Домашняя',
       },
-      responseErrors: {
-        userAlreadyExist: 'Пользователь уже существует',
+      responseError: {
+        error401: 'Пользователь не существует или не верный пароль',
+        error409: 'Пользователь с такм логином уже существует',
+        error500: 'Ошибка сервера',
       },
       validationError: {
         required: 'Это поле обязательно для ввода',

@@ -4,7 +4,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { authSelector, clearAuthError, signIn } from 'store/authSlice';
+import { authSelector, signIn } from 'store/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { Path } from 'constants/routing';
 import AuthPage from 'components/AuthPage';
@@ -18,7 +18,7 @@ const SignIn = () => {
   const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector(authSelector);
   const { t } = useTranslation();
-  const { control, handleSubmit, reset } = useForm<SignInFormFields>({
+  const { control, handleSubmit } = useForm<SignInFormFields>({
     defaultValues: {
       login: '',
       password: '',
@@ -28,9 +28,7 @@ const SignIn = () => {
   });
 
   const onSubmit = (signInData: SignInFormFields) => {
-    dispatch(clearAuthError());
     dispatch(signIn(signInData));
-    reset();
   };
 
   useEffect(() => {

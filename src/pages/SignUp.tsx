@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { authSelector, clearAuthError, signUp } from 'store/authSlice';
+import { authSelector, signUp } from 'store/authSlice';
 import AuthPage from 'components/AuthPage';
 import { Path } from 'constants/routing';
 import CreatedUserWindow from 'components/CreatedUserWindow';
@@ -15,7 +15,7 @@ import AuthSubmitButtonAndLink from 'components/AuthSubmitButtonAndLink';
 
 export default function SignUp() {
   const dispatch = useAppDispatch();
-  const { control, handleSubmit, reset } = useForm<SignUpFormFields>({
+  const { control, handleSubmit } = useForm<SignUpFormFields>({
     defaultValues: {
       name: '',
       login: '',
@@ -31,9 +31,7 @@ export default function SignUp() {
   const formControl = control as Control<AuthFormFields, any>;
 
   const onSubmit = (signUpData: SignUpFormFields) => {
-    dispatch(clearAuthError());
     dispatch(signUp(signUpData));
-    reset();
   };
 
   return (
