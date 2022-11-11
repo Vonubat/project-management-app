@@ -27,6 +27,10 @@ const resources = {
         add: 'Add board',
         delBoard: 'Are you sure you want to delete the board?',
       },
+      confirmModal: {
+        yes: 'Agree',
+        no: 'Disagree',
+      },
     },
   },
   ru: {
@@ -52,6 +56,10 @@ const resources = {
         remove: 'Удалить',
         add: 'Добавить доску',
         delBoard: 'Вы действительно хотите удалить доску?',
+      },
+      confirmModal: {
+        yes: 'Подтвердить',
+        no: 'Закрыть',
       },
     },
   },
