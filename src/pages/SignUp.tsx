@@ -27,8 +27,7 @@ export default function SignUp() {
   const { created } = useAppSelector(authSelector);
   const { t } = useTranslation();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const formControl = control as Control<AuthFormFields, any>;
+  const formControl = control as Control<AuthFormFields, unknown>;
 
   const onSubmit = (signUpData: SignUpFormFields) => {
     dispatch(signUp(signUpData));

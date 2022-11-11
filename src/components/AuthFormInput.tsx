@@ -6,8 +6,7 @@ import { AuthInputOptions, AuthFormFields } from 'types/auth';
 
 type Props = {
   inputOptions: AuthInputOptions;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<AuthFormFields, any>;
+  control: Control<AuthFormFields, unknown>;
 };
 
 const AuthFormInput: FC<Props> = ({
