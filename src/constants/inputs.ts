@@ -71,6 +71,6 @@ export const passwordInput: AuthInputOptions = {
   },
 };
 
-export const singInInputsList: AuthInputOptions[] = [loginInput, passwordInput];
+export const signInInputsList: AuthInputOptions[] = [loginInput, passwordInput];
 
-export const singUpInputsList: AuthInputOptions[] = [nameInput, loginInput, passwordInput];
+export const signUpInputsList: AuthInputOptions[] = [nameInput, loginInput, passwordInput];

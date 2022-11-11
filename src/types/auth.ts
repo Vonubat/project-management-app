@@ -34,18 +34,20 @@ export type SignInOkResponseData = {
   token: string;
 };
 
-export type SingInFormFields = {
+export type SignInFormFields = {
   login: string;
   password: string;
 };
 
-export type SingUpFormFields = {
-  login: string;
+export type SignUpFormFields = {
   name: string;
+  login: string;
   password: string;
 };
 
-export type AuthInputName = 'name' | 'login' | 'password';
+export type AuthFormFields = SignInFormFields | SignUpFormFields;
+
+export type AuthInputName = keyof SignUpFormFields;
 
 export type AuthInputOptions = {
   name: AuthInputName;
