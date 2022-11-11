@@ -1,5 +1,15 @@
 import React, { FC } from 'react';
-import { styled } from '@mui/material';
+import {
+  createTheme,
+  responsiveFontSizes,
+  styled,
+  SxProps,
+  Theme,
+  ThemeProvider,
+} from '@mui/material';
+
+let theme = createTheme();
+theme = responsiveFontSizes(theme);
 
 const StyledMain = styled('main')({
   flex: 1,
@@ -9,10 +19,15 @@ const StyledMain = styled('main')({
 
 type Props = {
   children?: React.ReactNode;
+  sx?: SxProps<Theme>;
 };
 
-const Page: FC<Props> = ({ children }) => {
-  return <StyledMain>{children}</StyledMain>;
+const Page: FC<Props> = ({ children, sx }) => {
+  return (
+    <ThemeProvider theme={theme}>
+      <StyledMain sx={sx}>{children}</StyledMain>
+    </ThemeProvider>
+  );
 };
 
 export default Page;
