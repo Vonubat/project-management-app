@@ -1,3 +1,5 @@
+import { RegisterOptions } from 'react-hook-form';
+
 export type AuthState = {
   isLoading: boolean;
   isAuth: boolean;
@@ -30,4 +32,24 @@ export type SignInRequestData = {
 
 export type SignInOkResponseData = {
   token: string;
+};
+
+export type SingInFormFields = {
+  login: string;
+  password: string;
+};
+
+export type SingUpFormFields = {
+  login: string;
+  name: string;
+  password: string;
+};
+
+export type AuthInputName = 'name' | 'login' | 'password';
+
+export type AuthInputOptions = {
+  name: AuthInputName;
+  label: string;
+  type: 'password' | 'text';
+  validationOptions: RegisterOptions;
 };

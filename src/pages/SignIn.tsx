@@ -7,34 +7,34 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useTranslation } from 'react-i18next';
+import { Controller, useForm } from 'react-hook-form';
+import { Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { authSelector, clearAuthError, signIn } from 'store/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { Path } from 'constants/routing';
 import AuthPage from 'components/AuthPage';
+import { SingInFormFields } from 'types/auth';
+import { loginInput, passwordInput } from 'constants/inputs';
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector(authSelector);
-  const navigate = useNavigate();
   const { t } = useTranslation();
+  const { control, handleSubmit, reset } = useForm<SingInFormFields>({
+    defaultValues: {
+      login: '',
+      password: '',
+    },
+    mode: 'onSubmit',
+    reValidateMode: 'onSubmit',
+  });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const data = new FormData(event.currentTarget);
-
-    const signInData = {
-      login: data.get('login') as string,
-      password: data.get('password') as string,
-    };
-
-    if ('login' in signInData && 'password' in signInData) {
-      dispatch(clearAuthError());
-      dispatch(signIn(signInData));
-
-      event.currentTarget.reset();
-    }
+  const onSubmit = (signInData: SingInFormFields) => {
+    dispatch(clearAuthError());
+    dispatch(signIn(signInData));
+    reset();
   };
 
   useEffect(() => {
@@ -45,25 +45,52 @@ const SignIn = () => {
 
   return (
     <AuthPage icon={<LockOutlinedIcon />} pageTitle={t('buttonText.signIn')}>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label={t('buttonText.signIn')}
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+        <Controller
           name="login"
-          autoComplete="off"
-          autoFocus
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <>
+              <TextField
+                margin="normal"
+                fullWidth
+                label={t('buttonText.signIn')}
+                autoComplete="off"
+                autoFocus
+                {...field}
+              />
+              {error && (
+                <Typography variant="caption" color={'red'}>
+                  {error.message}
+                </Typography>
+              )}
+            </>
+          )}
+          rules={loginInput.validationOptions}
         />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
+        <Controller
           name="password"
-          label={t('authPage.password')}
-          type="password"
-          autoComplete="off"
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <>
+              <TextField
+                type="password"
+                margin="normal"
+                fullWidth
+                label={t('authPage.password')}
+                autoComplete="off"
+                {...field}
+              />
+              {error && (
+                <Typography variant="caption" color={'red'}>
+                  {error.message}
+                </Typography>
+              )}
+            </>
+          )}
+          rules={passwordInput.validationOptions}
         />
+
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
           {t('buttonText.signIn')}
         </Button>
