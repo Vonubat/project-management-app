@@ -31,7 +31,7 @@ export default function Header() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [langMenuAnchor, setLangMenuAnchor] = React.useState<null | HTMLElement>(null);
-  const isLargeScreen = useMediaQuery('(min-width:690px)');
+  const isLargeScreen = useMediaQuery('(min-width:715px)');
   const trigger = useScrollTrigger();
   const { t, i18n } = useTranslation('translation', { keyPrefix: 'buttonText' });
 
