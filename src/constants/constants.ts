@@ -11,7 +11,10 @@ export enum ApiRoutes {
   columnsSet = '/columnsSet',
   tasks = '/tasks',
   file = '/file',
+  points = '/points',
 }
+
+export const _ = undefined; // for skipping unnecessary fn params
 
 export const TOKEN = 'token';
 
