@@ -26,6 +26,8 @@ const resources = {
         remove: 'Remove',
         add: 'Add board',
         delBoard: 'Are you sure you want to delete the board?',
+        title: 'Title',
+        description: 'Description',
       },
       confirmModal: {
         yes: 'Agree',
@@ -56,6 +58,8 @@ const resources = {
         remove: 'Удалить',
         add: 'Добавить доску',
         delBoard: 'Вы действительно хотите удалить доску?',
+        title: 'Заголовок',
+        description: 'Описание',
       },
       confirmModal: {
         yes: 'Подтвердить',
