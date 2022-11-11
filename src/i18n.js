@@ -17,7 +17,7 @@ const resources = {
         editProfile: 'Edit profile',
         home: 'Home',
       },
-   homePage: {
+      homePage: {
         startButton: 'Get started',
         sectionTitle_1: 'All great actions start with a project management system',
         sectionBody_1: 'Brings all your tasks, teammates, and tools together',

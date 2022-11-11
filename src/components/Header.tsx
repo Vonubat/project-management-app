@@ -44,7 +44,6 @@ export default function Header() {
     setLangMenuAnchor(event.currentTarget);
   };
 
-
   const closeLangMenu = (langType: LangType | BaseSyntheticEvent) => {
     setLangMenuAnchor(null);
     console.log(langType);
@@ -100,7 +99,7 @@ export default function Header() {
             anchorEl={langMenuAnchor}
             keepMounted
             open={Boolean(langMenuAnchor)}
-            onClose={() => closeLangMenu()}
+            onClose={closeLangMenu}
           >
             <MenuItem onClick={() => closeLangMenu(LangType.en)}>{t('en')}</MenuItem>
             <MenuItem onClick={() => closeLangMenu(LangType.ru)}>{t('ru')}</MenuItem>
