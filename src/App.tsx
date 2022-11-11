@@ -5,7 +5,7 @@ import Home from 'pages/Home';
 import SignIn from 'pages/SignIn';
 import SignUp from 'pages/SignUp';
 import { Path } from 'constants/routing';
-import Boards from 'pages/Boards';
+import BoardList from 'pages/BoardList';
 import ProtectedRoute from 'components/ProtectedRoute';
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
           path={Path.boards}
           element={
             <ProtectedRoute redirect={Path.home} isAuthState={false}>
-              <Boards />
+              <BoardList />
             </ProtectedRoute>
           }
         />
