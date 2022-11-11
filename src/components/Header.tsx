@@ -31,7 +31,7 @@ export default function Header() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [langMenuAnchor, setLangMenuAnchor] = React.useState<null | HTMLElement>(null);
-  const isLargeScreen = useMediaQuery('(min-width:690px)');
+  const isLargeScreen = useMediaQuery('(min-width:715px)');
   const trigger = useScrollTrigger();
   const { t, i18n } = useTranslation('translation', { keyPrefix: 'buttonText' });
 
@@ -43,6 +43,7 @@ export default function Header() {
   const langMenuBtnClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setLangMenuAnchor(event.currentTarget);
   };
+
 
   const closeLangMenu = (langType: LangType | BaseSyntheticEvent) => {
     setLangMenuAnchor(null);
@@ -99,7 +100,7 @@ export default function Header() {
             anchorEl={langMenuAnchor}
             keepMounted
             open={Boolean(langMenuAnchor)}
-            onClose={closeLangMenu}
+            onClose={() => closeLangMenu()}
           >
             <MenuItem onClick={() => closeLangMenu(LangType.en)}>{t('en')}</MenuItem>
             <MenuItem onClick={() => closeLangMenu(LangType.ru)}>{t('ru')}</MenuItem>
