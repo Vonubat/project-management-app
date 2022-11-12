@@ -53,3 +53,17 @@ input:-webkit-autofill:active {
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(25, 118, 210, 0.5);
 }
+
+/* Board description scrollbar */
+.board-description {
+  &::-webkit-scrollbar-track {
+    background: white;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgb(201, 204, 212);
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgb(161, 161, 173)
+  }
+}
