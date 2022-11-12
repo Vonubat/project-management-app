@@ -43,7 +43,7 @@ const AuthPage: FC<Props> = ({ icon, children, pageTitle }) => {
         <Loader />
       ) : (
         <>
-          <Container component="main" maxWidth="xs">
+          <Container component="div" maxWidth="xs">
             <Box sx={boxStyles}>
               <Avatar sx={avatarStyle}>{icon}</Avatar>
               <Typography component="h1" variant="h5">
