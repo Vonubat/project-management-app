@@ -40,7 +40,13 @@ export const deleteBoard = createAsyncThunk<BoardData, string>('board/delete', a
   return res.data;
 });
 
-const initState: { boards: BoardData[]; error: string | undefined; isLoading: boolean } = {
+interface IInitState {
+  boards: BoardData[];
+  error: string | undefined;
+  isLoading: boolean;
+}
+
+const initState: IInitState = {
   boards: [],
   error: undefined,
   isLoading: false,
@@ -82,5 +88,4 @@ const boardListSlice = createSlice({
 
 export default boardListSlice.reducer;
 
-export const boardListSelector = (state: { boardListStore: typeof initState }) =>
-  state.boardListStore;
+export const boardListSelector = (state: { boardListStore: IInitState }) => state.boardListStore;
