@@ -79,7 +79,7 @@ export default function AddBoardModal(props: IAddBoardModalProps) {
               sx={{ my: 0 }}
             />
             <DialogActions sx={{ p: 0, pt: 2 }}>
-              <Button onClick={close}>{confirm('no')}</Button>
+              <Button onClick={props.close}>{confirm('no')}</Button>
               <Button type="submit" onClick={props.agree}>
                 {confirm('yes')}
               </Button>
