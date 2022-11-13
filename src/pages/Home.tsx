@@ -14,11 +14,86 @@ import Logo2 from '../assets/logo_2.svg';
 import VonubatAvatar from '../assets/avatars/vonubat.jpg';
 import AlexanderSUSAvatar from '../assets/avatars/alexandersus.png';
 import AntonShcherbaAvatar from '../assets/avatars/anton-shcherba.png';
+import { MediaQuery } from 'constants/constants';
+
+type SimpleProps = {
+  children?: React.ReactNode;
+  breakPoint?: boolean;
+};
+
+const SectionWrapper: FC<SimpleProps> = ({ children, breakPoint }) => (
+  <Box
+    sx={{
+      display: 'flex',
+      flexDirection: breakPoint ? 'row' : 'column',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: '2rem',
+    }}
+  >
+    {children}
+  </Box>
+);
+
+const ColumnWrapper: FC<SimpleProps> = ({ children }) => (
+  <Box
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '2rem',
+      width: '100%',
+    }}
+  >
+    {children}
+  </Box>
+);
+
+const TextTitle: FC<SimpleProps> = ({ children }) => (
+  <Typography
+    variant="h3"
+    sx={{
+      fontWeight: 'bold',
+    }}
+  >
+    {children}
+  </Typography>
+);
+
+const TextBody: FC<SimpleProps> = ({ children }) => (
+  <Typography variant="h4">{children}</Typography>
+);
 
 type VideoTutorialProps = {
   children?: React.ReactNode;
   source: string;
 };
+
+const VideoTutorial: FC<VideoTutorialProps> = ({ source }) => (
+  <CardMedia
+    component="video"
+    sx={{ minWidth: 200, flexGrow: 1, borderRadius: '1rem' }}
+    image={source}
+    autoPlay
+    loop
+    muted
+    playsInline
+  />
+);
+
+const TeammateCardWrapper: FC<SimpleProps> = ({ children }) => (
+  <Box
+    sx={{
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      gap: '2rem',
+      width: '100%',
+    }}
+  >
+    {children}
+  </Box>
+);
 
 type TeammateCardProps = {
   children?: React.ReactNode;
@@ -28,46 +103,34 @@ type TeammateCardProps = {
   link: string;
 };
 
+const TeammateCard: FC<TeammateCardProps> = ({ avatar, name, role, link }) => (
+  <Link
+    href={link}
+    underline="none"
+    target="_blank"
+    rel="noopener noreferrer"
+    sx={{
+      textAlign: 'center',
+      p: 2,
+      border: '1px dashed grey',
+      width: 230,
+      '&:hover': {
+        border: '1px solid rgb(25, 118, 210)',
+      },
+    }}
+  >
+    <Avatar alt={name} src={avatar} sx={{ width: 200, height: 200, margin: 'auto' }} />
+    <Typography variant="h5">{name}</Typography>
+    <Typography variant="h6" color="text.secondary">
+      {role}
+    </Typography>
+  </Link>
+);
+
 const Home = () => {
   const { isAuth } = useAppSelector(authSelector);
   const { t } = useTranslation('translation', { keyPrefix: 'homePage' });
-  const isLargeScreen = useMediaQuery('(min-width:715px)');
-
-  const VideoTutorial: FC<VideoTutorialProps> = ({ source }) => (
-    <CardMedia
-      component="video"
-      sx={{ minWidth: 200, flexGrow: 1, borderRadius: '1rem' }}
-      image={source}
-      autoPlay
-      loop
-      muted
-      playsInline
-    />
-  );
-
-  const TeammateCard: FC<TeammateCardProps> = ({ avatar, name, role, link }) => (
-    <Link
-      href={link}
-      underline="none"
-      target="_blank"
-      rel="noopener noreferrer"
-      sx={{
-        textAlign: 'center',
-        p: 2,
-        border: '1px dashed grey',
-        width: 230,
-        '&:hover': {
-          border: '1px solid rgb(25, 118, 210)',
-        },
-      }}
-    >
-      <Avatar alt={name} src={avatar} sx={{ width: 200, height: 200, margin: 'auto' }} />
-      <Typography variant="h5">{name}</Typography>
-      <Typography variant="h6" color="text.secondary">
-        {role}
-      </Typography>
-    </Link>
-  );
+  const isLargeScreen: boolean = useMediaQuery(MediaQuery['min-width-715']);
 
   return (
     <Page
@@ -80,34 +143,10 @@ const Home = () => {
         gap: '10rem',
       }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: isLargeScreen ? 'row' : 'column',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '2rem',
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '2rem',
-            width: isLargeScreen ? '50%' : '100%',
-          }}
-        >
-          <Typography
-            variant="h3"
-            sx={{
-              fontWeight: 'bold',
-            }}
-          >
-            {t('sectionTitle_1')}
-          </Typography>
-
-          <Typography variant="h4">{t('sectionBody_1')}</Typography>
-
+      <SectionWrapper breakPoint={isLargeScreen}>
+        <ColumnWrapper breakPoint={isLargeScreen}>
+          <TextTitle>{t('sectionTitle_1')}</TextTitle>
+          <TextBody>{t('sectionBody_1')}</TextBody>
           <Button
             variant="contained"
             sx={{ width: 'fit-content' }}
@@ -116,144 +155,45 @@ const Home = () => {
           >
             {t('startButton')}
           </Button>
-        </Box>
-
+        </ColumnWrapper>
         <Box
           component="img"
           src={Logo1}
           sx={{ maxWidth: '450px', width: isLargeScreen ? '50%' : '100%' }}
-        ></Box>
-      </Box>
+        />
+      </SectionWrapper>
 
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: isLargeScreen ? 'row' : 'column',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '2rem',
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '2rem',
-            width: isLargeScreen ? '50%' : '100%',
-          }}
-        >
+      <SectionWrapper breakPoint={isLargeScreen}>
+        <ColumnWrapper breakPoint={isLargeScreen}>
           <Diversity1Icon sx={{ fontSize: 100 }} />
-
-          <Typography
-            variant="h3"
-            sx={{
-              fontWeight: 'bold',
-            }}
-          >
-            {t('sectionTitle_2')}
-          </Typography>
-
-          <Typography variant="h4">{t('sectionBody_2')}</Typography>
-        </Box>
-
+          <TextTitle>{t('sectionTitle_2')}</TextTitle>
+          <TextBody>{t('sectionBody_2')}</TextBody>
+        </ColumnWrapper>
         <VideoTutorial source="https://assets.codepen.io/6093409/river.mp4" />
-      </Box>
+      </SectionWrapper>
 
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: isLargeScreen ? 'row-reverse' : 'column',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '2rem',
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '2rem',
-            width: isLargeScreen ? '50%' : '100%',
-          }}
-        >
+      <SectionWrapper breakPoint={isLargeScreen}>
+        <ColumnWrapper breakPoint={isLargeScreen}>
           <PlaylistAddCheckIcon sx={{ fontSize: 100 }} />
-
-          <Typography
-            variant="h3"
-            sx={{
-              fontWeight: 'bold',
-            }}
-          >
-            {t('sectionTitle_3')}
-          </Typography>
-
-          <Typography variant="h4">{t('sectionBody_3')}</Typography>
-        </Box>
-
+          <TextTitle>{t('sectionTitle_3')}</TextTitle>
+          <TextBody>{t('sectionBody_3')}</TextBody>
+        </ColumnWrapper>
         <VideoTutorial source="https://assets.codepen.io/6093409/river.mp4" />
-      </Box>
+      </SectionWrapper>
 
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: isLargeScreen ? 'row' : 'column',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '2rem',
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '2rem',
-            width: isLargeScreen ? '50%' : '100%',
-          }}
-        >
+      <SectionWrapper breakPoint={isLargeScreen}>
+        <ColumnWrapper breakPoint={isLargeScreen}>
           <DashboardCustomizeIcon sx={{ fontSize: 100 }} />
-
-          <Typography
-            variant="h3"
-            sx={{
-              fontWeight: 'bold',
-            }}
-          >
-            {t('sectionTitle_4')}
-          </Typography>
-
-          <Typography variant="h4">{t('sectionBody_4')}</Typography>
-        </Box>
-
+          <TextTitle>{t('sectionTitle_4')}</TextTitle>
+          <TextBody>{t('sectionBody_4')}</TextBody>
+        </ColumnWrapper>
         <VideoTutorial source="https://assets.codepen.io/6093409/river.mp4" />
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '2rem',
-          width: '100%',
-        }}
-      >
+      </SectionWrapper>
+
+      <ColumnWrapper>
         <Box component="img" src={Logo2} sx={{ width: '100%' }}></Box>
-        <Typography
-          variant="h3"
-          sx={{
-            fontWeight: 'bold',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {t('team')}
-        </Typography>
-        <Box
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: '2rem',
-            width: '100%',
-          }}
-        >
+        <TextTitle>{t('team')}</TextTitle>
+        <TeammateCardWrapper>
           <TeammateCard
             avatar={VonubatAvatar}
             name={t('vonubat')}
@@ -272,8 +212,8 @@ const Home = () => {
             role={t('role')}
             link="https://github.com/Anton-Shcherba"
           />
-        </Box>
-      </Box>
+        </TeammateCardWrapper>
+      </ColumnWrapper>
     </Page>
   );
 };

@@ -45,8 +45,10 @@ export default function Header() {
             />
           </Box>
         ) : null}
+
         <Box sx={wrapperStyles}>
           <LanguageBox />
+
           {isAuth ? (
             <>
               <HeaderNavButton

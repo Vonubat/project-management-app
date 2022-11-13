@@ -1,3 +1,5 @@
+import { grey } from '@mui/material/colors';
+
 export const BASE_URL = 'https://pms-app.adaptable.app'; // back-end url
 
 // Write here your api endpoints
@@ -18,7 +20,20 @@ export const _ = undefined; // for skipping unnecessary fn params
 
 export const TOKEN = 'token';
 
+export const LANG_TYPE = 'langType';
+
 export enum LangType {
   ru = 'ru',
   en = 'en',
+}
+
+// Colors
+export const GRAY_700: '#616161' = grey[700];
+
+// MediaQuery storage
+
+export enum MediaQuery {
+  'min-width-750' = '(min-width:750px)',
+  'min-width-715' = '(min-width:715px)',
+  'min-width-500' = '(min-width:500px)',
 }

@@ -1,85 +1,79 @@
-import { Link, Tooltip, styled, useMediaQuery } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { Link, styled, useMediaQuery, Box, Button, Typography } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import RSLogoIcon from '../assets/icons/logo-rs.svg';
 import React, { FC } from 'react';
+import { GRAY_700, MediaQuery } from 'constants/constants';
 
-type GitHubIconStyledProps = {
-  children?: React.ReactNode;
-  title: string;
-};
-
-const Footer = () => {
-  const isLargeScreen = useMediaQuery('(min-width:550px)');
-
-  const StyledFooter = styled('footer')({
+const styledFooter = (breakPoint: boolean) =>
+  styled('footer')({
     padding: '1rem 2rem',
     display: 'flex',
+    flexDirection: breakPoint ? 'row' : 'column',
     justifyContent: 'space-between',
-    flexDirection: isLargeScreen ? 'row' : 'column',
     alignItems: 'center',
     gap: '1rem',
   });
 
-  const StyledWrapper = styled('div')({
+const styledWrapper = (breakPoint: boolean) =>
+  styled('div')({
     display: 'flex',
-    justifyContent: 'center',
-    gap: '1rem',
+    flexDirection: breakPoint ? 'row' : 'column',
+    alignItems: 'start',
   });
 
-  const GitHubIconStyled: FC<GitHubIconStyledProps> = ({ title }) => (
-    <Tooltip title={title} placement="top" followCursor>
-      <GitHubIcon
-        sx={{
-          fontSize: 50,
-          '&:hover': {
-            color: 'rgba(25, 118, 210, 0.5)',
-          },
-        }}
-      />
-    </Tooltip>
-  );
+const RSLogo: FC = () => (
+  <Link href="https://rs.school/" color={GRAY_700} target="_blank" rel="noopener noreferrer">
+    <Box
+      component="img"
+      sx={{
+        height: 50,
+        width: 120,
+        '&:hover': {
+          transform: 'scale(95%)',
+          transition: 'all 0.5s',
+        },
+      }}
+      alt="RSLogoIcon"
+      src={RSLogoIcon}
+    />
+  </Link>
+);
 
-  const color = grey[700];
+type GitHubUserProps = {
+  children?: React.ReactNode;
+  href: string;
+};
+
+const GitHubUser: FC<GitHubUserProps> = ({ href, children }) => (
+  <Button
+    variant="text"
+    startIcon={<GitHubIcon />}
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    sx={{ color: GRAY_700 }}
+  >
+    {children}
+  </Button>
+);
+
+const Footer: FC = () => {
+  const firstBreakPoint: boolean = useMediaQuery(MediaQuery['min-width-750']);
+  const secondBreakPoint: boolean = useMediaQuery(MediaQuery['min-width-500']);
+  const StyledFooter = styledFooter(firstBreakPoint);
+  const StyledWrapper = styledWrapper(secondBreakPoint);
+
   return (
     <StyledFooter>
-      <Link
-        href="https://rs.school/"
-        color={color}
-        underline="hover"
-        target="_blank"
-        rel="noopener noreferrer"
-        sx={{ whiteSpace: 'nowrap' }}
-      >
-        © 2022 The Rolling Scopes
-      </Link>
+      <RSLogo />
       <StyledWrapper>
-        <Link
-          href="https://github.com/Vonubat"
-          color={color}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <GitHubIconStyled title="Vonubat" />
-        </Link>
-
-        <Link
-          href="https://github.com/AlexanderSUS"
-          color={color}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <GitHubIconStyled title="AlexanderSus" />
-        </Link>
-
-        <Link
-          href="https://github.com/anton-shcherba"
-          color={color}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <GitHubIconStyled title="Anton-Shcherba" />
-        </Link>
+        <GitHubUser href={'https://github.com/Vonubat'}>Vonubat</GitHubUser>
+        <GitHubUser href={'https://github.com/AlexanderSUS'}>Vonubat</GitHubUser>
+        <GitHubUser href={'https://github.com/anton-shcherba'}>Anton-Shcherba</GitHubUser>
       </StyledWrapper>
+      <Typography variant="button" sx={{ color: GRAY_700 }}>
+        2022
+      </Typography>
     </StyledFooter>
   );
 };
