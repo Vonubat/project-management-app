@@ -32,5 +32,6 @@ export const GRAY_700: '#616161' = grey[700];
 
 export const MediaQuery = {
   750: '(min-width:750px)',
+  715: '(min-width:715px)',
   500: '(min-width:500px)',
 };
