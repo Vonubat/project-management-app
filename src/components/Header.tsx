@@ -1,6 +1,6 @@
 import { Path } from 'constants/routing';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import React, { BaseSyntheticEvent } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { authSelector, logOut } from 'store/authSlice';
 import {
@@ -26,6 +26,14 @@ import {
 import { useTranslation } from 'react-i18next';
 import { LangType } from 'constants/constants';
 
+const getLangType = (): LangType => {
+  const lang: string | null = localStorage.getItem('langType');
+  if (lang === LangType.en || lang === LangType.ru) {
+    return lang;
+  }
+  return LangType.en;
+};
+
 export default function Header() {
   const { isAuth } = useAppSelector(authSelector);
   const dispatch = useAppDispatch();
@@ -34,23 +42,25 @@ export default function Header() {
   const isLargeScreen = useMediaQuery('(min-width:715px)');
   const trigger = useScrollTrigger();
   const { t, i18n } = useTranslation('translation', { keyPrefix: 'buttonText' });
+  const [lang, setLang] = useState<LangType>(getLangType());
 
   const logOutUser = () => {
     dispatch(logOut());
     navigate(Path.home);
   };
 
-  const langMenuBtnClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const langMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setLangMenuAnchor(event.currentTarget);
   };
 
-  const closeLangMenu = (langType: LangType | BaseSyntheticEvent) => {
+  const langMenuClose = () => {
     setLangMenuAnchor(null);
-    console.log(langType);
-    if (typeof langType === 'string') {
-      i18n.changeLanguage(langType);
-    }
   };
+
+  useEffect(() => {
+    localStorage.setItem('langType', lang);
+    i18n.changeLanguage(lang);
+  }, [i18n, lang]);
 
   return (
     <AppBar color={trigger ? 'default' : 'primary'} position="sticky">
@@ -91,7 +101,7 @@ export default function Header() {
             color="inherit"
             startIcon={isLargeScreen ? <Language /> : null}
             sx={{ minWidth: 'min-content' }}
-            onClick={langMenuBtnClick}
+            onClick={langMenuOpen}
           >
             {isLargeScreen ? t('lang') : <Language />}
           </Button>
@@ -99,10 +109,25 @@ export default function Header() {
             anchorEl={langMenuAnchor}
             keepMounted
             open={Boolean(langMenuAnchor)}
-            onClose={closeLangMenu}
+            onClose={langMenuClose}
+            disableScrollLock={true}
           >
-            <MenuItem onClick={() => closeLangMenu(LangType.en)}>{t('en')}</MenuItem>
-            <MenuItem onClick={() => closeLangMenu(LangType.ru)}>{t('ru')}</MenuItem>
+            <MenuItem
+              onClick={() => {
+                setLang(LangType.en);
+                langMenuClose();
+              }}
+            >
+              {t('en')}
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                setLang(LangType.ru);
+                langMenuClose();
+              }}
+            >
+              {t('ru')}
+            </MenuItem>
           </Menu>
           {isAuth ? (
             <>
