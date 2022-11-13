@@ -3,4 +3,5 @@ export enum Path {
   signIn = 'signin',
   signUp = 'signup',
   boards = '/boards',
+  user = '/user',
 }

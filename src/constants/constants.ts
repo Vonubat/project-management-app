@@ -20,6 +20,8 @@ export const _ = undefined; // for skipping unnecessary fn params
 
 export const TOKEN = 'token';
 
+export const LANG_TYPE = 'langType';
+
 export enum LangType {
   ru = 'ru',
   en = 'en',
