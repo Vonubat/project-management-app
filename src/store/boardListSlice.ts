@@ -35,6 +35,14 @@ export const createBoard = createAsyncThunk<BoardData, BoardParams>(
   }
 );
 
+export const editBoard = createAsyncThunk<BoardData, Parameters<typeof BoardsService.updateBoard>>(
+  'board/edit',
+  async (params) => {
+    const res = await BoardsService.updateBoard(...params);
+    return res.data;
+  }
+);
+
 export const deleteBoard = createAsyncThunk<BoardData, string>('board/delete', async (boardId) => {
   const res = await BoardsService.deleteBoard(boardId);
   return res.data;
@@ -63,6 +71,10 @@ const boardListSlice = createSlice({
 
     builder.addCase(createBoard.fulfilled, (state, { payload }) => {
       state.boards.push(payload);
+    });
+
+    builder.addCase(editBoard.fulfilled, (state, { payload }) => {
+      state.boards = state.boards.map((board) => (board._id === payload._id ? payload : board));
     });
 
     builder.addCase(deleteBoard.fulfilled, (state, { payload }) => {
