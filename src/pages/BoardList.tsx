@@ -1,7 +1,8 @@
+import React, { useEffect, useState } from 'react';
 import Page from 'components/Page';
-import React, { useEffect } from 'react';
 import { Button, Box, Typography, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import styled from '@emotion/styled';
 import BoardPreview from 'components/BoardPreview';
 import AddBoardModal from 'components/AddBoardModal';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
@@ -9,29 +10,27 @@ import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
 import { authSelector } from 'store/authSlice';
 import Loader from 'components/Loader';
 
+const StyledBox = styled(Box)({
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  gap: 4,
+});
+
 export default function Boards() {
   const isLargeScreen = useMediaQuery('(min-width:380px)');
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const { userId } = useAppSelector(authSelector);
   const { boards, isLoading, error } = useAppSelector(boardListSelector);
   const dispatch = useAppDispatch();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const style = {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 4,
-    mx: isLargeScreen ? 4 : 1,
-  };
-
-  const [isOpenDelModal, setOpenDelModal] = React.useState(false);
-
-  function agreeDelModal() {
-    setOpenDelModal(false);
+  function closeModal() {
+    setIsOpen(false);
   }
 
-  function closeDelModal() {
-    setOpenDelModal(false);
+  function openModal() {
+    setIsOpen(true);
   }
 
   useEffect(() => {
@@ -40,25 +39,21 @@ export default function Boards() {
 
   return (
     <Page>
-      <Box sx={style}>
+      <StyledBox sx={{ mx: isLargeScreen ? 4 : 1 }}>
         {error ? (
           <h1>{error}</h1>
         ) : (
           <>
-            {boards.map((board) => (
-              <BoardPreview key={board._id} id={board._id} title={board.title} />
+            {boards.map(({ _id, title }) => (
+              <BoardPreview key={_id} id={_id} boardTitle={title} />
             ))}
-            <Button
-              sx={{ width: 310, height: 310 }}
-              variant="outlined"
-              onClick={() => setOpenDelModal(true)}
-            >
+            <Button sx={{ width: 310, height: 310 }} variant="outlined" onClick={openModal}>
               <Typography variant="h4">{t('add')}</Typography>
             </Button>
-            <AddBoardModal isOpen={isOpenDelModal} agree={agreeDelModal} close={closeDelModal} />
+            <AddBoardModal isOpen={isOpen} onSubmit={closeModal} onClose={closeModal} />
           </>
         )}
-      </Box>
+      </StyledBox>
       {isLoading && <Loader />}
     </Page>
   );
