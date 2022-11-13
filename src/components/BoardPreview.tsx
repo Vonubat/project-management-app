@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC, useState } from 'react';
 import { Button, Box, Typography, Paper, ButtonGroup, Tooltip } from '@mui/material';
 import { Edit, OpenWith, Delete } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
@@ -6,19 +6,28 @@ import ConfirmModal from './ConfirmModal';
 import { useAppDispatch } from 'hooks/hooks';
 import { deleteBoard } from 'store/boardListSlice';
 
-export default function BoardPreview(props: { title: string; id: string }) {
-  const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
-  const [isOpenDelModal, setOpenDelModal] = React.useState(false);
-  const dispatch = useAppDispatch();
-  const { title, description } = JSON.parse(props.title) as { title: string; description: string };
+type Props = {
+  boardTitle: string;
+  id: string;
+};
 
-  function agreeDelModal() {
-    dispatch(deleteBoard(props.id));
-    setOpenDelModal(false);
+const BoardPreview: FC<Props> = ({ boardTitle, id }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const { title, description } = JSON.parse(boardTitle) as { title: string; description: string };
+
+  function submit() {
+    dispatch(deleteBoard(id));
+    closeModal();
   }
 
-  function closeDelModal() {
-    setOpenDelModal(false);
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
   }
 
   return (
@@ -51,19 +60,16 @@ export default function BoardPreview(props: { title: string; id: string }) {
               </Button>
             </Tooltip>
             <Tooltip title={t('remove')} placement="top">
-              <Button onClick={() => setOpenDelModal(true)}>
+              <Button onClick={openModal}>
                 <Delete />
               </Button>
             </Tooltip>
           </ButtonGroup>
         </Box>
       </Box>
-      <ConfirmModal
-        title={t('delBoard')}
-        isOpen={isOpenDelModal}
-        agree={agreeDelModal}
-        close={closeDelModal}
-      />
+      <ConfirmModal title={t('delBoard')} isOpen={isOpen} onSubmit={submit} onClose={closeModal} />
     </Button>
   );
-}
+};
+
+export default BoardPreview;

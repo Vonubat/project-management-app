@@ -1,29 +1,30 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 interface IConfirmModalProps {
   isOpen: boolean;
   title: string;
-  agree: () => void;
-  close: () => void;
+  onClose: VoidFunction;
+  onSubmit: VoidFunction;
 }
 
-export default function ConfirmModal(props: IConfirmModalProps) {
+const ConfirmModal: FC<IConfirmModalProps> = ({ isOpen, title, onClose, onSubmit }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'confirmModal' });
-  const { isOpen, title, agree, close } = props;
 
   return (
-    <Dialog open={isOpen} onClose={props.close}>
+    <Dialog open={isOpen} onClose={onClose}>
       <DialogContent sx={{ p: 2 }}>
         <Typography variant="h6">{title}</Typography>
       </DialogContent>
       <DialogActions sx={{ p: 2, pt: 0 }}>
-        <Button onClick={close}>{t('no')}</Button>
-        <Button onClick={agree} autoFocus>
+        <Button onClick={onClose}>{t('no')}</Button>
+        <Button onClick={onSubmit} autoFocus>
           {t('yes')}
         </Button>
       </DialogActions>
     </Dialog>
   );
-}
+};
+
+export default ConfirmModal;
