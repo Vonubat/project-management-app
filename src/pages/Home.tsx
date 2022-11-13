@@ -16,18 +16,21 @@ import AlexanderSUSAvatar from '../assets/avatars/alexandersus.png';
 import AntonShcherbaAvatar from '../assets/avatars/anton-shcherba.png';
 import { MediaQuery } from 'constants/constants';
 
-type SimpleProps = {
+type Props = {
   children?: React.ReactNode;
   breakPoint?: boolean;
+  isReverse?: boolean;
+  width?: string;
+  source?: string;
 };
 
-const SectionWrapper: FC<SimpleProps> = ({ children, breakPoint }) => (
+const SectionWrapper: FC<Props> = ({ children, breakPoint, isReverse }) => (
   <Box
     sx={{
       display: 'flex',
-      flexDirection: breakPoint ? 'row' : 'column',
+      flexDirection: breakPoint ? `row${isReverse ? '-reverse' : ''}` : 'column',
       alignItems: 'center',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
       gap: '2rem',
     }}
   >
@@ -35,21 +38,21 @@ const SectionWrapper: FC<SimpleProps> = ({ children, breakPoint }) => (
   </Box>
 );
 
-const ColumnWrapper: FC<SimpleProps> = ({ children }) => (
+const ColumnWrapper: FC<Props> = ({ children, width, breakPoint }) => (
   <Box
     sx={{
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      gap: '2rem',
-      width: '100%',
+      gap: '1rem',
+      width: breakPoint ? width : '100%',
     }}
   >
     {children}
   </Box>
 );
 
-const TextTitle: FC<SimpleProps> = ({ children }) => (
+const TextTitle: FC<Props> = ({ children }) => (
   <Typography
     variant="h3"
     sx={{
@@ -60,19 +63,12 @@ const TextTitle: FC<SimpleProps> = ({ children }) => (
   </Typography>
 );
 
-const TextBody: FC<SimpleProps> = ({ children }) => (
-  <Typography variant="h4">{children}</Typography>
-);
+const TextBody: FC<Props> = ({ children }) => <Typography variant="h4">{children}</Typography>;
 
-type VideoTutorialProps = {
-  children?: React.ReactNode;
-  source: string;
-};
-
-const VideoTutorial: FC<VideoTutorialProps> = ({ source }) => (
+const VideoTutorial: FC<Props> = ({ source, width, breakPoint }) => (
   <CardMedia
     component="video"
-    sx={{ minWidth: 200, flexGrow: 1, borderRadius: '1rem' }}
+    sx={{ minWidth: 200, width: breakPoint ? width : '100%', borderRadius: '1rem' }}
     image={source}
     autoPlay
     loop
@@ -81,7 +77,7 @@ const VideoTutorial: FC<VideoTutorialProps> = ({ source }) => (
   />
 );
 
-const TeammateCardWrapper: FC<SimpleProps> = ({ children }) => (
+const TeammateCardWrapper: FC<Props> = ({ children }) => (
   <Box
     sx={{
       display: 'flex',
@@ -144,12 +140,12 @@ const Home = () => {
       }}
     >
       <SectionWrapper breakPoint={isLargeScreen}>
-        <ColumnWrapper breakPoint={isLargeScreen}>
+        <ColumnWrapper breakPoint={isLargeScreen} width="40%">
           <TextTitle>{t('sectionTitle_1')}</TextTitle>
           <TextBody>{t('sectionBody_1')}</TextBody>
           <Button
             variant="contained"
-            sx={{ width: 'fit-content' }}
+            sx={{ width: 'fit-content', whiteSpace: 'nowrap' }}
             component={RouterLink}
             to={isAuth ? Path.boards : Path.signUp}
           >
@@ -164,30 +160,42 @@ const Home = () => {
       </SectionWrapper>
 
       <SectionWrapper breakPoint={isLargeScreen}>
-        <ColumnWrapper breakPoint={isLargeScreen}>
+        <ColumnWrapper breakPoint={isLargeScreen} width="40%">
           <Diversity1Icon sx={{ fontSize: 100 }} />
           <TextTitle>{t('sectionTitle_2')}</TextTitle>
           <TextBody>{t('sectionBody_2')}</TextBody>
         </ColumnWrapper>
-        <VideoTutorial source="https://assets.codepen.io/6093409/river.mp4" />
+        <VideoTutorial
+          source="https://assets.codepen.io/6093409/river.mp4"
+          breakPoint={isLargeScreen}
+          width="60%"
+        />
       </SectionWrapper>
 
-      <SectionWrapper breakPoint={isLargeScreen}>
-        <ColumnWrapper breakPoint={isLargeScreen}>
+      <SectionWrapper breakPoint={isLargeScreen} isReverse={true}>
+        <ColumnWrapper breakPoint={isLargeScreen} width="40%">
           <PlaylistAddCheckIcon sx={{ fontSize: 100 }} />
           <TextTitle>{t('sectionTitle_3')}</TextTitle>
           <TextBody>{t('sectionBody_3')}</TextBody>
         </ColumnWrapper>
-        <VideoTutorial source="https://assets.codepen.io/6093409/river.mp4" />
+        <VideoTutorial
+          source="https://assets.codepen.io/6093409/river.mp4"
+          breakPoint={isLargeScreen}
+          width="60%"
+        />
       </SectionWrapper>
 
       <SectionWrapper breakPoint={isLargeScreen}>
-        <ColumnWrapper breakPoint={isLargeScreen}>
+        <ColumnWrapper breakPoint={isLargeScreen} width="40%">
           <DashboardCustomizeIcon sx={{ fontSize: 100 }} />
           <TextTitle>{t('sectionTitle_4')}</TextTitle>
           <TextBody>{t('sectionBody_4')}</TextBody>
         </ColumnWrapper>
-        <VideoTutorial source="https://assets.codepen.io/6093409/river.mp4" />
+        <VideoTutorial
+          source="https://assets.codepen.io/6093409/river.mp4"
+          breakPoint={isLargeScreen}
+          width="60%"
+        />
       </SectionWrapper>
 
       <ColumnWrapper>
