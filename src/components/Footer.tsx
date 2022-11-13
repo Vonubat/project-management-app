@@ -58,8 +58,8 @@ const GitHubUser: FC<GitHubUserProps> = ({ href, children }) => (
 );
 
 const Footer: FC = () => {
-  const firstBreakPoint: boolean = useMediaQuery(MediaQuery[750]);
-  const secondBreakPoint: boolean = useMediaQuery(MediaQuery[500]);
+  const firstBreakPoint: boolean = useMediaQuery(MediaQuery['min-width-750']);
+  const secondBreakPoint: boolean = useMediaQuery(MediaQuery['min-width-500']);
   const StyledFooter = styledFooter(firstBreakPoint);
   const StyledWrapper = styledWrapper(secondBreakPoint);
 
