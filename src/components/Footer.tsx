@@ -1,83 +1,77 @@
 import { Link, styled, useMediaQuery, Box, Button, Typography } from '@mui/material';
-import { grey } from '@mui/material/colors';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import RSLogoIcon from '../assets/icons/logo-rs.svg';
-import React from 'react';
+import React, { FC } from 'react';
+import { GRAY_700, MediaQuery } from 'constants/constants';
 
-const Footer = () => {
-  const firstBreakPoint = useMediaQuery('(min-width:750px)');
-  const secondBreakPoint = useMediaQuery('(min-width:500px)');
-
-  const StyledFooter = styled('footer')({
+const styledFooter = (breakPoint: boolean) =>
+  styled('footer')({
     padding: '1rem 2rem',
     display: 'flex',
-    flexDirection: secondBreakPoint ? 'row' : 'column',
+    flexDirection: breakPoint ? 'row' : 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: '1rem',
   });
 
-  const StyledWrapper = styled('div')({
+const styledWrapper = (breakPoint: boolean) =>
+  styled('div')({
     display: 'flex',
-    flexDirection: firstBreakPoint ? 'row' : 'column',
+    flexDirection: breakPoint ? 'row' : 'column',
     alignItems: 'start',
   });
 
-  const color = grey[700];
+const RSLogo: FC = () => (
+  <Link href="https://rs.school/" color={GRAY_700} target="_blank" rel="noopener noreferrer">
+    <Box
+      component="img"
+      sx={{
+        height: 50,
+        width: 120,
+        '&:hover': {
+          transform: 'scale(95%)',
+          transition: 'all 0.5s',
+        },
+      }}
+      alt="RSLogoIcon"
+      src={RSLogoIcon}
+    />
+  </Link>
+);
+
+type GitHubUserProps = {
+  children?: React.ReactNode;
+  href: string;
+};
+
+const GitHubUser: FC<GitHubUserProps> = ({ href, children }) => (
+  <Button
+    variant="text"
+    startIcon={<GitHubIcon />}
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    sx={{ color: GRAY_700 }}
+  >
+    {children}
+  </Button>
+);
+
+const Footer: FC = () => {
+  const firstBreakPoint: boolean = useMediaQuery(MediaQuery[750]);
+  const secondBreakPoint: boolean = useMediaQuery(MediaQuery[500]);
+  const StyledFooter = styledFooter(firstBreakPoint);
+  const StyledWrapper = styledWrapper(secondBreakPoint);
 
   return (
     <StyledFooter>
-      <Link href="https://rs.school/" color={color} target="_blank" rel="noopener noreferrer">
-        <Box
-          component="img"
-          sx={{
-            height: 50,
-            width: 120,
-            '&:hover': {
-              transform: 'scale(95%)',
-              transition: 'all 0.5s',
-            },
-          }}
-          alt="RSLogoIcon"
-          src={RSLogoIcon}
-        />
-      </Link>
+      <RSLogo />
       <StyledWrapper>
-        <Button
-          component="a"
-          variant="text"
-          startIcon={<GitHubIcon />}
-          href="https://github.com/Vonubat"
-          target="_blank"
-          rel="noopener noreferrer"
-          sx={{ color: color }}
-        >
-          Vonubat
-        </Button>
-        <Button
-          component="a"
-          variant="text"
-          startIcon={<GitHubIcon />}
-          href="https://github.com/AlexanderSUS"
-          target="_blank"
-          rel="noopener noreferrer"
-          sx={{ color: color }}
-        >
-          AlexanderSus
-        </Button>
-        <Button
-          component="a"
-          variant="text"
-          startIcon={<GitHubIcon />}
-          href="https://github.com/anton-shcherba"
-          target="_blank"
-          rel="noopener noreferrer"
-          sx={{ color: color }}
-        >
-          Anton-Shcherba
-        </Button>
+        <GitHubUser href={'https://github.com/Vonubat'}>Vonubat</GitHubUser>
+        <GitHubUser href={'https://github.com/AlexanderSUS'}>Vonubat</GitHubUser>
+        <GitHubUser href={'https://github.com/anton-shcherba'}>Anton-Shcherba</GitHubUser>
       </StyledWrapper>
-      <Typography variant="button" sx={{ color: color }}>
+      <Typography variant="button" sx={{ color: GRAY_700 }}>
         2022
       </Typography>
     </StyledFooter>
