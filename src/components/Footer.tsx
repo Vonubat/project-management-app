@@ -1,85 +1,85 @@
-import { Link, Tooltip, styled, useMediaQuery } from '@mui/material';
+import { Link, styled, useMediaQuery, Box, Button, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import React, { FC } from 'react';
-
-type GitHubIconStyledProps = {
-  children?: React.ReactNode;
-  title: string;
-};
+import RSLogoIcon from '../assets/icons/logo-rs.svg';
+import React from 'react';
 
 const Footer = () => {
-  const isLargeScreen = useMediaQuery('(min-width:550px)');
+  const firstBreakPoint = useMediaQuery('(min-width:750px)');
+  const secondBreakPoint = useMediaQuery('(min-width:500px)');
 
   const StyledFooter = styled('footer')({
     padding: '1rem 2rem',
     display: 'flex',
+    flexDirection: secondBreakPoint ? 'row' : 'column',
     justifyContent: 'space-between',
-    flexDirection: isLargeScreen ? 'row' : 'column',
     alignItems: 'center',
     gap: '1rem',
   });
 
   const StyledWrapper = styled('div')({
     display: 'flex',
-    justifyContent: 'center',
-    gap: '1rem',
+    flexDirection: firstBreakPoint ? 'row' : 'column',
+    alignItems: 'start',
   });
 
-  const GitHubIconStyled: FC<GitHubIconStyledProps> = ({ title }) => (
-    <Tooltip title={title} placement="top" followCursor>
-      <GitHubIcon
-        sx={{
-          fontSize: 50,
-          '&:hover': {
-            color: 'rgba(25, 118, 210, 0.5)',
-          },
-        }}
-      />
-    </Tooltip>
-  );
-
   const color = grey[700];
+
   return (
     <StyledFooter>
-      <Link
-        href="https://rs.school/"
-        color={color}
-        underline="hover"
-        target="_blank"
-        rel="noopener noreferrer"
-        sx={{ whiteSpace: 'nowrap' }}
-      >
-        © 2022 The Rolling Scopes
+      <Link href="https://rs.school/" color={color} target="_blank" rel="noopener noreferrer">
+        <Box
+          component="img"
+          sx={{
+            height: 50,
+            width: 120,
+            '&:hover': {
+              transform: 'scale(95%)',
+              transition: 'all 0.5s',
+            },
+          }}
+          alt="RSLogoIcon"
+          src={RSLogoIcon}
+        />
       </Link>
       <StyledWrapper>
-        <Link
+        <Button
+          component="a"
+          variant="text"
+          startIcon={<GitHubIcon />}
           href="https://github.com/Vonubat"
-          color={color}
           target="_blank"
           rel="noopener noreferrer"
+          sx={{ color: color }}
         >
-          <GitHubIconStyled title="Vonubat" />
-        </Link>
-
-        <Link
+          Vonubat
+        </Button>
+        <Button
+          component="a"
+          variant="text"
+          startIcon={<GitHubIcon />}
           href="https://github.com/AlexanderSUS"
-          color={color}
           target="_blank"
           rel="noopener noreferrer"
+          sx={{ color: color }}
         >
-          <GitHubIconStyled title="AlexanderSus" />
-        </Link>
-
-        <Link
+          AlexanderSus
+        </Button>
+        <Button
+          component="a"
+          variant="text"
+          startIcon={<GitHubIcon />}
           href="https://github.com/anton-shcherba"
-          color={color}
           target="_blank"
           rel="noopener noreferrer"
+          sx={{ color: color }}
         >
-          <GitHubIconStyled title="Anton-Shcherba" />
-        </Link>
+          Anton-Shcherba
+        </Button>
       </StyledWrapper>
+      <Typography variant="button" sx={{ color: color }}>
+        2022
+      </Typography>
     </StyledFooter>
   );
 };
