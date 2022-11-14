@@ -9,7 +9,7 @@ type Props = {
   control: Control<AuthFormFields, unknown>;
 };
 
-const AuthFormInput: FC<Props> = ({
+const ControlledFormInput: FC<Props> = ({
   inputOptions: { name, label, type, validationOptions },
   control,
 }) => {
@@ -38,4 +38,4 @@ const AuthFormInput: FC<Props> = ({
   );
 };
 
-export default AuthFormInput;
+export default ControlledFormInput;
