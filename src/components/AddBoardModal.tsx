@@ -39,7 +39,13 @@ export default function AddBoardModal({ isOpen, onClose, onSubmit }: IAddBoardMo
   };
 
   return (
-    <ModalWindow modalTitle={t('add')} onClose={onClose} isOpen={isOpen} onSubmit={onSubmit}>
+    <ModalWindow
+      modalTitle={t('add')}
+      onClose={onClose}
+      isOpen={isOpen}
+      onSubmit={onSubmit}
+      isSubmitDisabled={false}
+    >
       <Box component="form" id="modal-form" onSubmit={handleSubmit} noValidate>
         <TextField
           margin="normal"
