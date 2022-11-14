@@ -19,7 +19,7 @@ interface RejectedAction extends Action {
 
 type PendingAction = Action;
 
-interface FulFilledActiion extends Action {
+interface FulFilledAction extends Action {
   payload: SignUpOkResponseData;
 }
 
@@ -31,7 +31,7 @@ function isPendingAction(action: AnyAction): action is PendingAction {
   return action.type.endsWith('pending');
 }
 
-function isFullfiledAction(action: AnyAction): action is FulFilledActiion {
+function isFulfilledAction(action: AnyAction): action is FulFilledAction {
   return action.type.endsWith('fulfilled');
 }
 
@@ -63,7 +63,7 @@ export const getUser = createAsyncThunk<
   }
 });
 
-export const updatePassword = createAsyncThunk<
+export const updateUser = createAsyncThunk<
   SignUpOkResponseData,
   SignUpRequestData,
   { state: RootState; rejectValue: number }
@@ -130,6 +130,11 @@ const userSlice = createSlice({
       state.userId = _id;
     });
 
+    builder.addCase(updateUser.fulfilled, (state, { payload: { name, login } }) => {
+      state.name = name;
+      state.login = login;
+    });
+
     builder.addMatcher(isPendingAction, (state) => {
       state.error = null;
       state.isLoading = true;
@@ -144,7 +149,7 @@ const userSlice = createSlice({
       }
     });
 
-    builder.addMatcher(isFullfiledAction, (state) => {
+    builder.addMatcher(isFulfilledAction, (state) => {
       state.error = null;
       state.isLoading = false;
     });

@@ -1,0 +1,41 @@
+import { TextField } from '@mui/material';
+import React, { FC } from 'react';
+import { Control, Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { AuthInputOptions, AuthFormFields } from 'types/auth';
+
+type Props = {
+  inputOptions: AuthInputOptions;
+  control: Control<AuthFormFields, unknown>;
+};
+
+const ControlledFormInput: FC<Props> = ({
+  inputOptions: { name, label, type, validationOptions },
+  control,
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState: { error } }) => (
+        <>
+          <TextField
+            margin="normal"
+            fullWidth
+            label={t(label)}
+            autoComplete="off"
+            type={type}
+            error={!!error}
+            helperText={!!error ? t(`validationError.${error.message}`) : ''}
+            {...field}
+          />
+        </>
+      )}
+      rules={validationOptions}
+    />
+  );
+};
+
+export default ControlledFormInput;
