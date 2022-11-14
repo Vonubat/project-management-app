@@ -1,7 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { ApiRoutes } from 'constants/constants';
-import { SignUpRequestData } from 'types/auth';
-import { UserData } from 'types/users';
+import { UserData, UpdateUserData } from 'types/users';
 import api from './api';
 
 export default class UsersService {
@@ -13,7 +12,7 @@ export default class UsersService {
     return api.get(`${ApiRoutes.users}/${userId}`);
   }
 
-  static updateUser(userId: string, data: SignUpRequestData): Promise<AxiosResponse<UserData>> {
+  static updateUser(userId: string, data: UpdateUserData): Promise<AxiosResponse<UserData>> {
     return api.put(`${ApiRoutes.users}/${userId}`, data);
   }
 

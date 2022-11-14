@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
 import { authSelector } from 'store/authSlice';
 import Loader from 'components/Loader';
+import { getUser } from 'store/userSlice';
 
 const StyledBox = styled(Box)({
   display: 'flex',

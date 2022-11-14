@@ -71,6 +71,14 @@ const resources = {
         yes: 'Agree',
         no: 'Disagree',
       },
+      editProfile: {
+        pageTitle: 'User profile',
+        login: 'Login:',
+        userName: 'Name:',
+        editProfile: 'Edit profile',
+        deleteProfile: 'Delete account',
+        modalTitle: 'Изменить профиль',
+      },
     },
   },
   ru: {
@@ -141,6 +149,14 @@ const resources = {
       confirmModal: {
         yes: 'Подтвердить',
         no: 'Закрыть',
+      },
+      editProfile: {
+        pageTitle: 'Профиль пользователя',
+        login: 'Логин:',
+        userName: 'Имя:',
+        editProfile: 'Изменить',
+        deleteProfile: 'Удалить',
+        modalTitle: 'Изменить профиль',
       },
     },
   },
