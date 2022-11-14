@@ -19,7 +19,7 @@ interface RejectedAction extends Action {
 
 type PendingAction = Action;
 
-interface FulFilledActiion extends Action {
+interface FulFilledAction extends Action {
   payload: SignUpOkResponseData | SignInOkResponseData;
 }
 
@@ -31,7 +31,7 @@ function isPendingAction(action: AnyAction): action is PendingAction {
   return action.type.endsWith('pending');
 }
 
-function isFullfiledAction(action: AnyAction): action is FulFilledActiion {
+function isFulfilledAction(action: AnyAction): action is FulFilledAction {
   return action.type.endsWith('fulfilled');
 }
 
@@ -125,7 +125,7 @@ const authSlice = createSlice({
       }
     });
 
-    builder.addMatcher(isFullfiledAction, (state) => {
+    builder.addMatcher(isFulfilledAction, (state) => {
       state.error = null;
       state.isLoading = false;
     });

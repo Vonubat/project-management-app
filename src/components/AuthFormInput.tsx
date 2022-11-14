@@ -1,4 +1,4 @@
-import { TextField, Typography } from '@mui/material';
+import { TextField } from '@mui/material';
 import React, { FC } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -27,13 +27,10 @@ const AuthFormInput: FC<Props> = ({
             label={t(label)}
             autoComplete="off"
             type={type}
+            error={!!error}
+            helperText={!!error ? t(`validationError.${error.message}`) : ''}
             {...field}
           />
-          {error && (
-            <Typography variant="caption" color={'red'}>
-              {t(`validationError.${error.message}`)}
-            </Typography>
-          )}
         </>
       )}
       rules={validationOptions}
