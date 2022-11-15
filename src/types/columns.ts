@@ -1,4 +1,3 @@
-import { RegisterOptions } from 'react-hook-form';
 import { BoardData } from './boards';
 
 export type ColumnData = ColumnParams & {
@@ -24,13 +23,4 @@ export type ColumnsSetCreateParams = {
 
 export type AddColumnFields = {
   title: string;
-};
-
-export type ColumnInputName = keyof AddColumnFields;
-
-export type ColumnInputOptions = {
-  name: ColumnInputName;
-  label: string;
-  type: 'text';
-  validationOptions: RegisterOptions;
 };

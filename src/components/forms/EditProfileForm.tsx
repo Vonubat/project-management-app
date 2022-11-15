@@ -1,13 +1,14 @@
 import React, { FC, useEffect } from 'react';
 import { updateUser } from 'store/userSlice';
 import ControlledFormInput from 'components/ControlledFormInput';
-import { Control, useForm } from 'react-hook-form';
-import { AuthFormFields, SignUpFormFields } from 'types/auth';
+import { useForm } from 'react-hook-form';
+import { SignUpFormFields } from 'types/auth';
 import { loginInput, nameInput, passwordInput } from 'constants/inputs';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { useTranslation } from 'react-i18next';
 import ModalWithForm from 'components/ModalWithForm';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
+import { FormControl } from 'types/formInput';
 
 type Props = {
   login: string;
@@ -33,7 +34,7 @@ const EditProfileForm: FC<Props> = ({ login, name }) => {
     reValidateMode: 'onChange',
   });
 
-  const formControl = control as Control<AuthFormFields>;
+  const formControl = control as FormControl;
 
   const onSubmit = (data: SignUpFormFields) => {
     dispatch(updateUser(data));
@@ -48,6 +49,7 @@ const EditProfileForm: FC<Props> = ({ login, name }) => {
     if (isOpen) {
       reset({ login, name, password: '' });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   return (

@@ -7,20 +7,19 @@ import { useAppDispatch } from 'hooks/hooks';
 import { deleteBoard } from 'store/boardListSlice';
 import { Link as RouterLink } from 'react-router-dom';
 import { Path } from 'constants/routing';
+import { BoardData } from 'types/boards';
 
 type Props = {
-  boardTitle: string;
-  id: string;
+  boardData: BoardData;
 };
 
-const BoardPreview: FC<Props> = ({ boardTitle, id }) => {
+const BoardPreview: FC<Props> = ({ boardData: { _id, title, description } }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const { title, description } = JSON.parse(boardTitle) as { title: string; description: string };
 
   function submit() {
-    dispatch(deleteBoard(id));
+    dispatch(deleteBoard(_id));
     closeModal();
   }
 
@@ -57,7 +56,7 @@ const BoardPreview: FC<Props> = ({ boardTitle, id }) => {
               </Button>
             </Tooltip>
             <Tooltip title={t('open')} placement="top">
-              <Button component={RouterLink} to={`${Path.boards}/${id}`}>
+              <Button component={RouterLink} to={`${Path.boards}/${_id}`}>
                 <OpenWith />
               </Button>
             </Tooltip>

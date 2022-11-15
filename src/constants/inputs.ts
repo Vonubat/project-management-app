@@ -1,5 +1,4 @@
-import { AuthInputOptions } from 'types/auth';
-import { ColumnInputOptions } from 'types/columns';
+import { InputOptions } from 'types/formInput';
 
 const VALIDATION_RULE_REQUIRED = {
   value: true,
@@ -36,7 +35,7 @@ const VALIDATION_RULE_NAME_PATTERN = {
   message: 'namePattern',
 };
 
-export const nameInput: AuthInputOptions = {
+export const nameInput: InputOptions = {
   name: 'name',
   label: 'authPage.name',
   type: 'text',
@@ -48,7 +47,7 @@ export const nameInput: AuthInputOptions = {
   },
 };
 
-export const loginInput: AuthInputOptions = {
+export const loginInput: InputOptions = {
   name: 'login',
   label: 'buttonText.signIn',
   type: 'text',
@@ -60,7 +59,7 @@ export const loginInput: AuthInputOptions = {
   },
 };
 
-export const passwordInput: AuthInputOptions = {
+export const passwordInput: InputOptions = {
   name: 'password',
   label: 'authPage.password',
   type: 'password',
@@ -72,11 +71,11 @@ export const passwordInput: AuthInputOptions = {
   },
 };
 
-export const signInInputsList: AuthInputOptions[] = [loginInput, passwordInput];
+export const signInInputsList: InputOptions[] = [loginInput, passwordInput];
 
-export const signUpInputsList: AuthInputOptions[] = [nameInput, loginInput, passwordInput];
+export const signUpInputsList: InputOptions[] = [nameInput, loginInput, passwordInput];
 
-export const columnTitleInput: ColumnInputOptions = {
+export const columnTitleInput: InputOptions = {
   name: 'title',
   label: 'columns.title',
   type: 'text',

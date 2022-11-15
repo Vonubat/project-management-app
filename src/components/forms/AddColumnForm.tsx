@@ -5,10 +5,11 @@ import { columnsSelector, createColumn } from 'store/columnsSlice';
 import { useParams } from 'react-router-dom';
 import { columnTitleInput } from 'constants/inputs';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
-import { Control, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { AddColumnFields } from 'types/columns';
 import ModalWithForm from 'components/ModalWithForm';
 import ControlledFormInput from 'components/ControlledFormInput';
+import { FormControl } from 'types/formInput';
 
 const AddColumnForm: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
@@ -31,7 +32,7 @@ const AddColumnForm: FC = () => {
     reValidateMode: 'onChange',
   });
 
-  const formControl = control as Control<AddColumnFields, unknown>;
+  const formControl = control as FormControl;
 
   const onSubmit = (data: AddColumnFields) => {
     dispatch(
