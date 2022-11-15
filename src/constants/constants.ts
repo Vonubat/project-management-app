@@ -38,10 +38,9 @@ export enum Status {
 export const GRAY_700: '#616161' = grey[700];
 
 // MediaQuery storage
-
 export enum MediaQuery {
-  'min-width-750' = '(min-width:750px)',
-  'min-width-715' = '(min-width:715px)',
-  'min-width-500' = '(min-width:500px)',
-  'min-width-380' = '(min-width:380px)',
+  minWidth750 = '(min-width:750px)',
+  minWidth715 = '(min-width:715px)',
+  minWidth500 = '(min-width:500px)',
+  minWidth380 = '(min-width:380px)',
 }

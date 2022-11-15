@@ -126,7 +126,7 @@ const TeammateCard: FC<TeammateCardProps> = ({ avatar, name, role, link }) => (
 const Home = () => {
   const { isAuth } = useAppSelector(authSelector);
   const { t } = useTranslation('translation', { keyPrefix: 'homePage' });
-  const isLargeScreen: boolean = useMediaQuery(MediaQuery['min-width-715']);
+  const isLargeScreen: boolean = useMediaQuery(MediaQuery.minWidth715);
 
   return (
     <Page
