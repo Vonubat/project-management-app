@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import ConfirmModal from './ConfirmModal';
 import { useAppDispatch } from 'hooks/hooks';
 import { deleteBoard } from 'store/boardListSlice';
+import { Link as RouterLink } from 'react-router-dom';
+import { Path } from 'constants/routing';
 
 type Props = {
   boardTitle: string;
@@ -55,7 +57,7 @@ const BoardPreview: FC<Props> = ({ boardTitle, id }) => {
               </Button>
             </Tooltip>
             <Tooltip title={t('open')} placement="top">
-              <Button>
+              <Button component={RouterLink} to={`${Path.boards}/${id}`}>
                 <OpenWith />
               </Button>
             </Tooltip>

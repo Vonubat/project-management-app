@@ -78,6 +78,11 @@ const resources = {
         deleteProfile: 'Delete account',
         modalTitle: 'Изменить профиль',
       },
+      columns: {
+        addTask: 'Add task',
+        addColumn: 'Add column',
+        delColumn: 'Are you sure you want to delete the column?',
+      },
     },
   },
   ru: {
@@ -155,6 +160,11 @@ const resources = {
         editProfile: 'Изменить',
         deleteProfile: 'Удалить',
         modalTitle: 'Изменить профиль',
+      },
+      columns: {
+        addTask: 'Добавить задачу',
+        addColumn: 'Добавить колонку',
+        delColumn: 'Вы действительно хотите удалить колонку?',
       },
     },
   },

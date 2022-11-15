@@ -27,6 +27,13 @@ export enum LangType {
   en = 'en',
 }
 
+export enum Status {
+  idle = 'idle',
+  pending = 'pending',
+  succeeded = 'succeeded',
+  failed = 'failed',
+}
+
 // Colors
 export const GRAY_700: '#616161' = grey[700];
 
@@ -36,4 +43,5 @@ export enum MediaQuery {
   'min-width-750' = '(min-width:750px)',
   'min-width-715' = '(min-width:715px)',
   'min-width-500' = '(min-width:500px)',
+  'min-width-380' = '(min-width:380px)',
 }
