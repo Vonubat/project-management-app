@@ -21,15 +21,13 @@ export default function AddBoardModal({ isOpen, onClose, onSubmit }: IAddBoardMo
     event.preventDefault();
 
     const data = new FormData(event.currentTarget);
-
-    const titleData = JSON.stringify({
-      title: data.get('title'),
-      description: data.get('description'),
-    });
+    const title = data.get('title') as string;
+    const description = data.get('description') as string;
 
     dispatch(
       createBoard({
-        title: titleData,
+        title,
+        description,
         owner: userId as string,
         users: [],
       })
