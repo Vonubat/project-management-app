@@ -1,5 +1,3 @@
-import { RegisterOptions } from 'react-hook-form';
-
 export type AuthState = {
   isLoading: boolean;
   isAuth: boolean;
@@ -43,15 +41,4 @@ export type SignUpFormFields = {
   name: string;
   login: string;
   password: string;
-};
-
-export type AuthFormFields = SignInFormFields | SignUpFormFields;
-
-export type AuthInputName = keyof SignUpFormFields;
-
-export type AuthInputOptions = {
-  name: AuthInputName;
-  label: string;
-  type: 'password' | 'text';
-  validationOptions: RegisterOptions;
 };
