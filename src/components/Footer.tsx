@@ -68,7 +68,7 @@ const Footer: FC = () => {
       <RSLogo />
       <StyledWrapper>
         <GitHubUser href={'https://github.com/Vonubat'}>Vonubat</GitHubUser>
-        <GitHubUser href={'https://github.com/AlexanderSUS'}>Vonubat</GitHubUser>
+        <GitHubUser href={'https://github.com/AlexanderSUS'}>AlexanderSUS</GitHubUser>
         <GitHubUser href={'https://github.com/anton-shcherba'}>Anton-Shcherba</GitHubUser>
       </StyledWrapper>
       <Typography variant="button" sx={{ color: GRAY_700 }}>

@@ -25,9 +25,6 @@ const AddColumnForm: FC = () => {
     reset,
     formState: { isValid },
   } = useForm<AddColumnFields>({
-    defaultValues: {
-      title: '',
-    },
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
@@ -55,7 +52,11 @@ const AddColumnForm: FC = () => {
   }, [isOpen, reset]);
 
   return (
-    <ModalWithForm modalTitle={t('addColumn')} onSubmit={handleSubmit(onSubmit)}>
+    <ModalWithForm
+      sx={{ minWidth: 450, minHeight: 200 }}
+      modalTitle={t('addColumn')}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <ControlledFormInput control={formControl} inputOptions={columnTitleInput} />
     </ModalWithForm>
   );

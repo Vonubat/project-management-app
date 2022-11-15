@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-
 import { useTranslation } from 'react-i18next';
 import ConfirmModal from './ConfirmModal';
 import { useAppDispatch } from 'hooks/hooks';
@@ -22,6 +21,7 @@ const Column: FC<Pick<Props, 'children'>> = ({ children }) => {
         width: 1,
         py: 1,
         mx: 2,
+        maxWidth: 280,
         display: 'flex',
         flexDirection: 'column',
         boxShadow: 3,
@@ -54,7 +54,7 @@ const ColumnPreview: FC<Props> = ({ columnTitle, columnId, boardId }) => {
 
   return (
     <Column>
-      <Typography variant="h6" align="center" noWrap>
+      <Typography variant="h6" align="center">
         {columnTitle}
       </Typography>
       <ColumnsAddBtn cb={openModal}>
