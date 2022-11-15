@@ -35,6 +35,7 @@ const resources = {
       },
       responseError: {
         error401: 'User does not exist or password is wrong',
+        error404: 'Element does not exist',
         error409: 'User with such login already exist',
         error500: 'Server error',
         errorUnknown: 'An unknown error has occurred',
@@ -115,6 +116,7 @@ const resources = {
       },
       responseError: {
         error401: 'Пользователь не существует или не верный пароль',
+        error404: 'Элемент не существует',
         error409: 'Пользователь с такм логином уже существует',
         error500: 'Ошибка сервера',
         errorUnknown: 'Произошла неизвестная ошибка',
