@@ -41,6 +41,14 @@ export const createColumn = createAsyncThunk<ColumnData, { boardId: string; data
   }
 );
 
+export const updateColumn = createAsyncThunk<
+  ColumnData,
+  { boardId: string; columnId: string; data: ColumnParams }
+>('columns/update', async (arg) => {
+  const res = await ColumnsService.updateColumn(arg.boardId, arg.columnId, arg.data);
+  return res.data;
+});
+
 export const deleteColumn = createAsyncThunk<ColumnData, { boardId: string; columnId: string }>(
   'columns/delete',
   async (arg) => {
@@ -72,6 +80,12 @@ const columnsSlice = createSlice({
 
     builder.addCase(createColumn.fulfilled, (state, { payload }) => {
       state.columns.push(payload);
+    });
+
+    builder.addCase(updateColumn.fulfilled, (state, { payload }) => {
+      state.columns = state.columns.map((column) =>
+        column._id === payload._id ? payload : column
+      );
     });
 
     builder.addCase(deleteColumn.fulfilled, (state, { payload }) => {

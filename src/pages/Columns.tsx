@@ -36,8 +36,14 @@ const Columns = () => {
   return (
     <Page>
       <StyledBox>
-        {columns.map(({ _id, title, boardId }: ColumnData) => (
-          <ColumnPreview key={_id} columnId={_id} boardId={boardId} columnTitle={title} />
+        {columns.map(({ _id, title, boardId, order }: ColumnData) => (
+          <ColumnPreview
+            key={_id}
+            columnId={_id}
+            boardId={boardId}
+            columnTitle={title}
+            order={order}
+          />
         ))}
         <ColumnsAddBtn cb={() => dispatch(openModalForm())}>
           <Typography variant="h6">{t('addColumn')}</Typography>

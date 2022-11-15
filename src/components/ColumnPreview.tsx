@@ -5,12 +5,14 @@ import ConfirmModal from './ConfirmModal';
 import { useAppDispatch } from 'hooks/hooks';
 import { deleteColumn } from 'store/columnsSlice';
 import ColumnsAddBtn from './UI/ColumnsAddBtn';
+import StyledTextarea from './UI/StyledTextarea';
 
 type Props = {
   children?: React.ReactNode;
   columnTitle: string;
   columnId: string;
   boardId: string;
+  order: number;
 };
 
 const Column: FC<Pick<Props, 'children'>> = ({ children }) => {
@@ -24,6 +26,8 @@ const Column: FC<Pick<Props, 'children'>> = ({ children }) => {
         maxWidth: 280,
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
         boxShadow: 3,
         borderRadius: '5px',
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
@@ -34,7 +38,7 @@ const Column: FC<Pick<Props, 'children'>> = ({ children }) => {
   );
 };
 
-const ColumnPreview: FC<Props> = ({ columnTitle, columnId, boardId }) => {
+const ColumnPreview: FC<Props> = ({ columnTitle, columnId, boardId, order }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dispatch = useAppDispatch();
@@ -54,9 +58,7 @@ const ColumnPreview: FC<Props> = ({ columnTitle, columnId, boardId }) => {
 
   return (
     <Column>
-      <Typography variant="h6" align="center">
-        {columnTitle}
-      </Typography>
+      <StyledTextarea value={columnTitle} columnId={columnId} boardId={boardId} order={order} />
       <ColumnsAddBtn cb={openModal}>
         <Typography variant="h6">{t('addTask')}</Typography>
       </ColumnsAddBtn>
