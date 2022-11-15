@@ -3,7 +3,7 @@ import Page from 'components/Page';
 import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
-import AddBoardModal from 'components/AddBoardModal';
+import AddColumnModal from 'components/AddColumnModal';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import Loader from 'components/Loader';
 import { Status } from 'constants/constants';
@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import { ColumnData } from 'types/columns';
 import ColumnPreview from 'components/ColumnPreview';
 import ColumnsAddBtn from 'components/UI/ColumnsAddBtn';
+import AddColumnForm from 'components/forms/AddColumnForm';
 
 const StyledBox = styled(Box)({
   display: 'flex',
@@ -26,16 +27,7 @@ const Columns = () => {
   const { boardId } = useParams();
   const { columns, status } = useAppSelector(columnsSelector);
   const dispatch = useAppDispatch();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const isLoading: boolean = status === Status.pending;
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
-  const openModal = () => {
-    setIsOpen(true);
-  };
 
   useEffect(() => {
     dispatch(getColumnsInBoards(boardId as string));
@@ -47,10 +39,10 @@ const Columns = () => {
         {columns.map(({ _id, title, boardId }: ColumnData) => (
           <ColumnPreview key={_id} columnId={_id} boardId={boardId} columnTitle={title} />
         ))}
-        <ColumnsAddBtn cb={openModal}>
+        <ColumnsAddBtn>
           <Typography variant="h6">{t('addColumn')}</Typography>
         </ColumnsAddBtn>
-        <AddBoardModal isOpen={isOpen} onSubmit={closeModal} onClose={closeModal} />
+        <AddColumnForm />
       </StyledBox>
       {isLoading && <Loader />}
     </Page>

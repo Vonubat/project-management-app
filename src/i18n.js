@@ -79,6 +79,7 @@ const resources = {
         modalTitle: 'Изменить профиль',
       },
       columns: {
+        title: 'Title',
         addTask: 'Add task',
         addColumn: 'Add column',
         delColumn: 'Are you sure you want to delete the column?',
@@ -162,6 +163,7 @@ const resources = {
         modalTitle: 'Изменить профиль',
       },
       columns: {
+        title: 'Название',
         addTask: 'Добавить задачу',
         addColumn: 'Добавить колонку',
         delColumn: 'Вы действительно хотите удалить колонку?',

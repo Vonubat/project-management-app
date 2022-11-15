@@ -1,4 +1,5 @@
 import { AuthInputOptions } from 'types/auth';
+import { ColumnInputOptions } from 'types/columns';
 
 const VALIDATION_RULE_REQUIRED = {
   value: true,
@@ -74,3 +75,13 @@ export const passwordInput: AuthInputOptions = {
 export const signInInputsList: AuthInputOptions[] = [loginInput, passwordInput];
 
 export const signUpInputsList: AuthInputOptions[] = [nameInput, loginInput, passwordInput];
+
+export const columnTitleInput: ColumnInputOptions = {
+  name: 'title',
+  label: 'columns.title',
+  type: 'text',
+  validationOptions: {
+    required: VALIDATION_RULE_REQUIRED,
+    minLength: VALIDATION_RULE_MIN_LENGTH_3,
+  },
+};
