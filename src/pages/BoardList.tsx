@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
 import { authSelector } from 'store/authSlice';
 import Loader from 'components/Loader';
-import { getUser } from 'store/userSlice';
 
 const StyledBox = styled(Box)({
   display: 'flex',
@@ -45,8 +44,8 @@ export default function Boards() {
           <h1>{error}</h1>
         ) : (
           <>
-            {boards.map(({ _id, title }) => (
-              <BoardPreview key={_id} id={_id} boardTitle={title} />
+            {boards.map((board) => (
+              <BoardPreview key={board._id} boardData={board} />
             ))}
             <Button sx={{ width: 310, height: 310 }} variant="outlined" onClick={openModal}>
               <Typography variant="h4">{t('add')}</Typography>

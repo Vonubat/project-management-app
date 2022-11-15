@@ -5,20 +5,19 @@ import { useTranslation } from 'react-i18next';
 import ConfirmModal from './ConfirmModal';
 import { useAppDispatch } from 'hooks/hooks';
 import { deleteBoard } from 'store/boardListSlice';
+import { BoardData } from 'types/boards';
 
 type Props = {
-  boardTitle: string;
-  id: string;
+  boardData: BoardData;
 };
 
-const BoardPreview: FC<Props> = ({ boardTitle, id }) => {
+const BoardPreview: FC<Props> = ({ boardData: { _id, title, description } }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const { title, description } = JSON.parse(boardTitle) as { title: string; description: string };
 
   function submit() {
-    dispatch(deleteBoard(id));
+    dispatch(deleteBoard(_id));
     closeModal();
   }
 

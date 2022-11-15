@@ -6,6 +6,7 @@ export type BoardData = BoardParams & {
 
 export type BoardParams = {
   title: string;
+  description: string;
   owner: string;
   users: UserData['_id'][];
 };
