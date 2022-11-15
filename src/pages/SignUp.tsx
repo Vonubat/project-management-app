@@ -1,5 +1,5 @@
 import React from 'react';
-import { Control, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useTranslation } from 'react-i18next';
@@ -8,10 +8,11 @@ import { authSelector, signUp } from 'store/authSlice';
 import AuthPage from 'components/AuthPage';
 import { Path } from 'constants/routing';
 import CreatedUserWindow from 'components/CreatedUserWindow';
-import { AuthFormFields, SignUpFormFields } from 'types/auth';
+import { SignUpFormFields } from 'types/auth';
 import { signUpInputsList } from 'constants/inputs';
-import AuthFormInput from 'components/AuthFormInput';
 import AuthSubmitButtonAndLink from 'components/AuthSubmitButtonAndLink';
+import { FormControl } from 'types/formInput';
+import ControlledFormInput from 'components/ControlledFormInput';
 
 export default function SignUp() {
   const dispatch = useAppDispatch();
@@ -27,7 +28,7 @@ export default function SignUp() {
   const { created } = useAppSelector(authSelector);
   const { t } = useTranslation();
 
-  const formControl = control as Control<AuthFormFields, unknown>;
+  const formControl = control as FormControl;
 
   const onSubmit = (signUpData: SignUpFormFields) => {
     dispatch(signUp(signUpData));
@@ -40,7 +41,7 @@ export default function SignUp() {
       ) : (
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
           {signUpInputsList.map((options) => (
-            <AuthFormInput key={options.name} control={formControl} inputOptions={options} />
+            <ControlledFormInput key={options.name} control={formControl} inputOptions={options} />
           ))}
           <AuthSubmitButtonAndLink
             buttonText="buttonText.signUp"

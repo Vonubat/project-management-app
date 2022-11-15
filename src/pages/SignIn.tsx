@@ -10,8 +10,9 @@ import { Path } from 'constants/routing';
 import AuthPage from 'components/AuthPage';
 import { SignInFormFields } from 'types/auth';
 import { signInInputsList } from 'constants/inputs';
-import AuthFormInput from 'components/AuthFormInput';
 import AuthSubmitButtonAndLink from 'components/AuthSubmitButtonAndLink';
+import ControlledFormInput from 'components/ControlledFormInput';
+import { FormControl } from 'types/formInput';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -26,6 +27,8 @@ const SignIn = () => {
     mode: 'onSubmit',
     reValidateMode: 'onChange',
   });
+
+  const formControl = control as FormControl;
 
   const onSubmit = (signInData: SignInFormFields) => {
     dispatch(signIn(signInData));
@@ -42,7 +45,7 @@ const SignIn = () => {
     <AuthPage icon={<LockOutlinedIcon />} pageTitle={t('buttonText.signIn')}>
       <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
         {signInInputsList.map((options) => (
-          <AuthFormInput key={options.name} control={control} inputOptions={options} />
+          <ControlledFormInput key={options.name} control={formControl} inputOptions={options} />
         ))}
         <AuthSubmitButtonAndLink
           buttonText="buttonText.signIn"
