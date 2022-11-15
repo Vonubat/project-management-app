@@ -37,6 +37,8 @@ const resources = {
         error401: 'User does not exist or password is wrong',
         error409: 'User with such login already exist',
         error500: 'Server error',
+        errorUnknown: 'An unknown error has occurred',
+        'Network Error': 'Network error',
       },
       validationError: {
         required: 'This field is required',
@@ -76,7 +78,7 @@ const resources = {
         userName: 'Name:',
         editProfile: 'Edit profile',
         deleteProfile: 'Delete account',
-        modalTitle: 'Изменить профиль',
+        modalTitle: 'Change profile',
       },
     },
   },
@@ -115,6 +117,8 @@ const resources = {
         error401: 'Пользователь не существует или не верный пароль',
         error409: 'Пользователь с такм логином уже существует',
         error500: 'Ошибка сервера',
+        errorUnknown: 'Произошла неизвестная ошибка',
+        'Network Error': 'Ошибка сети',
       },
       validationError: {
         required: 'Это поле обязательно для ввода',

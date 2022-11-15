@@ -37,3 +37,10 @@ export enum MediaQuery {
   'min-width-715' = '(min-width:715px)',
   'min-width-500' = '(min-width:500px)',
 }
+
+export enum Severity {
+  error = 'error',
+  warning = 'warning',
+  info = 'info',
+  success = 'success',
+}

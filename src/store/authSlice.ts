@@ -112,21 +112,14 @@ const authSlice = createSlice({
     });
 
     builder.addMatcher(isPendingAction, (state) => {
-      state.error = null;
       state.isLoading = true;
     });
 
-    builder.addMatcher(isRejectedAction, (state, action) => {
+    builder.addMatcher(isRejectedAction, (state) => {
       state.isLoading = false;
-      if (action.payload) {
-        state.error = `error${action.payload}`;
-      } else {
-        state.error = action.error.message;
-      }
     });
 
     builder.addMatcher(isFulfilledAction, (state) => {
-      state.error = null;
       state.isLoading = false;
     });
   },
