@@ -7,6 +7,7 @@ import { deleteTask } from 'store/tasksSlice';
 import ConfirmModal from 'components/ConfirmModal';
 import DeleteBtn from './DeleteBtn';
 import { theme } from 'components/Page';
+import isTouchEnabled from 'utils/isTouchEnabled';
 
 type Props = {
   children?: React.ReactNode;
@@ -22,6 +23,7 @@ const Task: FC<Props> = ({ taskTitle, boardId, columnId, taskId }) => {
   const [isHovering, setIsHovering] = useState(false);
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const dispatch = useAppDispatch();
+  const isTouchScreenDevice: boolean = isTouchEnabled();
 
   const submit = () => {
     dispatch(deleteTask({ boardId, columnId, taskId }));
@@ -70,7 +72,9 @@ const Task: FC<Props> = ({ taskTitle, boardId, columnId, taskId }) => {
       <Typography variant="h6" noWrap>
         {taskTitle}
       </Typography>
-      {isHovering && <DeleteBtn size="small" color={DefaultColors.error} cb={openModal} />}
+      {(isHovering || isTouchScreenDevice) && (
+        <DeleteBtn size="small" color={DefaultColors.error} cb={openModal} />
+      )}
       <ConfirmModal title={t('delTask')} isOpen={isOpen} onSubmit={submit} onClose={closeModal} />
     </div>
   );
