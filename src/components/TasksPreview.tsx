@@ -9,7 +9,7 @@ import Loader from './Loader';
 import Task from './UI/Task';
 import { TaskData } from 'types/tasks';
 import { openModalForm } from 'store/modalSlice';
-import AddColumnForm from './forms/AddColumnForm';
+import AddTaskForm from './forms/AddTaskForm';
 
 type Props = {
   children?: React.ReactNode;
@@ -49,7 +49,7 @@ const TasksPreview: FC<Props> = ({ columnId, boardId }) => {
       <ColumnsAddBtn sx={{ marginTop: 3 }} cb={() => dispatch(openModalForm())}>
         <Typography variant="h6">{t('addTask')}</Typography>
       </ColumnsAddBtn>
-      <AddColumnForm />
+      <AddTaskForm boardId={boardId} columnId={columnId} />
       {isLoading && <Loader />}
     </Box>
   );

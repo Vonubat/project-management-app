@@ -66,7 +66,7 @@ const Columns = () => {
         <ColumnsAddBtn cb={() => dispatch(openModalForm())}>
           <Typography variant="h6">{t('addColumn')}</Typography>
         </ColumnsAddBtn>
-        <AddColumnForm />
+        <AddColumnForm boardId={boardId as string} />
       </StyledBox>
       {isLoading && <Loader />}
     </Page>

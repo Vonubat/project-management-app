@@ -19,3 +19,9 @@ export type TaskParamsCreate = {
   userId: UserData['_id'];
   users: UserData['_id'][];
 };
+
+export type AddTaskFields = {
+  title: string;
+  description: string;
+  // users: UserData['_id'][];
+};

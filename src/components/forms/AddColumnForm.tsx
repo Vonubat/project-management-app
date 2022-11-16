@@ -2,7 +2,6 @@ import React, { FC, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { useTranslation } from 'react-i18next';
 import { columnsSelector, createColumn } from 'store/columnsSlice';
-import { useParams } from 'react-router-dom';
 import { columnTitleInput } from 'constants/inputs';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
 import { useForm } from 'react-hook-form';
@@ -11,10 +10,13 @@ import ModalWithForm from 'components/ModalWithForm';
 import ControlledFormInput from 'components/ControlledFormInput';
 import { FormControl } from 'types/formInput';
 
-const AddColumnForm: FC = () => {
+type Props = {
+  boardId: string;
+};
+
+const AddColumnForm: FC<Props> = ({ boardId }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const { isOpen } = useAppSelector(modalSelector);
-  const { boardId } = useParams();
   const { columns } = useAppSelector(columnsSelector);
   const currentPosition: number = columns.length + 1;
   const dispatch = useAppDispatch();

@@ -83,3 +83,21 @@ export const columnTitleInput: InputOptions = {
     required: VALIDATION_RULE_REQUIRED,
   },
 };
+
+export const taskTitleInput: InputOptions = {
+  name: 'title',
+  label: 'tasks.title',
+  type: 'text',
+  validationOptions: {
+    required: VALIDATION_RULE_REQUIRED,
+  },
+};
+
+export const taskDescriptionInput: InputOptions = {
+  name: 'description',
+  label: 'tasks.description',
+  type: 'text',
+  validationOptions: {
+    required: VALIDATION_RULE_REQUIRED,
+  },
+};
