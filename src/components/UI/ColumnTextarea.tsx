@@ -56,7 +56,7 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) 
       style={{
         width: 230,
         padding: '5px',
-        marginBottom: '1rem',
+        marginBottom: '2rem',
         fontSize: '20px',
         border: '0',
         borderRadius: '7px',

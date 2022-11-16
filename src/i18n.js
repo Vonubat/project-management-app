@@ -84,6 +84,12 @@ const resources = {
         addColumn: 'Add column',
         delColumn: 'Are you sure you want to delete the column?',
       },
+      tasks: {
+        title: 'Title',
+        description: 'Description',
+        addTask: 'Add task',
+        delTask: 'Are you sure you want to delete the task?',
+      },
     },
   },
   ru: {
@@ -167,6 +173,12 @@ const resources = {
         addTask: 'Добавить задачу',
         addColumn: 'Добавить колонку',
         delColumn: 'Вы действительно хотите удалить колонку?',
+      },
+      tasks: {
+        title: 'Название',
+        description: 'Описание',
+        addTask: 'Добавить задачу',
+        delTask: 'Вы действительно хотите удалить задачу?',
       },
     },
   },

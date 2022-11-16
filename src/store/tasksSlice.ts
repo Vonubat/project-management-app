@@ -58,13 +58,13 @@ export const deleteTask = createAsyncThunk<
 });
 
 interface IInitState {
-  tasks: TaskData[];
+  tasks: { [index: TaskData['columnId']]: TaskData[] };
   error: string | null | undefined;
   status: StatusType;
 }
 
 const initState: IInitState = {
-  tasks: [],
+  tasks: {},
   error: null,
   status: Status.idle,
 };
@@ -74,20 +74,24 @@ const tasksSlice = createSlice({
   initialState: initState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getAllTasks.fulfilled, (state, { payload }) => {
-      state.tasks = payload;
+    builder.addCase(getAllTasks.fulfilled, (state, { payload, meta }) => {
+      state.tasks[meta.arg.columnId] = payload;
     });
 
-    builder.addCase(createTask.fulfilled, (state, { payload }) => {
-      state.tasks.push(payload);
+    builder.addCase(createTask.fulfilled, (state, { payload, meta }) => {
+      state.tasks[meta.arg.columnId].push(payload);
     });
 
-    builder.addCase(updateTask.fulfilled, (state, { payload }) => {
-      state.tasks = state.tasks.map((task) => (task._id === payload._id ? payload : task));
+    builder.addCase(updateTask.fulfilled, (state, { payload, meta }) => {
+      state.tasks[meta.arg.columnId] = state.tasks[meta.arg.columnId].map((task) =>
+        task._id === payload._id ? payload : task
+      );
     });
 
-    builder.addCase(deleteTask.fulfilled, (state, { payload }) => {
-      state.tasks = state.tasks.filter((task) => task._id !== payload._id);
+    builder.addCase(deleteTask.fulfilled, (state, { payload, meta }) => {
+      state.tasks[meta.arg.columnId] = state.tasks[meta.arg.columnId].filter(
+        (task) => task._id !== payload._id
+      );
     });
 
     builder.addMatcher(isPendingAction, (state) => {
@@ -109,4 +113,4 @@ const tasksSlice = createSlice({
 
 export default tasksSlice.reducer;
 
-export const columnsSelector = (state: { tasksStore: IInitState }) => state.tasksStore;
+export const tasksSelector = (state: { tasksStore: IInitState }) => state.tasksStore;
