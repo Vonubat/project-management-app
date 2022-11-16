@@ -54,7 +54,7 @@ const StyledTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) 
     <TextareaAutosize
       minRows={2}
       style={{
-        width: 240,
+        width: 230,
         padding: '5px 8px',
         fontSize: '20px',
         border: '0',

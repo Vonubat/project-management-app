@@ -6,7 +6,7 @@ import { GRAY_700, MediaQuery } from 'constants/constants';
 
 const styledFooter = (breakPoint: boolean) =>
   styled('footer')({
-    padding: '1rem 2rem',
+    padding: '0 2rem',
     display: 'flex',
     flexDirection: breakPoint ? 'row' : 'column',
     justifyContent: 'space-between',

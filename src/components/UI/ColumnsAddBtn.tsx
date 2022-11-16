@@ -16,9 +16,9 @@ const ColumnsAddBtn: FC<BtnProps> = ({ cb, children }) => (
     onClick={cb}
     sx={{
       color: GRAY_700,
-      minWidth: 260,
+      minWidth: 280,
       maxHeight: 50,
-      mx: 2,
+      mx: 1,
       '&:hover': {
         color: 'black',
         boxShadow: 3,

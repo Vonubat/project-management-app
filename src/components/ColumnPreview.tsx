@@ -6,6 +6,8 @@ import { useAppDispatch } from 'hooks/hooks';
 import { deleteColumn } from 'store/columnsSlice';
 import ColumnsAddBtn from './UI/ColumnsAddBtn';
 import StyledTextarea from './UI/StyledTextarea';
+import DeleteBtn from './UI/DeleteBtn';
+import { DefaultColors } from 'constants/constants';
 
 type Props = {
   children?: React.ReactNode;
@@ -19,18 +21,21 @@ const Column: FC<Pick<Props, 'children'>> = ({ children }) => {
   return (
     <Box
       sx={{
-        height: 1,
-        width: 1,
+        height: 'fit-content',
+        maxHeight: 0.9,
         py: 1,
         mx: 2,
-        maxWidth: 280,
+        maxWidth: 300,
+        minWidth: 300,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         boxShadow: 3,
         borderRadius: '5px',
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        overflowX: 'hidden',
+        overflowY: 'auto',
       }}
     >
       {children}
@@ -58,7 +63,16 @@ const ColumnPreview: FC<Props> = ({ columnTitle, columnId, boardId, order }) => 
 
   return (
     <Column>
-      <StyledTextarea value={columnTitle} columnId={columnId} boardId={boardId} order={order} />
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+        }}
+      >
+        <StyledTextarea value={columnTitle} columnId={columnId} boardId={boardId} order={order} />
+        <DeleteBtn size="small" color={DefaultColors.error} cb={openModal}></DeleteBtn>
+      </Box>
       <ColumnsAddBtn cb={openModal}>
         <Typography variant="h6">{t('addTask')}</Typography>
       </ColumnsAddBtn>

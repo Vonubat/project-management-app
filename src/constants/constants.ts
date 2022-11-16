@@ -37,6 +37,15 @@ export enum Status {
 // Colors
 export const GRAY_700: '#616161' = grey[700];
 
+export enum DefaultColors {
+  primary = 'primary',
+  secondary = 'secondary',
+  error = 'error',
+  warning = 'warning',
+  info = 'info',
+  success = 'success',
+}
+
 // MediaQuery storage
 export enum MediaQuery {
   minWidth750 = '(min-width:750px)',
