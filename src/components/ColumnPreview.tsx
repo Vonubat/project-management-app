@@ -71,7 +71,7 @@ const ColumnPreview: FC<Props> = ({ columnTitle, columnId, boardId, order }) => 
         }}
       >
         <ColumnTextarea value={columnTitle} columnId={columnId} boardId={boardId} order={order} />
-        <DeleteBtn size="small" color={DefaultColors.error} cb={openModal}></DeleteBtn>
+        <DeleteBtn size="small" color={DefaultColors.error} cb={openModal} />
       </Box>
       <TasksPreview columnId={columnId} boardId={boardId} />
       <ConfirmModal title={t('delColumn')} isOpen={isOpen} onSubmit={submit} onClose={closeModal} />

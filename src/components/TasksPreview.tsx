@@ -1,13 +1,9 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import ConfirmModal from './ConfirmModal';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { deleteColumn } from 'store/columnsSlice';
 import ColumnsAddBtn from './UI/ColumnsAddBtn';
-import ColumnTextarea from './UI/ColumnTextarea';
-import DeleteBtn from './UI/DeleteBtn';
-import { DefaultColors, Status } from 'constants/constants';
+import { Status } from 'constants/constants';
 import { getAllTasks, tasksSelector } from 'store/tasksSlice';
 import Loader from './Loader';
 import Task from './UI/Task';
@@ -50,7 +46,7 @@ const TasksPreview: FC<Props> = ({ columnId, boardId }) => {
           order={order}
         />
       ))}
-      <ColumnsAddBtn cb={() => dispatch(openModalForm())}>
+      <ColumnsAddBtn sx={{ marginTop: 3 }} cb={() => dispatch(openModalForm())}>
         <Typography variant="h6">{t('addTask')}</Typography>
       </ColumnsAddBtn>
       <AddColumnForm />

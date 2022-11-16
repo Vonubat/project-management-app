@@ -8,7 +8,7 @@ import {
   ThemeProvider,
 } from '@mui/material';
 
-let theme = createTheme();
+export let theme = createTheme();
 theme = responsiveFontSizes(theme);
 
 const StyledMain = styled('main')({
