@@ -3,5 +3,6 @@ export enum Path {
   signIn = 'signin',
   signUp = 'signup',
   boards = '/boards',
+  columns = '/boards/:boardId',
   user = '/user',
 }

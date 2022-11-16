@@ -6,6 +6,8 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  SxProps,
+  Theme,
   Typography,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -13,21 +15,28 @@ import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { closeModalForm, modalSelector } from 'store/modalSlice';
 
 type Props = {
+  uniqueId: string;
   modalTitle: string;
   children: ReactNode;
   onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+  sx?: SxProps<Theme>;
 };
 
-const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit }) => {
+const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, sx, uniqueId }) => {
+  const isOpenKey: `isOpen_${string}` = `isOpen_${uniqueId}`;
   const { t } = useTranslation('translation', { keyPrefix: 'confirmModal' });
-  const { isOpen, isSubmitDisabled } = useAppSelector(modalSelector);
+  const { [isOpenKey]: isOpen = false, isSubmitDisabled } = useAppSelector(modalSelector);
   const dispatch = useAppDispatch();
-
-  const closeModal = () => dispatch(closeModalForm());
+  const closeModal = () => dispatch(closeModalForm(uniqueId));
 
   return (
     <Dialog open={isOpen}>
-      <DialogContent sx={{ p: 2 }}>
+      <DialogContent
+        sx={{
+          ...sx,
+          p: 2,
+        }}
+      >
         <Typography variant="h5" align="center">
           {modalTitle}
         </Typography>

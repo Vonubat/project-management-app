@@ -37,6 +37,7 @@ const LanguageBox = () => {
         keepMounted
         open={Boolean(langMenuAnchor)}
         onClose={langMenuClose}
+        disableScrollLock={true}
       >
         <MenuItem onClick={() => changeLanguage(LangType.en)}>{t('en')}</MenuItem>
         <MenuItem onClick={() => changeLanguage(LangType.ru)}>{t('ru')}</MenuItem>

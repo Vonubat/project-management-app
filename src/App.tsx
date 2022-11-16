@@ -8,6 +8,7 @@ import { Path } from 'constants/routing';
 import BoardList from 'pages/BoardList';
 import ProtectedRoute from 'components/ProtectedRoute';
 import EditProfile from 'pages/EditProfile';
+import Columns from 'pages/Columns';
 
 function App() {
   return (
@@ -35,6 +36,14 @@ function App() {
           element={
             <ProtectedRoute redirect={Path.home} isAuthState={false}>
               <BoardList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={Path.columns}
+          element={
+            <ProtectedRoute redirect={Path.home} isAuthState={false}>
+              <Columns />
             </ProtectedRoute>
           }
         />

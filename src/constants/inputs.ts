@@ -105,4 +105,34 @@ export const signInInputsList: InputOptions[] = [loginInput, passwordInput];
 
 export const signUpInputsList: InputOptions[] = [nameInput, loginInput, passwordInput];
 
+export const columnTitleInput: InputOptions = {
+  name: 'title',
+  label: 'columns.title',
+  type: 'text',
+  rows: 3,
+  validationOptions: {
+    required: VALIDATION_RULE_REQUIRED,
+  },
+};
+
+export const taskTitleInput: InputOptions = {
+  name: 'title',
+  label: 'tasks.title',
+  type: 'text',
+  rows: 3,
+  validationOptions: {
+    required: VALIDATION_RULE_REQUIRED,
+  },
+};
+
+export const taskDescriptionInput: InputOptions = {
+  name: 'description',
+  label: 'tasks.description',
+  type: 'text',
+  rows: 10,
+  validationOptions: {
+    required: VALIDATION_RULE_REQUIRED,
+  },
+};
+
 export const editBoardInputsList: InputOptions[] = [titleInput, descriptionInput];
