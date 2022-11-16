@@ -27,7 +27,7 @@ const notificationSlice = createSlice({
       state.isOpen = true;
 
       if (action.payload) {
-        state.message = `error${action.payload}`;
+        state.message = `responseError.error${action.payload}`;
         return;
       }
 
@@ -36,10 +36,34 @@ const notificationSlice = createSlice({
       }
     });
 
-    builder.addMatcher(isFulfilled, (state) => {
+    builder.addMatcher(isFulfilled, (state, action) => {
       state.isOpen = true;
       state.severity = Severity.info;
       state.message = 'Info happened';
+
+      if (action.type.startsWith('auth/signIn')) {
+        state.message = 'responseSuccess.signIn';
+      }
+
+      if (action.type.startsWith('auth/signUp')) {
+        state.message = 'responseSuccess.signUp';
+      }
+
+      if (action.type.startsWith('user/delete')) {
+        state.message = 'responseSuccess.deleteUser';
+      }
+
+      if (action.type.startsWith('user/update')) {
+        state.message = 'responseSuccess.updateUser';
+      }
+
+      if (action.type.startsWith('board/create')) {
+        state.message = 'responseSuccess.boardCreated';
+      }
+
+      if (action.type.startsWith('board/delete')) {
+        state.message = 'responseSuccess.boardDeleted';
+      }
     });
   },
 });

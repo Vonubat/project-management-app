@@ -41,6 +41,14 @@ const resources = {
         errorUnknown: 'An unknown error has occurred',
         'Network Error': 'Network error',
       },
+      responseSuccess: {
+        signIn: 'Hello',
+        signUp: 'User was successfully created',
+        deleteUser: 'User was deleted',
+        updateUser: 'User profile updated successfully',
+        boardCreated: 'Board created successfully',
+        boardDeleted: 'Board deleted successfully',
+      },
       validationError: {
         required: 'This field is required',
         maxLength16: 'Input should be no more than 16 characters',
@@ -57,7 +65,7 @@ const resources = {
         dontHaveAccount: "Don't have an account? Sign Up",
         alreadyHaveAccount: 'Already have an account? Sign in',
         signUpTitle: 'Sign Up',
-        createdSuccessfuly: 'User was created successfuly',
+        createdSuccessfully: 'User was created successfully',
         logInToAccount: 'Log in to account',
       },
       boardList: {
@@ -122,6 +130,14 @@ const resources = {
         errorUnknown: 'Произошла неизвестная ошибка',
         'Network Error': 'Ошибка сети',
       },
+      responseSuccess: {
+        signIn: 'Привет ',
+        signUp: 'Пользователь cоpдан успешно',
+        deleteUser: 'Пользователь удален',
+        updateUser: 'Профиль успешно обновлен',
+        boardCreated: 'Доска успешно создана',
+        boardDeleted: 'Доска успешно удалена',
+      },
       validationError: {
         required: 'Это поле обязательно для ввода',
         maxLength16: 'Поле должно содержать не более 16 символов',
@@ -138,7 +154,7 @@ const resources = {
         dontHaveAccount: 'Нет аккаунта? Зарегистрируйтесь',
         alreadyHaveAccount: 'Уже есть аккаунт? Войдите в него',
         signUpTitle: 'Создать аккаунт',
-        createdSuccessfuly: 'Пользователь успешно зарегистрирован',
+        createdSuccessfully: 'Пользователь успешно зарегистрирован',
         logInToAccount: 'Войти в аккаунт',
       },
       boardList: {

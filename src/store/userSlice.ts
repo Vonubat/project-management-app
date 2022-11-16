@@ -67,7 +67,7 @@ export const updateUser = createAsyncThunk<
   SignUpOkResponseData,
   SignUpRequestData,
   { state: RootState; rejectValue: number }
->('user/updateName', async (data, { getState, rejectWithValue }) => {
+>('user/update', async (data, { getState, rejectWithValue }) => {
   const {
     userStore: { userId },
   } = getState();
@@ -91,7 +91,7 @@ export const deleteUser = createAsyncThunk<
   SignUpOkResponseData,
   void,
   { state: RootState; rejectValue: number }
->('user/updateName', async (_, { getState, rejectWithValue }) => {
+>('user/delete', async (_, { getState, rejectWithValue }) => {
   const {
     userStore: { userId },
   } = getState();

@@ -7,7 +7,7 @@ import { closeToast, notificationSelector } from 'store/notificationSlice';
 const ToastBox = () => {
   const { isOpen, message, severity } = useAppSelector(notificationSelector);
   const dispatch = useAppDispatch();
-  const { t } = useTranslation('translation', { keyPrefix: 'responseError' });
+  const { t } = useTranslation();
 
   return (
     <Snackbar
