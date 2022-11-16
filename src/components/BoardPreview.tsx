@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Button,
   Box,
@@ -13,7 +14,6 @@ import { useTranslation } from 'react-i18next';
 import ConfirmModal from './ConfirmModal';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { deleteBoard } from 'store/boardListSlice';
-import { Link as RouterLink } from 'react-router-dom';
 import { Path } from 'constants/routing';
 import { BoardData } from 'types/boards';
 import { openModalForm, setBoardParams } from 'store/modalSlice';
@@ -28,7 +28,7 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
   const { _id, title, description } = boardData;
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  // const [isDisabled, setDisabled] = useState<boolean>(false);
+  const navigate = useNavigate();
   const { boardLoadingArr } = useAppSelector(boardListSelector);
   const dispatch = useAppDispatch();
 
@@ -84,7 +84,7 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
                   </Button>
                 </Tooltip>
                 <Tooltip title={t('open')} placement="top">
-                  <Button component={RouterLink} to={`${Path.boards}/${_id}`}>
+                  <Button onClick={() => navigate(`${Path.boards}/${_id}`)}>
                     <OpenWith />
                   </Button>
                 </Tooltip>
