@@ -15,8 +15,9 @@ type Props = {
 };
 
 const AddColumnForm: FC<Props> = ({ boardId }) => {
+  const isOpenKey: `isOpen_${string}` = `isOpen_${boardId}`;
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
-  const { isOpen } = useAppSelector(modalSelector);
+  const { [isOpenKey]: isOpen } = useAppSelector(modalSelector);
   const { columns } = useAppSelector(columnsSelector);
   const currentPosition: number = columns.length + 1;
   const dispatch = useAppDispatch();
@@ -40,7 +41,7 @@ const AddColumnForm: FC<Props> = ({ boardId }) => {
         data: { title: data.title, order: currentPosition },
       })
     );
-    dispatch(closeModalForm());
+    dispatch(closeModalForm(boardId));
   };
 
   useEffect(() => {
@@ -54,7 +55,7 @@ const AddColumnForm: FC<Props> = ({ boardId }) => {
   }, [isOpen, reset]);
 
   return (
-    <ModalWithForm modalTitle={t('addColumn')} onSubmit={handleSubmit(onSubmit)}>
+    <ModalWithForm modalTitle={t('addColumn')} uniqueId={boardId} onSubmit={handleSubmit(onSubmit)}>
       <ControlledFormInput control={formControl} inputOptions={columnTitleInput} />
     </ModalWithForm>
   );

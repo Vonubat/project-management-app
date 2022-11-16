@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type ModalState = {
-  isOpen: boolean;
+  [key: `isOpen_${string}`]: boolean;
   isSubmitted: boolean;
   isDeclined: boolean;
   isSubmitDisabled: boolean;
@@ -12,7 +12,6 @@ type ModalState = {
 };
 
 const modalInitialState: ModalState = {
-  isOpen: false,
   isSubmitted: false,
   isDeclined: false,
   isSubmitDisabled: true,
@@ -26,11 +25,11 @@ const modalSlice = createSlice({
   name: 'modal',
   initialState: modalInitialState,
   reducers: {
-    openModalForm: (state) => {
-      state.isOpen = true;
+    openModalForm: (state, action: PayloadAction<string>) => {
+      state[`isOpen_${action.payload}`] = true;
     },
-    closeModalForm: (state) => {
-      state.isOpen = false;
+    closeModalForm: (state, action: PayloadAction<string>) => {
+      state[`isOpen_${action.payload}`] = false;
     },
     setIsSubmitDisabled: (state, action) => {
       state.isSubmitDisabled = action.payload;

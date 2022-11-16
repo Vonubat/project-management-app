@@ -3,9 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import ColumnsAddBtn from './UI/ColumnsAddBtn';
-import { Status } from 'constants/constants';
 import { getAllTasks, tasksSelector } from 'store/tasksSlice';
-import Loader from './Loader';
 import Task from './UI/Task';
 import { TaskData } from 'types/tasks';
 import { openModalForm } from 'store/modalSlice';
@@ -18,9 +16,8 @@ type Props = {
 };
 
 const TasksPreview: FC<Props> = ({ columnId, boardId }) => {
-  const { tasks, status } = useAppSelector(tasksSelector);
+  const { tasks } = useAppSelector(tasksSelector);
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
-  const isLoading: boolean = status === Status.pending;
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -46,11 +43,10 @@ const TasksPreview: FC<Props> = ({ columnId, boardId }) => {
           order={order}
         />
       ))}
-      <ColumnsAddBtn sx={{ marginTop: 3 }} cb={() => dispatch(openModalForm())}>
+      <ColumnsAddBtn sx={{ marginTop: 3 }} cb={() => dispatch(openModalForm(columnId))}>
         <Typography variant="h6">{t('addTask')}</Typography>
       </ColumnsAddBtn>
       <AddTaskForm boardId={boardId} columnId={columnId} />
-      {isLoading && <Loader />}
     </Box>
   );
 };

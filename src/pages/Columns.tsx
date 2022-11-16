@@ -63,7 +63,7 @@ const Columns = () => {
             order={order}
           />
         ))}
-        <ColumnsAddBtn cb={() => dispatch(openModalForm())}>
+        <ColumnsAddBtn cb={() => dispatch(openModalForm(boardId as string))}>
           <Typography variant="h6">{t('addColumn')}</Typography>
         </ColumnsAddBtn>
         <AddColumnForm boardId={boardId as string} />
