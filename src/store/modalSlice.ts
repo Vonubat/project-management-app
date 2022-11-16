@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { BoardData } from 'types/boards';
 
 type ModalState = {
   [key: `isOpen_${string}`]: boolean;
@@ -9,6 +10,7 @@ type ModalState = {
   isConfirmSubmitted: boolean;
   isConfirmDeclined: boolean;
   confirmTitle: string;
+  boardData?: BoardData;
 };
 
 const modalInitialState: ModalState = {
@@ -53,11 +55,23 @@ const modalSlice = createSlice({
       state.isConfirmDeclined = false;
       state.confirmTitle = modalInitialState.confirmTitle;
     },
+    setBoardParams: (state, action: PayloadAction<BoardData>) => {
+      state.boardData = action.payload;
+    },
+    clearBoardParams: (state) => {
+      state.boardData = undefined;
+    },
   },
 });
 
 export default modalSlice.reducer;
 
-export const { openModalForm, closeModalForm, setIsSubmitDisabled } = modalSlice.actions;
+export const {
+  openModalForm,
+  closeModalForm,
+  setIsSubmitDisabled,
+  setBoardParams,
+  clearBoardParams,
+} = modalSlice.actions;
 
 export const modalSelector = (state: { modalStore: ModalState }) => state.modalStore;

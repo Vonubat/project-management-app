@@ -51,6 +51,7 @@ const resources = {
       },
       validationError: {
         required: 'This field is required',
+        maxLength400: 'Input should be no more than 400 characters',
         maxLength16: 'Input should be no more than 16 characters',
         minLength2: 'Input should be no less than 2 characters',
         minLength3: 'Input should be no less than 3 characters',
@@ -69,10 +70,10 @@ const resources = {
         logInToAccount: 'Log in to account',
       },
       boardList: {
-        edit: 'Edit',
         open: 'Open',
         remove: 'Remove',
         add: 'Add board',
+        edit: 'Edit board',
         delBoard: 'Are you sure you want to delete the board?',
         title: 'Title',
         description: 'Description',
@@ -152,7 +153,8 @@ const resources = {
         boardDeleted: 'Доска успешно удалена',
       },
       validationError: {
-        required: 'Это поле обязательно для ввода',
+        required: 'Это поле обязательно',
+        maxLength400: 'Поле должно содержать не более 400 символов',
         maxLength16: 'Поле должно содержать не более 16 символов',
         minLength2: 'Поле должно содержать не менее 2 символов',
         minLength3: 'Поле должно содержать не менее 3 символов',
@@ -171,10 +173,10 @@ const resources = {
         logInToAccount: 'Войти в аккаунт',
       },
       boardList: {
-        edit: 'Изменить',
         open: 'Открыть',
         remove: 'Удалить',
         add: 'Добавить доску',
+        edit: 'Изменить доску',
         delBoard: 'Вы действительно хотите удалить доску?',
         title: 'Заголовок',
         description: 'Описание',

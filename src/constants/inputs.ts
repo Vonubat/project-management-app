@@ -5,6 +5,11 @@ const VALIDATION_RULE_REQUIRED = {
   message: 'required',
 };
 
+const VALIDATION_RULE_MAX_LENGTH_400 = {
+  value: 400,
+  message: 'maxLength400',
+};
+
 const VALIDATION_RULE_MAX_LENGTH_16 = {
   value: 16,
   message: 'maxLength16',
@@ -71,6 +76,31 @@ export const passwordInput: InputOptions = {
   },
 };
 
+export const titleInput: InputOptions = {
+  name: 'title',
+  label: 'boardList.title',
+  type: 'text',
+  validationOptions: {
+    required: VALIDATION_RULE_REQUIRED,
+    minLength: VALIDATION_RULE_MIN_LENGTH_3,
+    maxLength: VALIDATION_RULE_MAX_LENGTH_16,
+    pattern: VALIDATION_RULE_PASSWORD_PATTERN,
+  },
+};
+
+export const descriptionInput: InputOptions = {
+  name: 'description',
+  label: 'boardList.description',
+  type: 'text',
+  rows: 4,
+  validationOptions: {
+    required: VALIDATION_RULE_REQUIRED,
+    minLength: VALIDATION_RULE_MIN_LENGTH_8,
+    maxLength: VALIDATION_RULE_MAX_LENGTH_400,
+    pattern: VALIDATION_RULE_PASSWORD_PATTERN,
+  },
+};
+
 export const signInInputsList: InputOptions[] = [loginInput, passwordInput];
 
 export const signUpInputsList: InputOptions[] = [nameInput, loginInput, passwordInput];
@@ -79,6 +109,7 @@ export const columnTitleInput: InputOptions = {
   name: 'title',
   label: 'columns.title',
   type: 'text',
+  rows: 3,
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
   },
@@ -88,6 +119,7 @@ export const taskTitleInput: InputOptions = {
   name: 'title',
   label: 'tasks.title',
   type: 'text',
+  rows: 3,
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
   },
@@ -97,7 +129,10 @@ export const taskDescriptionInput: InputOptions = {
   name: 'description',
   label: 'tasks.description',
   type: 'text',
+  rows: 10,
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
   },
 };
+
+export const editBoardInputsList: InputOptions[] = [titleInput, descriptionInput];

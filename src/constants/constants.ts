@@ -59,6 +59,7 @@ export enum TypeofModal {
   addColumn = 'addColumn',
   addTask = 'addTask',
   editTask = 'editTask',
+  board = 'board',
 }
 
 export enum Severity {

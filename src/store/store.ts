@@ -7,7 +7,6 @@ import columnsReducer from './columnsSlice';
 import tasksReducer from './tasksSlice';
 import notificationSliceReducer from './notificationSlice';
 
-
 export const store = configureStore({
   reducer: {
     authStore: authSliceReducer,
@@ -17,7 +16,6 @@ export const store = configureStore({
     columnsStore: columnsReducer,
     tasksStore: tasksReducer,
     notificationStore: notificationSliceReducer,
-
   },
 });
 

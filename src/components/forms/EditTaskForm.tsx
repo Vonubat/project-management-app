@@ -84,12 +84,8 @@ const EditTaskForm: FC = () => {
       uniqueId={TypeofModal.editTask}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <ControlledFormInput control={formControl} inputOptions={taskTitleInput} controlSize={3} />
-      <ControlledFormInput
-        control={formControl}
-        inputOptions={taskDescriptionInput}
-        controlSize={10}
-      />
+      <ControlledFormInput control={formControl} inputOptions={taskTitleInput} />
+      <ControlledFormInput control={formControl} inputOptions={taskDescriptionInput} />
     </ModalWithForm>
   );
 };
