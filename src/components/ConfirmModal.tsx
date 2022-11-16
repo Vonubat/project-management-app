@@ -1,12 +1,12 @@
-import React, { FC } from 'react';
+import React, { FC, SyntheticEvent } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 interface IConfirmModalProps {
   isOpen: boolean;
   title: string;
-  onClose: VoidFunction;
-  onSubmit: VoidFunction;
+  onClose: VoidFunction | ((e: SyntheticEvent) => void);
+  onSubmit: VoidFunction | ((e: SyntheticEvent) => void);
 }
 
 const ConfirmModal: FC<IConfirmModalProps> = ({ isOpen, title, onClose, onSubmit }) => {

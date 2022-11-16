@@ -13,9 +13,12 @@ import { useTranslation } from 'react-i18next';
 import ConfirmModal from './ConfirmModal';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { deleteBoard } from 'store/boardListSlice';
+import { Link as RouterLink } from 'react-router-dom';
+import { Path } from 'constants/routing';
 import { BoardData } from 'types/boards';
 import { openModalForm, setBoardParams } from 'store/modalSlice';
 import { boardListSelector, setBoardLoading } from 'store/boardListSlice';
+import { TypeofModal } from 'constants/constants';
 
 type Props = {
   boardData: BoardData;
@@ -45,7 +48,7 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
 
   function openEditBoardModalForm() {
     dispatch(setBoardParams(boardData));
-    dispatch(openModalForm());
+    dispatch(openModalForm(TypeofModal.board));
   }
 
   const isEditBoardLoading = boardLoadingArr.some((id) => id === _id);
@@ -81,7 +84,7 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
                   </Button>
                 </Tooltip>
                 <Tooltip title={t('open')} placement="top">
-                  <Button>
+                  <Button component={RouterLink} to={`${Path.boards}/${_id}`}>
                     <OpenWith />
                   </Button>
                 </Tooltip>

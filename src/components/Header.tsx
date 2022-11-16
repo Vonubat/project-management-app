@@ -23,7 +23,7 @@ export default function Header() {
   const { isAuth } = useAppSelector(authSelector);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const trigger = useScrollTrigger();
+  const trigger = useScrollTrigger({ disableHysteresis: true });
   const { t } = useTranslation('translation', { keyPrefix: 'buttonText' });
 
   const logOutUser = () => {

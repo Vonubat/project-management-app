@@ -20,3 +20,7 @@ export type ColumnsSetCreateParams = {
   order: number;
   boardId: BoardData['_id'];
 };
+
+export type AddColumnFields = {
+  title: string;
+};

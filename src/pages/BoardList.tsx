@@ -10,6 +10,7 @@ import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
 import { authSelector } from 'store/authSlice';
 import { clearBoardParams, openModalForm } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { TypeofModal } from 'constants/constants';
 
 const StyledBox = styled(Box)({
   display: 'flex',
@@ -31,7 +32,7 @@ export default function Boards() {
 
   function openAddBoardModalForm() {
     dispatch(clearBoardParams());
-    dispatch(openModalForm());
+    dispatch(openModalForm(TypeofModal.board));
   }
 
   return (

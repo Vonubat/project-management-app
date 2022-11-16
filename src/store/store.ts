@@ -3,6 +3,8 @@ import authSliceReducer from './authSlice';
 import boardListSliceReducer from './boardListSlice';
 import userSliceReducer from './userSlice';
 import modalSliceReducer from './modalSlice';
+import columnsReducer from './columnsSlice';
+import tasksReducer from './tasksSlice';
 import notificationSliceReducer from './notificationSlice';
 
 export const store = configureStore({
@@ -11,6 +13,8 @@ export const store = configureStore({
     boardListStore: boardListSliceReducer,
     userStore: userSliceReducer,
     modalStore: modalSliceReducer,
+    columnsStore: columnsReducer,
+    tasksStore: tasksReducer,
     notificationStore: notificationSliceReducer,
   },
 });

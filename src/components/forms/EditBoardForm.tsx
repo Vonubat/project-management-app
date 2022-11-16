@@ -11,10 +11,12 @@ import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalS
 import { authSelector } from 'store/authSlice';
 import { editBoard, createBoard } from 'store/boardListSlice';
 import { setBoardLoading } from 'store/boardListSlice';
+import { TypeofModal } from 'constants/constants';
 
 const EditBoardForm: FC = () => {
   const { userId } = useAppSelector(authSelector);
-  const { isOpen, boardData } = useAppSelector(modalSelector);
+  const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.board}`;
+  const { [isOpenKey]: isOpen, boardData } = useAppSelector(modalSelector);
   const dispatch = useAppDispatch();
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const {
@@ -41,8 +43,7 @@ const EditBoardForm: FC = () => {
     } else {
       dispatch(createBoard(boardParams));
     }
-
-    dispatch(closeModalForm());
+    dispatch(closeModalForm(TypeofModal.board));
   };
 
   useEffect(() => {
@@ -60,7 +61,11 @@ const EditBoardForm: FC = () => {
   }, [isOpen]);
 
   return (
-    <ModalWithForm modalTitle={boardData ? t('edit') : t('add')} onSubmit={handleSubmit(onSubmit)}>
+    <ModalWithForm
+      modalTitle={boardData ? t('edit') : t('add')}
+      onSubmit={handleSubmit(onSubmit)}
+      uniqueId={TypeofModal.board}
+    >
       <ControlledFormInput control={formControl} inputOptions={titleInput} />
       <ControlledFormInput control={formControl} inputOptions={descriptionInput} />
     </ModalWithForm>
