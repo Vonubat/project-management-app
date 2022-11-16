@@ -15,18 +15,19 @@ import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { closeModalForm, modalSelector } from 'store/modalSlice';
 
 type Props = {
+  uniqueId: string;
   modalTitle: string;
   children: ReactNode;
   onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
   sx?: SxProps<Theme>;
 };
 
-const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, sx }) => {
+const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, sx, uniqueId }) => {
+  const isOpenKey: `isOpen_${string}` = `isOpen_${uniqueId}`;
   const { t } = useTranslation('translation', { keyPrefix: 'confirmModal' });
-  const { isOpen, isSubmitDisabled } = useAppSelector(modalSelector);
+  const { [isOpenKey]: isOpen = false, isSubmitDisabled } = useAppSelector(modalSelector);
   const dispatch = useAppDispatch();
-
-  const closeModal = () => dispatch(closeModalForm());
+  const closeModal = () => dispatch(closeModalForm(uniqueId));
 
   return (
     <Dialog open={isOpen}>

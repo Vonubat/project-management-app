@@ -53,3 +53,10 @@ export enum MediaQuery {
   minWidth500 = '(min-width:500px)',
   minWidth380 = '(min-width:380px)',
 }
+
+// Type of Modal storage
+export enum TypeofModal {
+  addColumn = 'addColumn',
+  addTask = 'addTask',
+  editTask = 'editTask',
+}

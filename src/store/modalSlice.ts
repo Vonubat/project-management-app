@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type ModalState = {
-  isOpen: boolean;
+  [key: `isOpen_${string}`]: boolean;
   isSubmitted: boolean;
   isDeclined: boolean;
   isSubmitDisabled: boolean;
@@ -9,10 +9,12 @@ type ModalState = {
   isConfirmSubmitted: boolean;
   isConfirmDeclined: boolean;
   confirmTitle: string;
+  currentBoardId: string;
+  currentColumnId: string;
+  currentTaskId: string;
 };
 
 const modalInitialState: ModalState = {
-  isOpen: false,
   isSubmitted: false,
   isDeclined: false,
   isSubmitDisabled: true,
@@ -20,17 +22,20 @@ const modalInitialState: ModalState = {
   isConfirmSubmitted: false,
   isConfirmDeclined: false,
   confirmTitle: '',
+  currentBoardId: '',
+  currentColumnId: '',
+  currentTaskId: '',
 };
 
 const modalSlice = createSlice({
   name: 'modal',
   initialState: modalInitialState,
   reducers: {
-    openModalForm: (state) => {
-      state.isOpen = true;
+    openModalForm: (state, action: PayloadAction<string>) => {
+      state[`isOpen_${action.payload}`] = true;
     },
-    closeModalForm: (state) => {
-      state.isOpen = false;
+    closeModalForm: (state, action: PayloadAction<string>) => {
+      state[`isOpen_${action.payload}`] = false;
     },
     setIsSubmitDisabled: (state, action) => {
       state.isSubmitDisabled = action.payload;
@@ -54,11 +59,27 @@ const modalSlice = createSlice({
       state.isConfirmDeclined = false;
       state.confirmTitle = modalInitialState.confirmTitle;
     },
+    setCurrentBoardId: (state, action: PayloadAction<string>) => {
+      state.currentBoardId = action.payload;
+    },
+    setCurrentColumnId: (state, action: PayloadAction<string>) => {
+      state.currentColumnId = action.payload;
+    },
+    setCurrentTaskId: (state, action: PayloadAction<string>) => {
+      state.currentTaskId = action.payload;
+    },
   },
 });
 
 export default modalSlice.reducer;
 
-export const { openModalForm, closeModalForm, setIsSubmitDisabled } = modalSlice.actions;
+export const {
+  openModalForm,
+  closeModalForm,
+  setIsSubmitDisabled,
+  setCurrentBoardId,
+  setCurrentColumnId,
+  setCurrentTaskId,
+} = modalSlice.actions;
 
 export const modalSelector = (state: { modalStore: ModalState }) => state.modalStore;

@@ -4,14 +4,15 @@ import { Box, Typography, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector, useImperativeDisableScroll } from 'hooks/hooks';
 import Loader from 'components/Loader';
-import { MediaQuery, Status } from 'constants/constants';
+import { MediaQuery, Status, TypeofModal } from 'constants/constants';
 import { columnsSelector, getColumnsInBoards } from 'store/columnsSlice';
 import { useParams } from 'react-router-dom';
 import { ColumnData } from 'types/columns';
 import ColumnPreview from 'components/ColumnPreview';
 import ColumnsAddBtn from 'components/UI/ColumnsAddBtn';
 import AddColumnForm from 'components/forms/AddColumnForm';
-import { openModalForm } from 'store/modalSlice';
+import { openModalForm, setCurrentBoardId } from 'store/modalSlice';
+import AddTaskForm from 'components/forms/AddTaskForm';
 
 type Props = {
   children?: React.ReactNode;
@@ -47,6 +48,7 @@ const Columns = () => {
 
   useEffect(() => {
     dispatch(getColumnsInBoards(boardId as string));
+    dispatch(setCurrentBoardId(boardId as string));
   }, [dispatch, boardId]);
 
   useImperativeDisableScroll(BODY);
@@ -63,10 +65,11 @@ const Columns = () => {
             order={order}
           />
         ))}
-        <ColumnsAddBtn cb={() => dispatch(openModalForm())}>
+        <ColumnsAddBtn cb={() => dispatch(openModalForm(TypeofModal.addColumn))}>
           <Typography variant="h6">{t('addColumn')}</Typography>
         </ColumnsAddBtn>
-        <AddColumnForm boardId={boardId as string} />
+        <AddColumnForm />
+        <AddTaskForm />
       </StyledBox>
       {isLoading && <Loader />}
     </Page>

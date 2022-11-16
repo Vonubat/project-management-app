@@ -9,14 +9,13 @@ import { AddColumnFields } from 'types/columns';
 import ModalWithForm from 'components/ModalWithForm';
 import ControlledFormInput from 'components/ControlledFormInput';
 import { FormControl } from 'types/formInput';
+import { TypeofModal } from 'constants/constants';
 
-type Props = {
-  boardId: string;
-};
-
-const AddColumnForm: FC<Props> = ({ boardId }) => {
+const AddColumnForm: FC = () => {
+  const { currentBoardId: boardId } = useAppSelector(modalSelector);
+  const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.addColumn}`;
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
-  const { isOpen } = useAppSelector(modalSelector);
+  const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
   const { columns } = useAppSelector(columnsSelector);
   const currentPosition: number = columns.length + 1;
   const dispatch = useAppDispatch();
@@ -36,11 +35,11 @@ const AddColumnForm: FC<Props> = ({ boardId }) => {
   const onSubmit = (data: AddColumnFields) => {
     dispatch(
       createColumn({
-        boardId: boardId as string,
+        boardId: boardId,
         data: { title: data.title, order: currentPosition },
       })
     );
-    dispatch(closeModalForm());
+    dispatch(closeModalForm(TypeofModal.addColumn));
   };
 
   useEffect(() => {
@@ -54,7 +53,11 @@ const AddColumnForm: FC<Props> = ({ boardId }) => {
   }, [isOpen, reset]);
 
   return (
-    <ModalWithForm modalTitle={t('addColumn')} onSubmit={handleSubmit(onSubmit)}>
+    <ModalWithForm
+      modalTitle={t('addColumn')}
+      uniqueId={TypeofModal.addColumn}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <ControlledFormInput control={formControl} inputOptions={columnTitleInput} />
     </ModalWithForm>
   );

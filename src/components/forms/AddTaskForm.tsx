@@ -10,16 +10,15 @@ import { FormControl } from 'types/formInput';
 import { createTask, tasksSelector } from 'store/tasksSlice';
 import { AddTaskFields } from 'types/tasks';
 import { authSelector } from 'store/authSlice';
+import { TypeofModal } from 'constants/constants';
 
-type Props = {
-  boardId: string;
-  columnId: string;
-};
-
-const AddTaskForm: FC<Props> = ({ boardId, columnId }) => {
+const AddTaskForm: FC = () => {
+  const { currentBoardId: boardId } = useAppSelector(modalSelector);
+  const { currentColumnId: columnId } = useAppSelector(modalSelector);
+  const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.addTask}`;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const { userId } = useAppSelector(authSelector);
-  const { isOpen } = useAppSelector(modalSelector);
+  const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
   const { tasks } = useAppSelector(tasksSelector);
   const currentPosition: number = (tasks[boardId]?.length || 0) + 1;
   const dispatch = useAppDispatch();
@@ -50,7 +49,7 @@ const AddTaskForm: FC<Props> = ({ boardId, columnId }) => {
         },
       })
     );
-    dispatch(closeModalForm());
+    dispatch(closeModalForm(TypeofModal.addTask));
   };
 
   useEffect(() => {
@@ -59,12 +58,16 @@ const AddTaskForm: FC<Props> = ({ boardId, columnId }) => {
 
   useEffect(() => {
     if (isOpen) {
-      reset({ title: '' });
+      reset({ title: '', description: '' });
     }
   }, [isOpen, reset]);
 
   return (
-    <ModalWithForm modalTitle={t('addTask')} onSubmit={handleSubmit(onSubmit)}>
+    <ModalWithForm
+      modalTitle={t('addTask')}
+      uniqueId={TypeofModal.addTask}
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <ControlledFormInput control={formControl} inputOptions={taskTitleInput} />
       <ControlledFormInput control={formControl} inputOptions={taskDescriptionInput} />
     </ModalWithForm>
