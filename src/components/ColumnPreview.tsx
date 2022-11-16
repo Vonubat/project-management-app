@@ -5,7 +5,7 @@ import ConfirmModal from './ConfirmModal';
 import { useAppDispatch } from 'hooks/hooks';
 import { deleteColumn } from 'store/columnsSlice';
 import ColumnsAddBtn from './UI/ColumnsAddBtn';
-import StyledTextarea from './UI/StyledTextarea';
+import ColumnTextarea from './UI/ColumnTextarea';
 import DeleteBtn from './UI/DeleteBtn';
 import { DefaultColors } from 'constants/constants';
 
@@ -31,6 +31,7 @@ const Column: FC<Pick<Props, 'children'>> = ({ children }) => {
         flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
+        gap: 1,
         boxShadow: 3,
         borderRadius: '5px',
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
@@ -70,7 +71,7 @@ const ColumnPreview: FC<Props> = ({ columnTitle, columnId, boardId, order }) => 
           justifyContent: 'space-between',
         }}
       >
-        <StyledTextarea value={columnTitle} columnId={columnId} boardId={boardId} order={order} />
+        <ColumnTextarea value={columnTitle} columnId={columnId} boardId={boardId} order={order} />
         <DeleteBtn size="small" color={DefaultColors.error} cb={openModal}></DeleteBtn>
       </Box>
       <ColumnsAddBtn cb={openModal}>

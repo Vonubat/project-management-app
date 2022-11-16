@@ -52,11 +52,7 @@ const AddColumnForm: FC = () => {
   }, [isOpen, reset]);
 
   return (
-    <ModalWithForm
-      sx={{ minWidth: 450, minHeight: 200 }}
-      modalTitle={t('addColumn')}
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <ModalWithForm modalTitle={t('addColumn')} onSubmit={handleSubmit(onSubmit)}>
       <ControlledFormInput control={formControl} inputOptions={columnTitleInput} />
     </ModalWithForm>
   );

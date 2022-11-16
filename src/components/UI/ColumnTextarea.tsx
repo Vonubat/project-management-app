@@ -12,7 +12,7 @@ type TextareaProps = {
   value: string;
 };
 
-const StyledTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) => {
+const ColumnTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) => {
   const [hasFocus, setFocus] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
   const [previousValue, setPreviousValue] = useState(value);
@@ -55,7 +55,8 @@ const StyledTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) 
       minRows={2}
       style={{
         width: 230,
-        padding: '5px 8px',
+        padding: '5px',
+        marginBottom: '1rem',
         fontSize: '20px',
         border: '0',
         borderRadius: '7px',
@@ -74,4 +75,4 @@ const StyledTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) 
   );
 };
 
-export default StyledTextarea;
+export default ColumnTextarea;
