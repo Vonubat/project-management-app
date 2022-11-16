@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { InputOptions } from 'types/formInput';
 
 type Props = {
+  controlSize?: number;
   inputOptions: InputOptions;
   control: Control<FieldValues, unknown>;
 };
@@ -12,6 +13,7 @@ type Props = {
 const ControlledFormInput: FC<Props> = ({
   inputOptions: { name, label, type, validationOptions },
   control,
+  controlSize,
 }) => {
   const { t } = useTranslation();
 
@@ -22,6 +24,8 @@ const ControlledFormInput: FC<Props> = ({
       render={({ field, fieldState: { error } }) => (
         <>
           <TextField
+            multiline
+            rows={controlSize || 1}
             margin="normal"
             fullWidth
             label={t(label)}

@@ -1,4 +1,4 @@
-import { Action, AnyAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { Action, AnyAction, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import ColumnsService from 'services/columnsService';
@@ -61,18 +61,29 @@ interface IInitState {
   columns: ColumnData[];
   error: string | null | undefined;
   status: StatusType;
+  currentBoardId: string;
+  currentColumnId: string;
 }
 
 const initState: IInitState = {
   columns: [],
   error: null,
   status: Status.idle,
+  currentBoardId: '',
+  currentColumnId: '',
 };
 
 const columnsSlice = createSlice({
   name: 'columns',
   initialState: initState,
-  reducers: {},
+  reducers: {
+    setCurrentBoardId: (state, action: PayloadAction<string>) => {
+      state.currentBoardId = action.payload;
+    },
+    setCurrentColumnId: (state, action: PayloadAction<string>) => {
+      state.currentColumnId = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getColumnsInBoards.fulfilled, (state, { payload }) => {
       state.columns = payload;
@@ -110,5 +121,7 @@ const columnsSlice = createSlice({
 });
 
 export default columnsSlice.reducer;
+
+export const { setCurrentBoardId, setCurrentColumnId } = columnsSlice.actions;
 
 export const columnsSelector = (state: { columnsStore: IInitState }) => state.columnsStore;

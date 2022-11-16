@@ -1,16 +1,13 @@
 import { Control, RegisterOptions } from 'react-hook-form';
 import { SignInFormFields, SignUpFormFields } from './auth';
 import { AddColumnFields } from './columns';
-import { AddTaskFields } from './tasks';
+import { TaskFields } from './tasks';
 
 // Add here your form fields types as intersection
-export type CustomFormFields = SignInFormFields &
-  SignUpFormFields &
-  AddColumnFields &
-  AddTaskFields;
+export type CustomFormFields = SignInFormFields & SignUpFormFields & AddColumnFields & TaskFields;
 
 // Add here your form fields keys
-export type InputName = keyof SignUpFormFields | keyof AddColumnFields | keyof AddTaskFields;
+export type InputName = keyof SignUpFormFields | keyof AddColumnFields | keyof TaskFields;
 
 export type InputOptions = {
   name: InputName;

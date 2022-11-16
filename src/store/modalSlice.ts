@@ -9,9 +9,6 @@ type ModalState = {
   isConfirmSubmitted: boolean;
   isConfirmDeclined: boolean;
   confirmTitle: string;
-  currentBoardId: string;
-  currentColumnId: string;
-  currentTaskId: string;
 };
 
 const modalInitialState: ModalState = {
@@ -22,9 +19,6 @@ const modalInitialState: ModalState = {
   isConfirmSubmitted: false,
   isConfirmDeclined: false,
   confirmTitle: '',
-  currentBoardId: '',
-  currentColumnId: '',
-  currentTaskId: '',
 };
 
 const modalSlice = createSlice({
@@ -59,27 +53,11 @@ const modalSlice = createSlice({
       state.isConfirmDeclined = false;
       state.confirmTitle = modalInitialState.confirmTitle;
     },
-    setCurrentBoardId: (state, action: PayloadAction<string>) => {
-      state.currentBoardId = action.payload;
-    },
-    setCurrentColumnId: (state, action: PayloadAction<string>) => {
-      state.currentColumnId = action.payload;
-    },
-    setCurrentTaskId: (state, action: PayloadAction<string>) => {
-      state.currentTaskId = action.payload;
-    },
   },
 });
 
 export default modalSlice.reducer;
 
-export const {
-  openModalForm,
-  closeModalForm,
-  setIsSubmitDisabled,
-  setCurrentBoardId,
-  setCurrentColumnId,
-  setCurrentTaskId,
-} = modalSlice.actions;
+export const { openModalForm, closeModalForm, setIsSubmitDisabled } = modalSlice.actions;
 
 export const modalSelector = (state: { modalStore: ModalState }) => state.modalStore;

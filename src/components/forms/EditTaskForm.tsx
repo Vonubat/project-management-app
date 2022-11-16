@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { useTranslation } from 'react-i18next';
 import { taskDescriptionInput, taskTitleInput } from 'constants/inputs';
@@ -7,16 +7,19 @@ import { useForm } from 'react-hook-form';
 import ModalWithForm from 'components/ModalWithForm';
 import ControlledFormInput from 'components/ControlledFormInput';
 import { FormControl } from 'types/formInput';
-import { createTask, tasksSelector } from 'store/tasksSlice';
+import { tasksSelector, updateTask } from 'store/tasksSlice';
 import { TaskFields } from 'types/tasks';
 import { authSelector } from 'store/authSlice';
 import { TypeofModal } from 'constants/constants';
 import { columnsSelector } from 'store/columnsSlice';
 
-const AddTaskForm: FC = () => {
+const EditTaskForm: FC = () => {
+  const { currentTaskTitle: taskTitle } = useAppSelector(tasksSelector);
+  const { currentTaskDescription: taskDescription } = useAppSelector(tasksSelector);
+  const { currentTaskId: taskId } = useAppSelector(tasksSelector);
   const { currentBoardId: boardId } = useAppSelector(columnsSelector);
   const { currentColumnId: columnId } = useAppSelector(columnsSelector);
-  const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.addTask}`;
+  const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.editTask}`;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const { userId } = useAppSelector(authSelector);
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
@@ -30,6 +33,10 @@ const AddTaskForm: FC = () => {
     reset,
     formState: { isValid },
   } = useForm<TaskFields>({
+    defaultValues: {
+      title: taskTitle,
+      description: taskDescription,
+    },
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
@@ -37,42 +44,54 @@ const AddTaskForm: FC = () => {
   const formControl = control as FormControl;
 
   const onSubmit = (data: TaskFields) => {
-    dispatch(
-      createTask({
-        boardId,
-        columnId,
-        data: {
-          title: data.title,
-          description: data.description,
-          order: currentPosition,
-          userId: userId as string,
-          users: [userId as string], // temporary plug
-        },
-      })
-    );
-    dispatch(closeModalForm(TypeofModal.addTask));
+    if (data.title !== taskTitle || data.description !== taskDescription) {
+      dispatch(
+        updateTask({
+          boardId,
+          columnId,
+          taskId,
+          data: {
+            columnId,
+            title: data.title,
+            description: data.description,
+            order: currentPosition,
+            userId: userId as string,
+            users: [userId as string], // temporary plug
+          },
+        })
+      );
+    }
+    dispatch(closeModalForm(TypeofModal.editTask));
   };
 
   useEffect(() => {
     dispatch(setIsSubmitDisabled(!isValid));
   }, [isValid, dispatch]);
 
+  const resetForm: () => void = useCallback((): void => {
+    reset({ title: taskTitle, description: taskDescription });
+  }, [reset, taskTitle, taskDescription]);
+
   useEffect(() => {
     if (isOpen) {
-      reset({ title: '', description: '' });
+      resetForm();
     }
-  }, [isOpen, reset]);
+  }, [isOpen, resetForm]);
 
   return (
     <ModalWithForm
-      modalTitle={t('addTask')}
-      uniqueId={TypeofModal.addTask}
+      modalTitle={t('editTask')}
+      uniqueId={TypeofModal.editTask}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <ControlledFormInput control={formControl} inputOptions={taskTitleInput} />
-      <ControlledFormInput control={formControl} inputOptions={taskDescriptionInput} />
+      <ControlledFormInput control={formControl} inputOptions={taskTitleInput} controlSize={3} />
+      <ControlledFormInput
+        control={formControl}
+        inputOptions={taskDescriptionInput}
+        controlSize={10}
+      />
     </ModalWithForm>
   );
 };
 
-export default AddTaskForm;
+export default EditTaskForm;

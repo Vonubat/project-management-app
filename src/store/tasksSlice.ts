@@ -1,4 +1,4 @@
-import { Action, AnyAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { Action, AnyAction, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import TasksService from 'services/tasksService';
@@ -61,18 +61,34 @@ interface IInitState {
   tasks: { [index: TaskData['columnId']]: TaskData[] };
   error: string | null | undefined;
   status: StatusType;
+  currentTaskTitle: string;
+  currentTaskDescription: string;
+  currentTaskId: string;
 }
 
 const initState: IInitState = {
   tasks: {},
   error: null,
   status: Status.idle,
+  currentTaskTitle: '',
+  currentTaskDescription: '',
+  currentTaskId: '',
 };
 
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState: initState,
-  reducers: {},
+  reducers: {
+    setCurrentTaskTitle: (state, action: PayloadAction<string>) => {
+      state.currentTaskTitle = action.payload;
+    },
+    setCurrentTaskDescription: (state, action: PayloadAction<string>) => {
+      state.currentTaskDescription = action.payload;
+    },
+    setCurrentTaskId: (state, action: PayloadAction<string>) => {
+      state.currentTaskId = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getAllTasks.fulfilled, (state, { payload, meta }) => {
       state.tasks[meta.arg.columnId] = payload;
@@ -112,5 +128,8 @@ const tasksSlice = createSlice({
 });
 
 export default tasksSlice.reducer;
+
+export const { setCurrentTaskTitle, setCurrentTaskDescription, setCurrentTaskId } =
+  tasksSlice.actions;
 
 export const tasksSelector = (state: { tasksStore: IInitState }) => state.tasksStore;

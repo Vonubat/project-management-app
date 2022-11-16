@@ -5,14 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector, useImperativeDisableScroll } from 'hooks/hooks';
 import Loader from 'components/Loader';
 import { MediaQuery, Status, TypeofModal } from 'constants/constants';
-import { columnsSelector, getColumnsInBoards } from 'store/columnsSlice';
+import { columnsSelector, getColumnsInBoards, setCurrentBoardId } from 'store/columnsSlice';
 import { useParams } from 'react-router-dom';
 import { ColumnData } from 'types/columns';
 import ColumnPreview from 'components/ColumnPreview';
 import ColumnsAddBtn from 'components/UI/ColumnsAddBtn';
 import AddColumnForm from 'components/forms/AddColumnForm';
-import { openModalForm, setCurrentBoardId } from 'store/modalSlice';
+import { openModalForm } from 'store/modalSlice';
 import AddTaskForm from 'components/forms/AddTaskForm';
+import EditTaskForm from 'components/forms/EditTaskForm';
 
 type Props = {
   children?: React.ReactNode;
@@ -70,6 +71,7 @@ const Columns = () => {
         </ColumnsAddBtn>
         <AddColumnForm />
         <AddTaskForm />
+        <EditTaskForm />
       </StyledBox>
       {isLoading && <Loader />}
     </Page>

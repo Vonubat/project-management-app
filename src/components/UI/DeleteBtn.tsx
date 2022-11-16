@@ -1,5 +1,5 @@
 import { IconButton } from '@mui/material';
-import React, { FC } from 'react';
+import React, { FC, SyntheticEvent } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DefaultColors } from 'constants/constants';
 import { keyframes } from '@mui/system';
@@ -13,7 +13,7 @@ type BtnProps = {
     | DefaultColors.warning
     | DefaultColors.info
     | DefaultColors.success;
-  cb: () => void;
+  cb: (e: SyntheticEvent) => void;
 };
 
 const appendAnimate = keyframes`

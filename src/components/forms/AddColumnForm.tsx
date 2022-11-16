@@ -12,7 +12,7 @@ import { FormControl } from 'types/formInput';
 import { TypeofModal } from 'constants/constants';
 
 const AddColumnForm: FC = () => {
-  const { currentBoardId: boardId } = useAppSelector(modalSelector);
+  const { currentBoardId: boardId } = useAppSelector(columnsSelector);
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.addColumn}`;
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);

@@ -1,41 +1,60 @@
-import React, { FC, useState } from 'react';
+import React, { FC, SyntheticEvent, useState } from 'react';
 import { Typography } from '@mui/material';
-import { DefaultColors, GRAY_700 } from 'constants/constants';
+import { DefaultColors, GRAY_700, TypeofModal } from 'constants/constants';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'hooks/hooks';
-import { deleteTask } from 'store/tasksSlice';
+import {
+  deleteTask,
+  setCurrentTaskDescription,
+  setCurrentTaskId,
+  setCurrentTaskTitle,
+} from 'store/tasksSlice';
 import ConfirmModal from 'components/ConfirmModal';
 import DeleteBtn from './DeleteBtn';
 import { theme } from 'components/Page';
 import isTouchEnabled from 'utils/isTouchEnabled';
+import { openModalForm } from 'store/modalSlice';
+import { setCurrentColumnId } from 'store/columnsSlice';
 
 type Props = {
   children?: React.ReactNode;
   taskTitle: string;
+  taskDescription: string;
   columnId: string;
   boardId: string;
   taskId: string;
   order: number;
 };
 
-const Task: FC<Props> = ({ taskTitle, boardId, columnId, taskId }) => {
+const Task: FC<Props> = ({ taskTitle, taskDescription, boardId, columnId, taskId }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const dispatch = useAppDispatch();
   const isTouchScreenDevice: boolean = isTouchEnabled();
 
-  const submit = () => {
+  const submit = (e: SyntheticEvent) => {
+    e.stopPropagation();
     dispatch(deleteTask({ boardId, columnId, taskId }));
-    closeModal();
+    closeConfirmModal(e);
   };
 
-  const openModal = () => {
+  const openConfirmModal = (e: SyntheticEvent) => {
+    e.stopPropagation();
     setIsOpen(true);
   };
 
-  const closeModal = () => {
+  const closeConfirmModal = (e: SyntheticEvent) => {
+    e.stopPropagation();
     setIsOpen(false);
+  };
+
+  const openEditTaskModal = () => {
+    dispatch(setCurrentColumnId(columnId));
+    dispatch(setCurrentTaskId(taskId));
+    dispatch(setCurrentTaskTitle(taskTitle));
+    dispatch(setCurrentTaskDescription(taskDescription));
+    dispatch(openModalForm(TypeofModal.editTask));
   };
 
   const handleMouseOver = () => {
@@ -68,14 +87,20 @@ const Task: FC<Props> = ({ taskTitle, boardId, columnId, taskId }) => {
       }}
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
+      onClick={openEditTaskModal}
     >
       <Typography variant="h6" noWrap>
         {taskTitle}
       </Typography>
       {(isHovering || isTouchScreenDevice) && (
-        <DeleteBtn size="small" color={DefaultColors.error} cb={openModal} />
+        <DeleteBtn size="small" color={DefaultColors.error} cb={openConfirmModal} />
       )}
-      <ConfirmModal title={t('delTask')} isOpen={isOpen} onSubmit={submit} onClose={closeModal} />
+      <ConfirmModal
+        title={t('delTask')}
+        isOpen={isOpen}
+        onSubmit={submit}
+        onClose={closeConfirmModal}
+      />
     </div>
   );
 };

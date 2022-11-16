@@ -6,8 +6,9 @@ import ColumnsAddBtn from './UI/ColumnsAddBtn';
 import { getAllTasks, tasksSelector } from 'store/tasksSlice';
 import Task from './UI/Task';
 import { TaskData } from 'types/tasks';
-import { openModalForm, setCurrentColumnId } from 'store/modalSlice';
+import { openModalForm } from 'store/modalSlice';
 import { TypeofModal } from 'constants/constants';
+import { setCurrentColumnId } from 'store/columnsSlice';
 
 type Props = {
   children?: React.ReactNode;
@@ -38,13 +39,14 @@ const TasksPreview: FC<Props> = ({ columnId, boardId }) => {
         gap: 1,
       }}
     >
-      {tasks[columnId]?.map(({ _id, title, boardId, columnId, order }: TaskData) => (
+      {tasks[columnId]?.map(({ _id, title, description, boardId, columnId, order }: TaskData) => (
         <Task
           key={_id}
           taskId={_id}
           boardId={boardId}
           columnId={columnId}
           taskTitle={title}
+          taskDescription={description}
           order={order}
         />
       ))}
