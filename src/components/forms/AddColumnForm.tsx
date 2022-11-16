@@ -39,6 +39,7 @@ const AddColumnForm: FC = () => {
         data: { title: data.title, order: currentPosition },
       })
     );
+
     dispatch(closeModalForm(TypeofModal.addColumn));
   };
 
