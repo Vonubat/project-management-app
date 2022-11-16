@@ -8,7 +8,6 @@ export type AuthState = {
     name: string;
     login: string;
   } | null;
-  error: string | null;
 };
 
 export type SignUpRequestData = {

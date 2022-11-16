@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { authSelector, clearAuthPageData } from 'store/authSlice';
 import Loader from 'components/Loader';
 import { Typography } from '@mui/material';
-import AuthErrorContainer from './AuthErrorContainer';
 
 const boxStyles = {
   marginTop: 8,
@@ -28,7 +27,7 @@ type Props = {
 };
 
 const AuthPage: FC<Props> = ({ icon, children, pageTitle }) => {
-  const { error, isLoading } = useAppSelector(authSelector);
+  const { isLoading } = useAppSelector(authSelector);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -50,7 +49,6 @@ const AuthPage: FC<Props> = ({ icon, children, pageTitle }) => {
                 {pageTitle}
               </Typography>
             </Box>
-            <AuthErrorContainer message={error} />
             {children}
           </Container>
         </>
