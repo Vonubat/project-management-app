@@ -1,8 +1,8 @@
-import { Link, styled, useMediaQuery, Box, Button, Typography } from '@mui/material';
+import { styled, useMediaQuery, Button, Typography } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import RSLogoIcon from '../assets/icons/logo-rs.svg';
 import React, { FC } from 'react';
 import { GRAY_700, MediaQuery } from 'constants/constants';
+import RSLogo from './UI/RSLogo';
 
 const styledFooter = (breakPoint: boolean) =>
   styled('footer')({
@@ -20,24 +20,6 @@ const styledWrapper = (breakPoint: boolean) =>
     flexDirection: breakPoint ? 'row' : 'column',
     alignItems: 'start',
   });
-
-const RSLogo: FC = () => (
-  <Link href="https://rs.school/" color={GRAY_700} target="_blank" rel="noopener noreferrer">
-    <Box
-      component="img"
-      sx={{
-        height: 50,
-        width: 120,
-        '&:hover': {
-          transform: 'scale(95%)',
-          transition: 'all 0.5s',
-        },
-      }}
-      alt="RSLogoIcon"
-      src={RSLogoIcon}
-    />
-  </Link>
-);
 
 type GitHubUserProps = {
   children?: React.ReactNode;
