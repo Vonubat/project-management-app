@@ -9,7 +9,7 @@ import {
   SignUpOkResponseData,
   SignUpRequestData,
 } from 'types/auth';
-import { getAuthSliseInitialState } from 'utils/getAuthSliceInitialState';
+import { getAuthSliceInitialState } from 'utils/getAuthSliceInitialState';
 import { parseJwt } from 'utils/parseJwt';
 
 interface RejectedAction extends Action {
@@ -77,10 +77,9 @@ export const signIn = createAsyncThunk<
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: getAuthSliseInitialState(),
+  initialState: getAuthSliceInitialState(),
   reducers: {
     clearAuthPageData: (state) => {
-      state.error = null;
       state.created = null;
       state.isLoading = false;
     },
@@ -104,29 +103,18 @@ const authSlice = createSlice({
         state.userId = jwtBody.id;
 
         localStorage.setItem(TOKEN, payload.token);
-
-        return;
       }
-
-      state.error = 'invalid jwt';
     });
 
     builder.addMatcher(isPendingAction, (state) => {
-      state.error = null;
       state.isLoading = true;
     });
 
-    builder.addMatcher(isRejectedAction, (state, action) => {
+    builder.addMatcher(isRejectedAction, (state) => {
       state.isLoading = false;
-      if (action.payload) {
-        state.error = `error${action.payload}`;
-      } else {
-        state.error = action.error.message;
-      }
     });
 
     builder.addMatcher(isFulfilledAction, (state) => {
-      state.error = null;
       state.isLoading = false;
     });
   },

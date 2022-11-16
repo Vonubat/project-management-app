@@ -1,7 +1,7 @@
 import { AuthState } from 'types/auth';
 import { getUserDataFromLocalStorage } from './getUserDataFromLocalStorage';
 
-export const getAuthSliseInitialState = (): AuthState => {
+export const getAuthSliceInitialState = (): AuthState => {
   const { login, id } = getUserDataFromLocalStorage();
 
   return {
@@ -11,6 +11,5 @@ export const getAuthSliseInitialState = (): AuthState => {
     login: login,
     userId: id,
     created: null,
-    error: null,
   };
 };

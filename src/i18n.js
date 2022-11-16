@@ -35,8 +35,19 @@ const resources = {
       },
       responseError: {
         error401: 'User does not exist or password is wrong',
+        error404: 'Element does not exist',
         error409: 'User with such login already exist',
         error500: 'Server error',
+        errorUnknown: 'An unknown error has occurred',
+        'Network Error': 'Network error',
+      },
+      responseSuccess: {
+        signIn: 'Hello',
+        signUp: 'User was successfully created',
+        deleteUser: 'User was deleted',
+        updateUser: 'User profile updated successfully',
+        boardCreated: 'Board created successfully',
+        boardDeleted: 'Board deleted successfully',
       },
       validationError: {
         required: 'This field is required',
@@ -54,7 +65,7 @@ const resources = {
         dontHaveAccount: "Don't have an account? Sign Up",
         alreadyHaveAccount: 'Already have an account? Sign in',
         signUpTitle: 'Sign Up',
-        createdSuccessfuly: 'User was created successfuly',
+        createdSuccessfully: 'User was created successfully',
         logInToAccount: 'Log in to account',
       },
       boardList: {
@@ -76,7 +87,7 @@ const resources = {
         userName: 'Name:',
         editProfile: 'Edit profile',
         deleteProfile: 'Delete account',
-        modalTitle: 'Изменить профиль',
+        modalTitle: 'Change profile',
       },
     },
   },
@@ -113,8 +124,19 @@ const resources = {
       },
       responseError: {
         error401: 'Пользователь не существует или не верный пароль',
+        error404: 'Элемент не существует',
         error409: 'Пользователь с такм логином уже существует',
         error500: 'Ошибка сервера',
+        errorUnknown: 'Произошла неизвестная ошибка',
+        'Network Error': 'Ошибка сети',
+      },
+      responseSuccess: {
+        signIn: 'Привет ',
+        signUp: 'Пользователь cоpдан успешно',
+        deleteUser: 'Пользователь удален',
+        updateUser: 'Профиль успешно обновлен',
+        boardCreated: 'Доска успешно создана',
+        boardDeleted: 'Доска успешно удалена',
       },
       validationError: {
         required: 'Это поле обязательно для ввода',
@@ -132,7 +154,7 @@ const resources = {
         dontHaveAccount: 'Нет аккаунта? Зарегистрируйтесь',
         alreadyHaveAccount: 'Уже есть аккаунт? Войдите в него',
         signUpTitle: 'Создать аккаунт',
-        createdSuccessfuly: 'Пользователь успешно зарегистрирован',
+        createdSuccessfully: 'Пользователь успешно зарегистрирован',
         logInToAccount: 'Войти в аккаунт',
       },
       boardList: {
