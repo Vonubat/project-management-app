@@ -1,4 +1,4 @@
-import { Action, AnyAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { Action, AnyAction, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import BoardsService from 'services/boardsService';
 import { BoardData, BoardParams } from 'types/boards';
@@ -35,6 +35,14 @@ export const createBoard = createAsyncThunk<BoardData, BoardParams>(
   }
 );
 
+export const editBoard = createAsyncThunk<BoardData, Parameters<typeof BoardsService.updateBoard>>(
+  'board/edit',
+  async (params) => {
+    const res = await BoardsService.updateBoard(...params);
+    return res.data;
+  }
+);
+
 export const deleteBoard = createAsyncThunk<BoardData, string>('board/delete', async (boardId) => {
   const res = await BoardsService.deleteBoard(boardId);
   return res.data;
@@ -43,49 +51,73 @@ export const deleteBoard = createAsyncThunk<BoardData, string>('board/delete', a
 interface IInitState {
   boards: BoardData[];
   error: string | undefined;
+  isAddBoardLoading: boolean;
+  boardLoadingArr: string[];
   isLoading: boolean;
 }
 
 const initState: IInitState = {
   boards: [],
   error: undefined,
+  isAddBoardLoading: false,
+  boardLoadingArr: [],
   isLoading: false,
 };
 
 const boardListSlice = createSlice({
   name: 'board',
   initialState: initState,
-  reducers: {},
+  reducers: {
+    setBoardLoading: (state, action: PayloadAction<string>) => {
+      state.boardLoadingArr.push(action.payload);
+    },
+  },
   extraReducers: (builder) => {
+    builder.addCase(getBoardsByUser.pending, (state) => {
+      state.isLoading = true;
+    });
+
     builder.addCase(getBoardsByUser.fulfilled, (state, { payload }) => {
       state.boards = payload;
+      state.isLoading = false;
+    });
+
+    builder.addCase(createBoard.pending, (state) => {
+      state.isAddBoardLoading = true;
     });
 
     builder.addCase(createBoard.fulfilled, (state, { payload }) => {
       state.boards.push(payload);
+      state.isAddBoardLoading = false;
+    });
+
+    builder.addCase(editBoard.fulfilled, (state, { payload }) => {
+      state.boards = state.boards.map((board) => (board._id === payload._id ? payload : board));
+      state.boardLoadingArr = state.boardLoadingArr.filter((id) => payload._id !== id);
     });
 
     builder.addCase(deleteBoard.fulfilled, (state, { payload }) => {
       state.boards = state.boards.filter((board) => board._id !== payload._id);
+      state.boardLoadingArr = state.boardLoadingArr.filter((id) => payload._id !== id);
     });
 
     builder.addMatcher(isPendingAction, (state) => {
       state.error = undefined;
-      state.isLoading = true;
     });
 
     builder.addMatcher(isRejectedAction, (state, action) => {
       state.isLoading = false;
+      state.boardLoadingArr = [];
       state.error = action.error.message || 'Some error occurred';
     });
 
     builder.addMatcher(isFulFilledAction, (state) => {
       state.error = undefined;
-      state.isLoading = false;
     });
   },
 });
 
 export default boardListSlice.reducer;
+export const { setBoardLoading } = boardListSlice.actions;
 
 export const boardListSelector = (state: { boardListStore: IInitState }) => state.boardListStore;

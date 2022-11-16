@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import Page from 'components/Page';
-import { Button, Box, Typography, useMediaQuery } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect } from 'react';
+import { Button, Box, Typography, useMediaQuery, CircularProgress } from '@mui/material';
 import styled from '@emotion/styled';
+import { useTranslation } from 'react-i18next';
+import Page from 'components/Page';
 import BoardPreview from 'components/BoardPreview';
-import AddBoardModal from 'components/AddBoardModal';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import Loader from 'components/Loader';
+import EditBoardForm from 'components/forms/EditBoardForm';
 import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
 import { authSelector } from 'store/authSlice';
-import Loader from 'components/Loader';
+import { clearBoardParams, openModalForm } from 'store/modalSlice';
+import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 
 const StyledBox = styled(Box)({
   display: 'flex',
@@ -21,40 +22,46 @@ export default function Boards() {
   const isLargeScreen = useMediaQuery('(min-width:380px)');
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const { userId } = useAppSelector(authSelector);
-  const { boards, isLoading, error } = useAppSelector(boardListSelector);
+  const { boards, isLoading, error, isAddBoardLoading } = useAppSelector(boardListSelector);
   const dispatch = useAppDispatch();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  function openModal() {
-    setIsOpen(true);
-  }
 
   useEffect(() => {
     dispatch(getBoardsByUser(userId as string));
   }, [dispatch, userId]);
 
+  function openAddBoardModalForm() {
+    dispatch(clearBoardParams());
+    dispatch(openModalForm());
+  }
+
   return (
     <Page>
       <StyledBox sx={{ mx: isLargeScreen ? 4 : 1 }}>
-        {error ? (
+        {isLoading ? (
+          <Loader />
+        ) : error ? (
           <h1>{error}</h1>
         ) : (
           <>
             {boards.map((board) => (
               <BoardPreview key={board._id} boardData={board} />
             ))}
-            <Button sx={{ width: 310, height: 310 }} variant="outlined" onClick={openModal}>
-              <Typography variant="h4">{t('add')}</Typography>
+            <Button
+              sx={{ width: 310, height: 310 }}
+              variant="outlined"
+              onClick={openAddBoardModalForm}
+              disabled={isAddBoardLoading}
+            >
+              {isAddBoardLoading ? (
+                <CircularProgress color="inherit" size={100} />
+              ) : (
+                <Typography variant="h4">{t('add')}</Typography>
+              )}
             </Button>
-            <AddBoardModal isOpen={isOpen} onSubmit={closeModal} onClose={closeModal} />
           </>
         )}
       </StyledBox>
-      {isLoading && <Loader />}
+      <EditBoardForm />
     </Page>
   );
 }

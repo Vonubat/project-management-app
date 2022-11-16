@@ -10,3 +10,5 @@ export type BoardParams = {
   owner: string;
   users: UserData['_id'][];
 };
+
+export type EditBoardFormFields = Pick<BoardParams, 'title' | 'description'>;

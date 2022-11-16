@@ -10,7 +10,7 @@ type Props = {
 };
 
 const ControlledFormInput: FC<Props> = ({
-  inputOptions: { name, label, type, validationOptions },
+  inputOptions: { name, label, type, validationOptions, rows },
   control,
 }) => {
   const { t } = useTranslation();
@@ -29,6 +29,8 @@ const ControlledFormInput: FC<Props> = ({
             type={type}
             error={!!error}
             helperText={!!error ? t(`validationError.${error.message}`) : ''}
+            multiline={!!rows}
+            rows={rows}
             {...field}
           />
         </>
