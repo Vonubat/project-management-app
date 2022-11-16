@@ -5,6 +5,8 @@ import userSliceReducer from './userSlice';
 import modalSliceReducer from './modalSlice';
 import columnsReducer from './columnsSlice';
 import tasksReducer from './tasksSlice';
+import notificationSliceReducer from './notificationSlice';
+
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +16,8 @@ export const store = configureStore({
     modalStore: modalSliceReducer,
     columnsStore: columnsReducer,
     tasksStore: tasksReducer,
+    notificationStore: notificationSliceReducer,
+
   },
 });
 
