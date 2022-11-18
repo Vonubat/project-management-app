@@ -6,7 +6,7 @@ import Page from 'components/Page';
 import BoardPreview from 'components/BoardPreview';
 import Loader from 'components/Loader';
 import EditBoardForm from 'components/forms/EditBoardForm';
-import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
+import { boardListSelector, getBoardsByUser, getAllUsers } from 'store/boardListSlice';
 import { authSelector } from 'store/authSlice';
 import { clearBoardParams, openModalForm } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
@@ -24,10 +24,12 @@ export default function Boards() {
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const { userId } = useAppSelector(authSelector);
   const { boards, isLoading, error, isAddBoardLoading } = useAppSelector(boardListSelector);
+  const { usersLoading } = useAppSelector(boardListSelector);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getBoardsByUser(userId as string));
+    dispatch(getAllUsers());
   }, [dispatch, userId]);
 
   function openAddBoardModalForm() {
@@ -53,7 +55,7 @@ export default function Boards() {
               onClick={openAddBoardModalForm}
               disabled={isAddBoardLoading}
             >
-              {isAddBoardLoading ? (
+              {isAddBoardLoading && usersLoading ? (
                 <CircularProgress color="inherit" size={100} />
               ) : (
                 <Typography variant="h4">{t('add')}</Typography>

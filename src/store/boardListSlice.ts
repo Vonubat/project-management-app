@@ -2,6 +2,8 @@ import { Action, AnyAction, createAsyncThunk, createSlice, PayloadAction } from 
 import { AxiosError } from 'axios';
 import BoardsService from 'services/boardsService';
 import { BoardData, BoardParams } from 'types/boards';
+import { SignUpOkResponseData as UserData } from 'types/auth';
+import UsersService from 'services/usersService';
 
 interface RejectedAction extends Action {
   error: Error | AxiosError;
@@ -48,19 +50,28 @@ export const deleteBoard = createAsyncThunk<BoardData, string>('board/delete', a
   return res.data;
 });
 
+export const getAllUsers = createAsyncThunk<UserData[]>('users/getAll', async () => {
+  const res = await UsersService.getAllUsers();
+  return res.data;
+});
+
 interface IInitState {
   boards: BoardData[];
+  users: UserData[];
   error: string | undefined;
   isAddBoardLoading: boolean;
   boardLoadingArr: string[];
+  usersLoading: boolean;
   isLoading: boolean;
 }
 
 const initState: IInitState = {
   boards: [],
+  users: [],
   error: undefined,
   isAddBoardLoading: false,
   boardLoadingArr: [],
+  usersLoading: false,
   isLoading: false,
 };
 
@@ -99,6 +110,15 @@ const boardListSlice = createSlice({
     builder.addCase(deleteBoard.fulfilled, (state, { payload }) => {
       state.boards = state.boards.filter((board) => board._id !== payload._id);
       state.boardLoadingArr = state.boardLoadingArr.filter((id) => payload._id !== id);
+    });
+
+    builder.addCase(getAllUsers.pending, (state) => {
+      state.usersLoading = true;
+    });
+
+    builder.addCase(getAllUsers.fulfilled, (state, { payload }) => {
+      state.users = payload;
+      state.usersLoading = false;
     });
 
     builder.addMatcher(isPendingAction, (state) => {
