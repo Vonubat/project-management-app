@@ -1,72 +1,108 @@
-import { Action, AnyAction, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import BoardsService from 'services/boardsService';
 import { BoardData, BoardParams } from 'types/boards';
+import { AsyncThunkConfig } from 'types/store';
+import { isRejectedAction } from 'utils/actionTypePredicates';
 
-interface RejectedAction extends Action {
-  error: Error | AxiosError;
-}
+export const getBoardsByUser = createAsyncThunk<BoardData[], void, AsyncThunkConfig>(
+  'boards/getAll',
+  async (_, { getState, rejectWithValue }) => {
+    const {
+      authStore: { userId },
+    } = getState();
 
-function isRejectedAction(action: AnyAction): action is RejectedAction {
-  return action.type.endsWith('rejected');
-}
+    try {
+      const res = await BoardsService.getUserBoardsSet(userId);
 
-function isPendingAction(action: AnyAction) {
-  return action.type.endsWith('pending');
-}
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
 
-function isFulFilledAction(action: AnyAction) {
-  return action.type.endsWith('fulfilled');
-}
+      if (!error.response) {
+        throw err;
+      }
 
-export const getBoardsByUser = createAsyncThunk<BoardData[], string>(
-  'board/getAll',
-  async (userId) => {
-    const res = await BoardsService.getUserBoardsSet(userId);
-    return res.data;
+      return rejectWithValue(error.response.status);
+    }
   }
 );
 
-export const createBoard = createAsyncThunk<BoardData, BoardParams>(
-  'board/create',
-  async (createBoardData) => {
-    const res = await BoardsService.createBoard(createBoardData);
-    return res.data;
+export const createBoard = createAsyncThunk<BoardData, BoardParams, AsyncThunkConfig>(
+  'boards/create',
+  async (createBoardData, { rejectWithValue }) => {
+    try {
+      const res = await BoardsService.createBoard(createBoardData);
+
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
+
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue(error.response.status);
+    }
   }
 );
 
-export const editBoard = createAsyncThunk<BoardData, Parameters<typeof BoardsService.updateBoard>>(
-  'board/edit',
-  async (params) => {
+export const updateBoard = createAsyncThunk<
+  BoardData,
+  Parameters<typeof BoardsService.updateBoard>,
+  AsyncThunkConfig
+>('boards/update', async (params, { rejectWithValue }) => {
+  try {
     const res = await BoardsService.updateBoard(...params);
-    return res.data;
-  }
-);
 
-export const deleteBoard = createAsyncThunk<BoardData, string>('board/delete', async (boardId) => {
-  const res = await BoardsService.deleteBoard(boardId);
-  return res.data;
+    return res.data;
+  } catch (err) {
+    const error = err as AxiosError;
+
+    if (!error.response) {
+      throw err;
+    }
+
+    return rejectWithValue(error.response.status);
+  }
 });
 
-interface IInitState {
+export const deleteBoard = createAsyncThunk<BoardData, string, AsyncThunkConfig>(
+  'boards/delete',
+  async (boardId, { rejectWithValue }) => {
+    try {
+      const res = await BoardsService.deleteBoard(boardId);
+
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
+
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue(error.response.status);
+    }
+  }
+);
+
+interface BoardsState {
   boards: BoardData[];
-  error: string | undefined;
   isAddBoardLoading: boolean;
   boardLoadingArr: string[];
   isLoading: boolean;
 }
 
-const initState: IInitState = {
+const initialBoardsState: BoardsState = {
   boards: [],
-  error: undefined,
   isAddBoardLoading: false,
   boardLoadingArr: [],
   isLoading: false,
 };
 
 const boardListSlice = createSlice({
-  name: 'board',
-  initialState: initState,
+  name: 'boards',
+  initialState: initialBoardsState,
   reducers: {
     setBoardLoading: (state, action: PayloadAction<string>) => {
       state.boardLoadingArr.push(action.payload);
@@ -91,7 +127,7 @@ const boardListSlice = createSlice({
       state.isAddBoardLoading = false;
     });
 
-    builder.addCase(editBoard.fulfilled, (state, { payload }) => {
+    builder.addCase(updateBoard.fulfilled, (state, { payload }) => {
       state.boards = state.boards.map((board) => (board._id === payload._id ? payload : board));
       state.boardLoadingArr = state.boardLoadingArr.filter((id) => payload._id !== id);
     });
@@ -101,18 +137,9 @@ const boardListSlice = createSlice({
       state.boardLoadingArr = state.boardLoadingArr.filter((id) => payload._id !== id);
     });
 
-    builder.addMatcher(isPendingAction, (state) => {
-      state.error = undefined;
-    });
-
-    builder.addMatcher(isRejectedAction, (state, action) => {
+    builder.addMatcher(isRejectedAction, (state) => {
       state.isLoading = false;
       state.boardLoadingArr = [];
-      state.error = action.error.message || 'Some error occurred';
-    });
-
-    builder.addMatcher(isFulFilledAction, (state) => {
-      state.error = undefined;
     });
   },
 });
@@ -120,4 +147,4 @@ const boardListSlice = createSlice({
 export default boardListSlice.reducer;
 export const { setBoardLoading } = boardListSlice.actions;
 
-export const boardListSelector = (state: { boardListStore: IInitState }) => state.boardListStore;
+export const boardListSelector = (state: { boardListStore: BoardsState }) => state.boardListStore;

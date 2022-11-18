@@ -2,22 +2,15 @@ import { createAsyncThunk, createSlice, Action, AnyAction } from '@reduxjs/toolk
 import { AxiosError } from 'axios';
 import UsersService from 'services/usersService';
 import { SignUpOkResponseData, SignUpRequestData } from 'types/auth';
-import { RootState } from './store';
+import { AsyncThunkConfig, PendingAction, RejectedAction } from 'types/store';
 
-type UserState = {
+type UsersState = {
   name: string;
   login: string;
   userId: string;
   error: null | string;
   isLoading: boolean;
 };
-
-interface RejectedAction extends Action {
-  error: Error;
-  payload?: number;
-}
-
-type PendingAction = Action;
 
 interface FulFilledAction extends Action {
   payload: SignUpOkResponseData;
@@ -35,42 +28,37 @@ function isFulfilledAction(action: AnyAction): action is FulFilledAction {
   return action.type.endsWith('fulfilled');
 }
 
-export const getUser = createAsyncThunk<
-  SignUpOkResponseData,
-  void,
-  { state: RootState; rejectValue: number }
->('user/getUser', async (_, { getState, rejectWithValue }) => {
-  const {
-    authStore: { userId },
-  } = getState();
+export const getUser = createAsyncThunk<SignUpOkResponseData, void, AsyncThunkConfig>(
+  'users/getUser',
+  async (_, { getState, rejectWithValue }) => {
+    const { userId } = getState().authStore;
 
-  try {
-    if (userId) {
-      const res = await UsersService.getUser(userId);
+    try {
+      if (userId) {
+        const res = await UsersService.getUser(userId);
 
-      return res.data;
+        return res.data;
+      }
+
+      throw new Error('error'); //TODO handle this case
+    } catch (err) {
+      const error = err as AxiosError;
+
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue(error.response.status);
     }
-
-    throw new Error('error'); //TODO handle this case
-  } catch (err) {
-    const error = err as AxiosError;
-
-    if (!error.response) {
-      throw err;
-    }
-
-    return rejectWithValue(error.response.status);
   }
-});
+);
 
 export const updateUser = createAsyncThunk<
   SignUpOkResponseData,
   SignUpRequestData,
-  { state: RootState; rejectValue: number }
->('user/update', async (data, { getState, rejectWithValue }) => {
-  const {
-    userStore: { userId },
-  } = getState();
+  AsyncThunkConfig
+>('users/update', async (data, { getState, rejectWithValue }) => {
+  const { userId } = getState().usersStore;
 
   try {
     const res = await UsersService.updateUser(userId, data);
@@ -87,31 +75,28 @@ export const updateUser = createAsyncThunk<
   }
 });
 
-export const deleteUser = createAsyncThunk<
-  SignUpOkResponseData,
-  void,
-  { state: RootState; rejectValue: number }
->('user/delete', async (_, { getState, rejectWithValue }) => {
-  const {
-    userStore: { userId },
-  } = getState();
+export const deleteUser = createAsyncThunk<SignUpOkResponseData, void, AsyncThunkConfig>(
+  'users/delete',
+  async (_, { getState, rejectWithValue }) => {
+    const { userId } = getState().usersStore;
 
-  try {
-    const res = await UsersService.deleteUser(userId);
+    try {
+      const res = await UsersService.deleteUser(userId);
 
-    return res.data;
-  } catch (err) {
-    const error = err as AxiosError;
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
 
-    if (!error.response) {
-      throw err;
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue(error.response.status);
     }
-
-    return rejectWithValue(error.response.status);
   }
-});
+);
 
-const userSliceInitialState: UserState = {
+const userSliceInitialState: UsersState = {
   name: '',
   login: '',
   userId: '',
@@ -119,8 +104,8 @@ const userSliceInitialState: UserState = {
   isLoading: false,
 };
 
-const userSlice = createSlice({
-  name: 'user',
+const usersSlice = createSlice({
+  name: 'users',
   initialState: userSliceInitialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -156,6 +141,6 @@ const userSlice = createSlice({
   },
 });
 
-export default userSlice.reducer;
+export default usersSlice.reducer;
 
-export const userSelector = (state: { userStore: UserState }) => state.userStore;
+export const usersSelector = (state: { usersStore: UsersState }) => state.usersStore;

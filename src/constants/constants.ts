@@ -68,3 +68,21 @@ export enum Severity {
   info = 'info',
   success = 'success',
 }
+
+export enum StatusCode {
+  unauthorized = 403,
+}
+
+export enum ActionName {
+  getAll = 'getAll',
+  getUser = 'getUser',
+  signIn = 'signIn',
+  signUp = 'signUp',
+  create = 'create',
+  update = 'update',
+  delete = 'delete',
+}
+
+export enum SliceName {
+  auth = 'auth',
+}

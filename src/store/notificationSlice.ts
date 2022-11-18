@@ -1,5 +1,6 @@
 import { createSlice, isFulfilled, isRejected } from '@reduxjs/toolkit';
-import { Severity } from 'constants/constants';
+import { ActionName, Severity, SliceName } from 'constants/constants';
+import { getTranslationString } from 'utils/getTranslationString';
 
 type NotificationState = {
   message: string;
@@ -28,6 +29,7 @@ const notificationSlice = createSlice({
 
       if (action.payload) {
         state.message = `responseError.error${action.payload}`;
+
         return;
       }
 
@@ -37,33 +39,22 @@ const notificationSlice = createSlice({
     });
 
     builder.addMatcher(isFulfilled, (state, action) => {
+      const [sliceName, actionName] = action.type.split('/');
+
+      if (actionName === ActionName.getAll || actionName === ActionName.getUser) {
+        return;
+      }
+
+      if (sliceName === SliceName.auth || actionName == ActionName.delete) {
+        state.severity === Severity.info;
+      }
+
+      if (actionName === ActionName.create || actionName === ActionName.update) {
+        state.severity = Severity.success;
+      }
+
       state.isOpen = true;
-      state.severity = Severity.info;
-      state.message = 'Info happened';
-
-      if (action.type.startsWith('auth/signIn')) {
-        state.message = 'responseSuccess.signIn';
-      }
-
-      if (action.type.startsWith('auth/signUp')) {
-        state.message = 'responseSuccess.signUp';
-      }
-
-      if (action.type.startsWith('user/delete')) {
-        state.message = 'responseSuccess.deleteUser';
-      }
-
-      if (action.type.startsWith('user/update')) {
-        state.message = 'responseSuccess.updateUser';
-      }
-
-      if (action.type.startsWith('board/create')) {
-        state.message = 'responseSuccess.boardCreated';
-      }
-
-      if (action.type.startsWith('board/delete')) {
-        state.message = 'responseSuccess.boardDeleted';
-      }
+      state.message = `responseSuccess.${getTranslationString(action)}`;
     });
   },
 });

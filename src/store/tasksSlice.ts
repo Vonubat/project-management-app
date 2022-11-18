@@ -1,29 +1,11 @@
-import { Action, AnyAction, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import TasksService from 'services/tasksService';
 import { ColumnData } from 'types/columns';
+import { AsyncThunkConfig } from 'types/store';
 import { TaskData, TaskParamsCreate, TaskParamsUpdate } from 'types/tasks';
-
-interface RejectedAction extends Action {
-  error: Error | AxiosError;
-}
-
-interface FulFilledAction extends Action {
-  payload: TaskData[] | TaskData;
-}
-
-function isRejectedAction(action: AnyAction): action is RejectedAction {
-  return action.type.endsWith('rejected');
-}
-
-function isPendingAction(action: AnyAction): action is Action {
-  return action.type.endsWith('pending');
-}
-
-function isFulFilledAction(action: AnyAction): action is FulFilledAction {
-  return action.type.endsWith('fulfilled');
-}
+import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
 
 export const getAllTasks = createAsyncThunk<TaskData[], { boardId: string; columnId: string }>(
   'tasks/getAll',
@@ -35,26 +17,60 @@ export const getAllTasks = createAsyncThunk<TaskData[], { boardId: string; colum
 
 export const createTask = createAsyncThunk<
   TaskData,
-  { boardId: string; columnId: string; data: TaskParamsCreate }
->('tasks/create', async (arg) => {
-  const res = await TasksService.createTask(arg.boardId, arg.columnId, arg.data);
-  return res.data;
+  { boardId: string; columnId: string; data: TaskParamsCreate },
+  AsyncThunkConfig
+>('tasks/create', async (arg, { rejectWithValue }) => {
+  try {
+    const res = await TasksService.createTask(arg.boardId, arg.columnId, arg.data);
+    return res.data;
+  } catch (err) {
+    const error = err as AxiosError;
+
+    if (!error.response) {
+      throw err;
+    }
+
+    return rejectWithValue(error.response.status);
+  }
 });
 
 export const updateTask = createAsyncThunk<
   TaskData,
-  { boardId: string; columnId: string; taskId: string; data: TaskParamsUpdate }
->('tasks/update', async (arg) => {
-  const res = await TasksService.updateTask(arg.boardId, arg.columnId, arg.taskId, arg.data);
-  return res.data;
+  { boardId: string; columnId: string; taskId: string; data: TaskParamsUpdate },
+  AsyncThunkConfig
+>('tasks/update', async ({ boardId, columnId, taskId, data }, { rejectWithValue }) => {
+  try {
+    const res = await TasksService.updateTask(boardId, columnId, taskId, data);
+    return res.data;
+  } catch (err) {
+    const error = err as AxiosError;
+
+    if (!error.response) {
+      throw err;
+    }
+
+    return rejectWithValue(error.response.status);
+  }
 });
 
 export const deleteTask = createAsyncThunk<
   TaskData,
-  { boardId: string; columnId: string; taskId: string }
->('tasks/delete', async (arg) => {
-  const res = await TasksService.deleteTask(arg.boardId, arg.columnId, arg.taskId);
-  return res.data;
+  { boardId: string; columnId: string; taskId: string },
+  AsyncThunkConfig
+>('tasks/delete', async ({ boardId, columnId, taskId }, { rejectWithValue }) => {
+  try {
+    const res = await TasksService.deleteTask(boardId, columnId, taskId);
+
+    return res.data;
+  } catch (err) {
+    const error = err as AxiosError;
+
+    if (!error.response) {
+      throw err;
+    }
+
+    return rejectWithValue(error.response.status);
+  }
 });
 
 interface IInitState {
@@ -125,17 +141,14 @@ const tasksSlice = createSlice({
     });
 
     builder.addMatcher(isPendingAction, (state) => {
-      state.error = null;
       state.status = Status.pending;
     });
 
-    builder.addMatcher(isRejectedAction, (state, action) => {
-      state.error = action.error.message || 'Some error occurred';
+    builder.addMatcher(isRejectedAction, (state) => {
       state.status = Status.failed;
     });
 
-    builder.addMatcher(isFulFilledAction, (state) => {
-      state.error = null;
+    builder.addMatcher(isFulfilledAction, (state) => {
       state.status = Status.succeeded;
     });
   },

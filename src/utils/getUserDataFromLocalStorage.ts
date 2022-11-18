@@ -5,17 +5,17 @@ import { parseJwt } from './parseJwt';
 export const getUserDataFromLocalStorage = (): LocalStorageUserData => {
   const jwt = localStorage.getItem(TOKEN);
 
-  let login = null;
-  let id = null;
+  let login = '';
+  let userId = '';
 
   if (jwt) {
     const jwtBody = parseJwt(jwt);
 
     if (jwtBody) {
       login = jwtBody.login;
-      id = jwtBody.id;
+      userId = jwtBody.id;
     }
   }
 
-  return { login, id };
+  return { login, userId };
 };
