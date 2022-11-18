@@ -77,6 +77,9 @@ const resources = {
         delBoard: 'Are you sure you want to delete the board?',
         title: 'Title',
         description: 'Description',
+        search: 'Search…',
+        back: 'Back',
+        addUsers: 'Add users',
       },
       confirmModal: {
         yes: 'Agree',
@@ -180,6 +183,9 @@ const resources = {
         delBoard: 'Вы действительно хотите удалить доску?',
         title: 'Заголовок',
         description: 'Описание',
+        search: 'Поиск…',
+        back: 'Назад',
+        addUsers: 'Добавить пользователей',
       },
       confirmModal: {
         yes: 'Подтвердить',
