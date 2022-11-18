@@ -27,7 +27,7 @@ type Props = {
 const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, sx, uniqueId }) => {
   const isOpenKey: `isOpen_${string}` = `isOpen_${uniqueId}`;
   const isSubmitDisabledKey: `isSubmitDisabled_${string}` = `isSubmitDisabled_${uniqueId}`;
-  const { t } = useTranslation('translation', { keyPrefix: 'confirmModal' });
+  const { t } = useTranslation('translation', { keyPrefix: 'modalForm' });
   const { [isOpenKey]: isOpen = false, [isSubmitDisabledKey]: isSubmitDisabled = true } =
     useAppSelector(modalSelector);
   const dispatch = useAppDispatch();
@@ -48,14 +48,14 @@ const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, sx, uniqueId
           <Box component="form" onSubmit={onSubmit} sx={{ mt: 1 }}>
             {children}
             <DialogActions sx={{ p: 0, pt: 2 }}>
-              <Button onClick={closeModal}>{t('no')}</Button>
+              <Button onClick={closeModal}>{t('cancel')}</Button>
               <Button
                 type="submit"
                 disabled={isSubmitDisabled}
                 color={DefaultColors.success}
                 endIcon={<CheckCircleIcon />}
               >
-                {t('yes')}
+                {t('submit')}
               </Button>
             </DialogActions>
           </Box>
