@@ -6,7 +6,8 @@ import Page from 'components/Page';
 import BoardPreview from 'components/BoardPreview';
 import Loader from 'components/Loader';
 import EditBoardForm from 'components/forms/EditBoardForm';
-import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
+import { boardListSelector, getBoardsByUser, getAllUsers } from 'store/boardListSlice';
+import { authSelector } from 'store/authSlice';
 import { clearBoardParams, openModalForm } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { MediaQuery, TypeofModal } from 'constants/constants';
@@ -21,11 +22,12 @@ const StyledBox = styled(Box)({
 export default function Boards() {
   const isLargeScreen = useMediaQuery(MediaQuery.minWidth380);
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
-  const { boards, isLoading, isAddBoardLoading } = useAppSelector(boardListSelector);
+  const { boards, isLoading, isAddBoardLoading, usersLoading } = useAppSelector(boardListSelector);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getBoardsByUser());
+    dispatch(getAllUsers());
   }, [dispatch]);
 
   function openAddBoardModalForm() {
@@ -49,7 +51,7 @@ export default function Boards() {
               onClick={openAddBoardModalForm}
               disabled={isAddBoardLoading}
             >
-              {isAddBoardLoading ? (
+              {isAddBoardLoading && usersLoading ? (
                 <CircularProgress color="inherit" size={100} />
               ) : (
                 <Typography variant="h4">{t('add')}</Typography>
