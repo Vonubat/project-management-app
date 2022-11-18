@@ -38,7 +38,7 @@ export default function Boards() {
   return (
     <Page>
       <StyledBox sx={{ mx: isLargeScreen ? 4 : 1 }}>
-        {isLoading ? (
+        {isLoading || usersLoading ? (
           <Loader />
         ) : (
           <>
@@ -51,7 +51,7 @@ export default function Boards() {
               onClick={openAddBoardModalForm}
               disabled={isAddBoardLoading}
             >
-              {isAddBoardLoading && usersLoading ? (
+              {isAddBoardLoading ? (
                 <CircularProgress color="inherit" size={100} />
               ) : (
                 <Typography variant="h4">{t('add')}</Typography>
