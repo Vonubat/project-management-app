@@ -3,7 +3,7 @@ import { Container } from '@mui/system';
 import Page from 'components/Page';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import React, { useEffect, useState } from 'react';
-import { deleteUser, getUser, userSelector } from 'store/userSlice';
+import { deleteUser, getUser, usersSelector } from 'store/usersSlice';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PersonIcon from '@mui/icons-material/Person';
@@ -33,7 +33,7 @@ const avatarStyle = {
 
 const EditProfile = () => {
   const { userId } = useAppSelector(authSelector);
-  const { login, name } = useAppSelector(userSelector);
+  const { login, name } = useAppSelector(usersSelector);
   const dispatch = useAppDispatch();
   const { t } = useTranslation('translation', { keyPrefix: 'editProfile' });
   const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
@@ -98,7 +98,7 @@ const EditProfile = () => {
       <EditProfileForm login={login} name={name} />
       <ConfirmModal
         isOpen={isConfirmOpen}
-        title={'title'}
+        title={t('deleteProfile')}
         onClose={closeConfirmModal}
         onSubmit={deleteAccount}
       />

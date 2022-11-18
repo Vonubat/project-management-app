@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { updateUser } from 'store/userSlice';
+import { updateUser, usersSelector } from 'store/usersSlice';
 import ControlledFormInput from 'components/ControlledFormInput';
 import { useForm } from 'react-hook-form';
 import { SignUpFormFields } from 'types/auth';
@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import ModalWithForm from 'components/ModalWithForm';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
 import { FormControl } from 'types/formInput';
-import { authSelector } from 'store/authSlice';
 
 type Props = {
   login: string;
@@ -17,7 +16,7 @@ type Props = {
 };
 
 const EditProfileForm: FC<Props> = ({ login, name }) => {
-  const { userId } = useAppSelector(authSelector);
+  const { userId } = useAppSelector(usersSelector);
   const isOpenKey: `isOpen_${string}` = `isOpen_${userId}`;
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
   const dispatch = useAppDispatch();
@@ -56,11 +55,7 @@ const EditProfileForm: FC<Props> = ({ login, name }) => {
   }, [isOpen]);
 
   return (
-    <ModalWithForm
-      modalTitle={t('modalTitle')}
-      uniqueId={userId as string}
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <ModalWithForm modalTitle={t('modalTitle')} uniqueId={userId} onSubmit={handleSubmit(onSubmit)}>
       <ControlledFormInput control={formControl} inputOptions={nameInput} />
       <ControlledFormInput control={formControl} inputOptions={loginInput} />
       <ControlledFormInput control={formControl} inputOptions={passwordInput} />

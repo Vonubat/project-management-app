@@ -10,7 +10,7 @@ import { boardListSelector, getBoardsByUser, getAllUsers } from 'store/boardList
 import { authSelector } from 'store/authSlice';
 import { clearBoardParams, openModalForm } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { TypeofModal } from 'constants/constants';
+import { MediaQuery, TypeofModal } from 'constants/constants';
 
 const StyledBox = styled(Box)({
   display: 'flex',
@@ -20,17 +20,15 @@ const StyledBox = styled(Box)({
 });
 
 export default function Boards() {
-  const isLargeScreen = useMediaQuery('(min-width:380px)');
+  const isLargeScreen = useMediaQuery(MediaQuery.minWidth380);
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
-  const { userId } = useAppSelector(authSelector);
-  const { boards, isLoading, error, isAddBoardLoading } = useAppSelector(boardListSelector);
-  const { usersLoading } = useAppSelector(boardListSelector);
+  const { boards, isLoading, isAddBoardLoading, usersLoading } = useAppSelector(boardListSelector);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getBoardsByUser(userId as string));
+    dispatch(getBoardsByUser());
     dispatch(getAllUsers());
-  }, [dispatch, userId]);
+  }, [dispatch]);
 
   function openAddBoardModalForm() {
     dispatch(clearBoardParams());
@@ -42,8 +40,6 @@ export default function Boards() {
       <StyledBox sx={{ mx: isLargeScreen ? 4 : 1 }}>
         {isLoading ? (
           <Loader />
-        ) : error ? (
-          <h1>{error}</h1>
         ) : (
           <>
             {boards.map((board) => (

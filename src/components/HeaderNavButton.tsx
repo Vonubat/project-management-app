@@ -1,6 +1,7 @@
 import React, { FC, ReactNode } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Button, useMediaQuery } from '@mui/material';
+import { MediaQuery } from 'constants/constants';
 
 type Props = {
   to: string;
@@ -10,7 +11,7 @@ type Props = {
 };
 
 const HeaderNavButton: FC<Props> = ({ to, startIcon, buttonText, onClick }) => {
-  const isLargeScreen = useMediaQuery('(min-width:715px)');
+  const isLargeScreen = useMediaQuery(MediaQuery.minWidth715);
 
   return (
     <Button

@@ -1,73 +1,98 @@
-import { Action, AnyAction, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import ColumnsService from 'services/columnsService';
 import { ColumnData, ColumnParams } from 'types/columns';
-import { StatusType } from 'types/store';
+import { AsyncThunkConfig, StatusType } from 'types/store';
+import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
 
-interface RejectedAction extends Action {
-  error: Error | AxiosError;
-}
-
-interface FulFilledAction extends Action {
-  payload: ColumnData[] | ColumnData;
-}
-
-function isRejectedAction(action: AnyAction): action is RejectedAction {
-  return action.type.endsWith('rejected');
-}
-
-function isPendingAction(action: AnyAction): action is Action {
-  return action.type.endsWith('pending');
-}
-
-function isFulFilledAction(action: AnyAction): action is FulFilledAction {
-  return action.type.endsWith('fulfilled');
-}
-
-export const getColumnsInBoards = createAsyncThunk<ColumnData[], string>(
+export const getColumnsInBoards = createAsyncThunk<ColumnData[], string, AsyncThunkConfig>(
   'columns/getAll',
-  async (boardId) => {
-    const res = await ColumnsService.getAllColumns(boardId);
-    return res.data;
+  async (boardId, { rejectWithValue }) => {
+    try {
+      const res = await ColumnsService.getAllColumns(boardId);
+
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
+
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue(error.response.status);
+    }
   }
 );
 
-export const createColumn = createAsyncThunk<ColumnData, { boardId: string; data: ColumnParams }>(
-  'columns/create',
-  async (arg) => {
-    const res = await ColumnsService.createColumn(arg.boardId, arg.data);
+export const createColumn = createAsyncThunk<
+  ColumnData,
+  { boardId: string; data: ColumnParams },
+  AsyncThunkConfig
+>('columns/create', async ({ boardId, data }, { rejectWithValue }) => {
+  try {
+    const res = await ColumnsService.createColumn(boardId, data);
+
     return res.data;
+  } catch (err) {
+    const error = err as AxiosError;
+
+    if (!error.response) {
+      throw err;
+    }
+
+    return rejectWithValue(error.response.status);
   }
-);
+});
 
 export const updateColumn = createAsyncThunk<
   ColumnData,
-  { boardId: string; columnId: string; data: ColumnParams }
->('columns/update', async (arg) => {
-  const res = await ColumnsService.updateColumn(arg.boardId, arg.columnId, arg.data);
-  return res.data;
+  { boardId: string; columnId: string; data: ColumnParams },
+  AsyncThunkConfig
+>('columns/update', async (arg, { rejectWithValue }) => {
+  try {
+    const res = await ColumnsService.updateColumn(arg.boardId, arg.columnId, arg.data);
+
+    return res.data;
+  } catch (err) {
+    const error = err as AxiosError;
+
+    if (!error.response) {
+      throw err;
+    }
+
+    return rejectWithValue(error.response.status);
+  }
 });
 
 export const deleteColumn = createAsyncThunk<ColumnData, { boardId: string; columnId: string }>(
   'columns/delete',
-  async (arg) => {
-    const res = await ColumnsService.deleteColumn(arg.boardId, arg.columnId);
-    return res.data;
+  async (arg, { rejectWithValue }) => {
+    try {
+      const res = await ColumnsService.deleteColumn(arg.boardId, arg.columnId);
+
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
+
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue(error.response.status);
+    }
   }
 );
 
-interface IInitState {
+interface ColumnsState {
   columns: ColumnData[];
-  error: string | null | undefined;
   status: StatusType;
   currentBoardId: string;
   currentColumnId: string;
 }
 
-const initState: IInitState = {
+const initState: ColumnsState = {
   columns: [],
-  error: null,
   status: Status.idle,
   currentBoardId: '',
   currentColumnId: '',
@@ -104,17 +129,14 @@ const columnsSlice = createSlice({
     });
 
     builder.addMatcher(isPendingAction, (state) => {
-      state.error = null;
       state.status = Status.pending;
     });
 
-    builder.addMatcher(isRejectedAction, (state, action) => {
-      state.error = action.error.message || 'Some error occurred';
+    builder.addMatcher(isRejectedAction, (state) => {
       state.status = Status.failed;
     });
 
-    builder.addMatcher(isFulFilledAction, (state) => {
-      state.error = null;
+    builder.addMatcher(isFulfilledAction, (state) => {
       state.status = Status.succeeded;
     });
   },
@@ -124,4 +146,4 @@ export default columnsSlice.reducer;
 
 export const { setCurrentBoardId, setCurrentColumnId } = columnsSlice.actions;
 
-export const columnsSelector = (state: { columnsStore: IInitState }) => state.columnsStore;
+export const columnsSelector = (state: { columnsStore: ColumnsState }) => state.columnsStore;
