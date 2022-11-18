@@ -59,6 +59,7 @@ export const deleteColumn = createAsyncThunk<ColumnData, { boardId: string; colu
 interface IInitState {
   columns: ColumnData[];
   error: string | null | undefined;
+  columnLoadingArr: string[];
   status: Status;
   currentColumnId: string;
 }
@@ -66,6 +67,7 @@ interface IInitState {
 const initState: IInitState = {
   columns: [],
   error: null,
+  columnLoadingArr: [],
   status: Status.idle,
   currentColumnId: '',
 };
@@ -77,10 +79,22 @@ const columnsSlice = createSlice({
     setCurrentColumnId: (state, action: PayloadAction<string>) => {
       state.currentColumnId = action.payload;
     },
+    setColumnLoading: (state, action: PayloadAction<string>) => {
+      state.columnLoadingArr.push(action.payload);
+    },
   },
+
   extraReducers: (builder) => {
+    builder.addCase(getColumnsInBoards.pending, (state) => {
+      state.status = Status.pending;
+    });
+
     builder.addCase(getColumnsInBoards.fulfilled, (state, { payload }) => {
       state.columns = payload;
+    });
+
+    builder.addCase(createColumn.pending, (state) => {
+      state.status = Status.pending;
     });
 
     builder.addCase(createColumn.fulfilled, (state, { payload }) => {
@@ -91,15 +105,16 @@ const columnsSlice = createSlice({
       state.columns = state.columns.map((column) =>
         column._id === payload._id ? payload : column
       );
+      state.columnLoadingArr = state.columnLoadingArr.filter((id) => payload._id !== id);
     });
 
     builder.addCase(deleteColumn.fulfilled, (state, { payload }) => {
       state.columns = state.columns.filter((column) => column._id !== payload._id);
+      state.columnLoadingArr = state.columnLoadingArr.filter((id) => payload._id !== id);
     });
 
     builder.addMatcher(isPendingAction, (state) => {
       state.error = null;
-      state.status = Status.pending;
     });
 
     builder.addMatcher(isRejectedAction, (state, action) => {
@@ -116,6 +131,6 @@ const columnsSlice = createSlice({
 
 export default columnsSlice.reducer;
 
-export const { setCurrentColumnId } = columnsSlice.actions;
+export const { setCurrentColumnId, setColumnLoading } = columnsSlice.actions;
 
 export const columnsSelector = (state: { columnsStore: IInitState }) => state.columnsStore;

@@ -2,7 +2,7 @@ import { Badge, Box, TextareaAutosize } from '@mui/material';
 import { DefaultColors, GRAY_700 } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import React, { FC, useState, ChangeEvent } from 'react';
-import { deleteColumn, updateColumn } from 'store/columnsSlice';
+import { deleteColumn, setColumnLoading, updateColumn } from 'store/columnsSlice';
 import CustomIconBtn from './CustomIconBtn';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmModal from 'components/ConfirmModal';
@@ -61,6 +61,7 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) 
   };
 
   const submit = () => {
+    dispatch(setColumnLoading(columnId));
     dispatch(deleteColumn({ boardId, columnId }));
     closeConfirmModal();
   };
