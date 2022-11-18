@@ -35,6 +35,7 @@ const resources = {
       },
       responseError: {
         error401: 'User does not exist or password is wrong',
+        error403: 'Your session is expired',
         error404: 'Element does not exist',
         error409: 'User with such login already exist',
         error500: 'Server error',
@@ -48,6 +49,7 @@ const resources = {
         updateUser: 'User profile updated successfully',
         boardCreated: 'Board created successfully',
         boardDeleted: 'Board deleted successfully',
+        boardEdited: 'Board was edited successfully',
       },
       validationError: {
         required: 'This field is required',
@@ -139,6 +141,7 @@ const resources = {
       responseError: {
         error401: 'Пользователь не существует или не верный пароль',
         error404: 'Элемент не существует',
+        error403: 'Ваша сессия устарена',
         error409: 'Пользователь с такм логином уже существует',
         error500: 'Ошибка сервера',
         errorUnknown: 'Произошла неизвестная ошибка',
@@ -151,6 +154,7 @@ const resources = {
         updateUser: 'Профиль успешно обновлен',
         boardCreated: 'Доска успешно создана',
         boardDeleted: 'Доска успешно удалена',
+        boardEdited: 'Доска успешно отредактирована',
       },
       validationError: {
         required: 'Это поле обязательно',
@@ -160,7 +164,7 @@ const resources = {
         minLength3: 'Поле должно содержать не менее 3 символов',
         minLength8: 'Поле должно содержать не менее 8 символов',
         passwordPattern: 'Допустимы только латинские буквы, цифры и символы _, ., -',
-        namePattern: 'Allowed only alphabetical characters',
+        namePattern: 'Поле должно содержать только буквы',
       },
       authPage: {
         password: 'Пароль',

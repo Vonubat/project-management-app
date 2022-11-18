@@ -68,3 +68,7 @@ export enum Severity {
   info = 'info',
   success = 'success',
 }
+
+export enum StatusCode {
+  unauthorized = 403,
+}

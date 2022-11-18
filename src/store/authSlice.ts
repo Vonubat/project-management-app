@@ -1,6 +1,6 @@
 import { Action, AnyAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
-import { TOKEN } from 'constants/constants';
+import { StatusCode, TOKEN } from 'constants/constants';
 import { AuthService } from 'services/authService';
 import {
   AuthState,
@@ -9,15 +9,9 @@ import {
   SignUpOkResponseData,
   SignUpRequestData,
 } from 'types/auth';
+import { PendingAction, RejectedAction } from 'types/store';
 import { getAuthSliceInitialState } from 'utils/getAuthSliceInitialState';
 import { parseJwt } from 'utils/parseJwt';
-
-interface RejectedAction extends Action {
-  error: Error;
-  payload?: number;
-}
-
-type PendingAction = Action;
 
 interface FulFilledAction extends Action {
   payload: SignUpOkResponseData | SignInOkResponseData;
@@ -85,6 +79,9 @@ const authSlice = createSlice({
     },
     logOut: (state) => {
       state.isAuth = false;
+      state.login = '';
+      state.name = '';
+      state.userId = '';
       localStorage.removeItem(TOKEN);
     },
   },
@@ -110,8 +107,13 @@ const authSlice = createSlice({
       state.isLoading = true;
     });
 
-    builder.addMatcher(isRejectedAction, (state) => {
+    builder.addMatcher(isRejectedAction, (state, action) => {
       state.isLoading = false;
+
+      if (action.payload && action.payload === StatusCode.unauthorized) {
+        state.isAuth = false;
+        localStorage.removeItem(TOKEN);
+      }
     });
 
     builder.addMatcher(isFulfilledAction, (state) => {
