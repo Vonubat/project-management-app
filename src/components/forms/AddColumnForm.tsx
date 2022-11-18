@@ -44,7 +44,7 @@ const AddColumnForm: FC = () => {
   };
 
   useEffect(() => {
-    dispatch(setIsSubmitDisabled(!isValid));
+    dispatch(setIsSubmitDisabled({ uniqueId: TypeofModal.addColumn, flag: !isValid }));
   }, [isValid, dispatch]);
 
   useEffect(() => {

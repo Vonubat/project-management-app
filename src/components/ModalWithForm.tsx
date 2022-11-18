@@ -26,8 +26,10 @@ type Props = {
 
 const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, sx, uniqueId }) => {
   const isOpenKey: `isOpen_${string}` = `isOpen_${uniqueId}`;
+  const isSubmitDisabledKey: `isSubmitDisabled_${string}` = `isSubmitDisabled_${uniqueId}`;
   const { t } = useTranslation('translation', { keyPrefix: 'confirmModal' });
-  const { [isOpenKey]: isOpen = false, isSubmitDisabled } = useAppSelector(modalSelector);
+  const { [isOpenKey]: isOpen = false, [isSubmitDisabledKey]: isSubmitDisabled = true } =
+    useAppSelector(modalSelector);
   const dispatch = useAppDispatch();
   const closeModal = () => dispatch(closeModalForm(uniqueId));
 

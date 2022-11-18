@@ -2,7 +2,6 @@ import { Action, AnyAction, createAsyncThunk, createSlice, PayloadAction } from 
 import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import TasksService from 'services/tasksService';
-import { StatusType } from 'types/store';
 import { TaskData, TaskParamsCreate, TaskParamsUpdate } from 'types/tasks';
 
 interface RejectedAction extends Action {
@@ -60,7 +59,7 @@ export const deleteTask = createAsyncThunk<
 interface IInitState {
   tasks: { [index: TaskData['columnId']]: TaskData[] };
   error: string | null | undefined;
-  status: StatusType;
+  status: Status;
   currentTaskTitle: string;
   currentTaskDescription: string;
   currentTaskId: string;

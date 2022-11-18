@@ -3,7 +3,6 @@ import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import ColumnsService from 'services/columnsService';
 import { ColumnData, ColumnParams } from 'types/columns';
-import { StatusType } from 'types/store';
 
 interface RejectedAction extends Action {
   error: Error | AxiosError;
@@ -60,7 +59,7 @@ export const deleteColumn = createAsyncThunk<ColumnData, { boardId: string; colu
 interface IInitState {
   columns: ColumnData[];
   error: string | null | undefined;
-  status: StatusType;
+  status: Status;
   currentBoardId: string;
   currentColumnId: string;
 }

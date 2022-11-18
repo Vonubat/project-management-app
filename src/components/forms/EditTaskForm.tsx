@@ -65,7 +65,7 @@ const EditTaskForm: FC = () => {
   };
 
   useEffect(() => {
-    dispatch(setIsSubmitDisabled(!isValid));
+    dispatch(setIsSubmitDisabled({ uniqueId: TypeofModal.editTask, flag: !isValid }));
   }, [isValid, dispatch]);
 
   const resetForm: () => void = useCallback((): void => {

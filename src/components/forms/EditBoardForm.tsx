@@ -47,7 +47,7 @@ const EditBoardForm: FC = () => {
   };
 
   useEffect(() => {
-    dispatch(setIsSubmitDisabled(!isValid));
+    dispatch(setIsSubmitDisabled({ uniqueId: TypeofModal.board, flag: !isValid }));
   }, [isValid, dispatch]);
 
   useEffect(() => {

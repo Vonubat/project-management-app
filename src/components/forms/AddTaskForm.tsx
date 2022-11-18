@@ -54,7 +54,7 @@ const AddTaskForm: FC = () => {
   };
 
   useEffect(() => {
-    dispatch(setIsSubmitDisabled(!isValid));
+    dispatch(setIsSubmitDisabled({ uniqueId: TypeofModal.addTask, flag: !isValid }));
   }, [isValid, dispatch]);
 
   useEffect(() => {

@@ -3,9 +3,9 @@ import { BoardData } from 'types/boards';
 
 type ModalState = {
   [key: `isOpen_${string}`]: boolean;
+  [key: `isSubmitDisabled_${string}`]: boolean;
   isSubmitted: boolean;
   isDeclined: boolean;
-  isSubmitDisabled: boolean;
   isConfirmOpen: boolean;
   isConfirmSubmitted: boolean;
   isConfirmDeclined: boolean;
@@ -16,7 +16,6 @@ type ModalState = {
 const modalInitialState: ModalState = {
   isSubmitted: false,
   isDeclined: false,
-  isSubmitDisabled: true,
   isConfirmOpen: false,
   isConfirmSubmitted: false,
   isConfirmDeclined: false,
@@ -33,8 +32,8 @@ const modalSlice = createSlice({
     closeModalForm: (state, action: PayloadAction<string>) => {
       state[`isOpen_${action.payload}`] = false;
     },
-    setIsSubmitDisabled: (state, action) => {
-      state.isSubmitDisabled = action.payload;
+    setIsSubmitDisabled: (state, action: PayloadAction<{ uniqueId: string; flag: boolean }>) => {
+      state[`isSubmitDisabled_${action.payload.uniqueId}`] = action.payload.flag;
     },
     openConfirmWindow: (state, action) => {
       state.isConfirmOpen = true;
