@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import TasksService from 'services/tasksService';
-import { AsyncThunkConfig, StatusType } from 'types/store';
+import { ColumnData } from 'types/columns';
+import { AsyncThunkConfig } from 'types/store';
 import { TaskData, TaskParamsCreate, TaskParamsUpdate } from 'types/tasks';
 import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
 
@@ -74,7 +75,9 @@ export const deleteTask = createAsyncThunk<
 
 interface IInitState {
   tasks: { [index: TaskData['columnId']]: TaskData[] };
-  status: StatusType;
+  tasksLoadingArr: ColumnData['_id'][];
+  status: Status;
+  error: string | null | undefined;
   currentTaskTitle: string;
   currentTaskDescription: string;
   currentTaskId: string;
@@ -82,7 +85,9 @@ interface IInitState {
 
 const initState: IInitState = {
   tasks: {},
+  tasksLoadingArr: [],
   status: Status.idle,
+  error: null,
   currentTaskTitle: '',
   currentTaskDescription: '',
   currentTaskId: '',
@@ -101,6 +106,9 @@ const tasksSlice = createSlice({
     setCurrentTaskId: (state, action: PayloadAction<string>) => {
       state.currentTaskId = action.payload;
     },
+    setTasksLoading: (state, action: PayloadAction<ColumnData['_id']>) => {
+      state.tasksLoadingArr.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllTasks.fulfilled, (state, { payload, meta }) => {
@@ -109,17 +117,26 @@ const tasksSlice = createSlice({
 
     builder.addCase(createTask.fulfilled, (state, { payload, meta }) => {
       state.tasks[meta.arg.columnId].push(payload);
+      state.tasksLoadingArr = state.tasksLoadingArr.filter(
+        (columnId) => payload.columnId !== columnId
+      );
     });
 
     builder.addCase(updateTask.fulfilled, (state, { payload, meta }) => {
       state.tasks[meta.arg.columnId] = state.tasks[meta.arg.columnId].map((task) =>
         task._id === payload._id ? payload : task
       );
+      state.tasksLoadingArr = state.tasksLoadingArr.filter(
+        (columnId) => payload.columnId !== columnId
+      );
     });
 
     builder.addCase(deleteTask.fulfilled, (state, { payload, meta }) => {
       state.tasks[meta.arg.columnId] = state.tasks[meta.arg.columnId].filter(
         (task) => task._id !== payload._id
+      );
+      state.tasksLoadingArr = state.tasksLoadingArr.filter(
+        (columnId) => payload.columnId !== columnId
       );
     });
 
@@ -139,7 +156,7 @@ const tasksSlice = createSlice({
 
 export default tasksSlice.reducer;
 
-export const { setCurrentTaskTitle, setCurrentTaskDescription, setCurrentTaskId } =
+export const { setCurrentTaskTitle, setCurrentTaskDescription, setCurrentTaskId, setTasksLoading } =
   tasksSlice.actions;
 
 export const tasksSelector = (state: { tasksStore: IInitState }) => state.tasksStore;

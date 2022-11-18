@@ -13,6 +13,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { closeModalForm, modalSelector } from 'store/modalSlice';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { DefaultColors } from 'constants/constants';
 
 type Props = {
   uniqueId: string;
@@ -24,8 +26,10 @@ type Props = {
 
 const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, sx, uniqueId }) => {
   const isOpenKey: `isOpen_${string}` = `isOpen_${uniqueId}`;
+  const isSubmitDisabledKey: `isSubmitDisabled_${string}` = `isSubmitDisabled_${uniqueId}`;
   const { t } = useTranslation('translation', { keyPrefix: 'modalForm' });
-  const { [isOpenKey]: isOpen = false, isSubmitDisabled } = useAppSelector(modalSelector);
+  const { [isOpenKey]: isOpen = false, [isSubmitDisabledKey]: isSubmitDisabled = true } =
+    useAppSelector(modalSelector);
   const dispatch = useAppDispatch();
   const closeModal = () => dispatch(closeModalForm(uniqueId));
 
@@ -45,7 +49,12 @@ const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, sx, uniqueId
             {children}
             <DialogActions sx={{ p: 0, pt: 2 }}>
               <Button onClick={closeModal}>{t('cancel')}</Button>
-              <Button type="submit" disabled={isSubmitDisabled}>
+              <Button
+                type="submit"
+                disabled={isSubmitDisabled}
+                color={DefaultColors.success}
+                endIcon={<CheckCircleIcon />}
+              >
                 {t('submit')}
               </Button>
             </DialogActions>

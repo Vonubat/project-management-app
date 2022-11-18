@@ -1,10 +1,10 @@
 import { IconButton } from '@mui/material';
 import React, { FC, SyntheticEvent } from 'react';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { DefaultColors } from 'constants/constants';
 import { keyframes } from '@mui/system';
 
 type BtnProps = {
+  children: React.ReactNode;
   size: 'small' | 'large';
   color:
     | DefaultColors.primary
@@ -27,15 +27,15 @@ const appendAnimate = keyframes`
 	}
 `;
 
-const DeleteBtn: FC<BtnProps> = ({ size, color, cb }) => (
+const DeleteBtn: FC<BtnProps> = ({ size, color, cb, children }) => (
   <IconButton
     aria-label="delete"
     size={size}
     color={color}
     onClick={cb}
-    sx={{ animation: `${appendAnimate} .1s linear` }}
+    sx={{ animation: `${appendAnimate} .1s linear`, p: 0 }}
   >
-    <DeleteIcon />
+    {children}
   </IconButton>
 );
 

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector, useImperativeDisableScroll } from 'hooks/hooks';
 import Loader from 'components/Loader';
 import { MediaQuery, Status, TypeofModal } from 'constants/constants';
-import { columnsSelector, getColumnsInBoards, setCurrentBoardId } from 'store/columnsSlice';
+import { columnsSelector, getColumnsInBoards } from 'store/columnsSlice';
 import { useParams } from 'react-router-dom';
 import { ColumnData } from 'types/columns';
 import ColumnPreview from 'components/ColumnPreview';
@@ -14,6 +14,7 @@ import AddColumnForm from 'components/forms/AddColumnForm';
 import { openModalForm } from 'store/modalSlice';
 import AddTaskForm from 'components/forms/AddTaskForm';
 import EditTaskForm from 'components/forms/EditTaskForm';
+import ColumnsBackBtn from 'components/UI/ColumnsBackBtn';
 
 type Props = {
   children?: React.ReactNode;
@@ -30,7 +31,7 @@ const StyledBox: FC<Props> = ({ children }) => {
         alignItems: 'baseline',
         overflowX: 'auto',
         overflowY: 'hidden',
-        height: isBreakPoint ? 'calc(100vh - 170px)' : 'calc(100vh - 330px)',
+        height: isBreakPoint ? 'calc(100vh - 210px)' : 'calc(100vh - 370px)',
         gap: '1rem',
       }}
     >
@@ -49,13 +50,13 @@ const Columns = () => {
 
   useEffect(() => {
     dispatch(getColumnsInBoards(boardId as string));
-    dispatch(setCurrentBoardId(boardId as string));
   }, [dispatch, boardId]);
 
   useImperativeDisableScroll(BODY);
 
   return (
-    <Page sx={{ marginTop: '2rem' }}>
+    <Page sx={{ marginTop: '1rem' }}>
+      <ColumnsBackBtn />
       <StyledBox>
         {columns.map(({ _id, title, boardId, order }: ColumnData) => (
           <ColumnPreview
@@ -66,6 +67,7 @@ const Columns = () => {
             order={order}
           />
         ))}
+
         <ColumnsAddBtn cb={() => dispatch(openModalForm(TypeofModal.addColumn))}>
           <Typography variant="h6">{t('addColumn')}</Typography>
         </ColumnsAddBtn>

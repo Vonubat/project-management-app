@@ -7,21 +7,22 @@ import { useForm } from 'react-hook-form';
 import ModalWithForm from 'components/ModalWithForm';
 import ControlledFormInput from 'components/ControlledFormInput';
 import { FormControl } from 'types/formInput';
-import { createTask, tasksSelector } from 'store/tasksSlice';
+import { createTask, setTasksLoading, tasksSelector } from 'store/tasksSlice';
 import { TaskFields } from 'types/tasks';
 import { authSelector } from 'store/authSlice';
 import { TypeofModal } from 'constants/constants';
 import { columnsSelector } from 'store/columnsSlice';
+import { useParams } from 'react-router-dom';
 
 const AddTaskForm: FC = () => {
-  const { currentBoardId: boardId } = useAppSelector(columnsSelector);
+  const { boardId } = useParams();
   const { currentColumnId: columnId } = useAppSelector(columnsSelector);
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.addTask}`;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const { userId } = useAppSelector(authSelector);
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
   const { tasks } = useAppSelector(tasksSelector);
-  const currentPosition: number = (tasks[boardId]?.length || 0) + 1;
+  const currentPosition: number = (tasks[boardId as string]?.length || 0) + 1;
   const dispatch = useAppDispatch();
 
   const {
@@ -37,9 +38,10 @@ const AddTaskForm: FC = () => {
   const formControl = control as FormControl;
 
   const onSubmit = (data: TaskFields) => {
+    dispatch(setTasksLoading(columnId));
     dispatch(
       createTask({
-        boardId,
+        boardId: boardId as string,
         columnId,
         data: {
           title: data.title,
@@ -54,7 +56,7 @@ const AddTaskForm: FC = () => {
   };
 
   useEffect(() => {
-    dispatch(setIsSubmitDisabled(!isValid));
+    dispatch(setIsSubmitDisabled({ uniqueId: TypeofModal.addTask, flag: !isValid }));
   }, [isValid, dispatch]);
 
   useEffect(() => {

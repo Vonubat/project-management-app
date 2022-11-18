@@ -119,7 +119,7 @@ export const taskTitleInput: InputOptions = {
   name: 'title',
   label: 'tasks.title',
   type: 'text',
-  rows: 3,
+  rows: 2,
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
   },
@@ -129,7 +129,7 @@ export const taskDescriptionInput: InputOptions = {
   name: 'description',
   label: 'tasks.description',
   type: 'text',
-  rows: 10,
+  rows: 7,
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
   },

@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import ColumnsService from 'services/columnsService';
 import { ColumnData, ColumnParams } from 'types/columns';
-import { AsyncThunkConfig, StatusType } from 'types/store';
+import { AsyncThunkConfig } from 'types/store';
 import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
 
 export const getColumnsInBoards = createAsyncThunk<ColumnData[], string, AsyncThunkConfig>(
@@ -86,15 +86,17 @@ export const deleteColumn = createAsyncThunk<ColumnData, { boardId: string; colu
 
 interface ColumnsState {
   columns: ColumnData[];
-  status: StatusType;
-  currentBoardId: string;
+  columnLoadingArr: ColumnData['_id'][];
+  status: Status;
+  error: string | null | undefined;
   currentColumnId: string;
 }
 
 const initState: ColumnsState = {
   columns: [],
+  columnLoadingArr: [],
   status: Status.idle,
-  currentBoardId: '',
+  error: null,
   currentColumnId: '',
 };
 
@@ -102,16 +104,25 @@ const columnsSlice = createSlice({
   name: 'columns',
   initialState: initState,
   reducers: {
-    setCurrentBoardId: (state, action: PayloadAction<string>) => {
-      state.currentBoardId = action.payload;
-    },
     setCurrentColumnId: (state, action: PayloadAction<string>) => {
       state.currentColumnId = action.payload;
     },
+    setColumnLoading: (state, action: PayloadAction<string>) => {
+      state.columnLoadingArr.push(action.payload);
+    },
   },
+
   extraReducers: (builder) => {
+    builder.addCase(getColumnsInBoards.pending, (state) => {
+      state.status = Status.pending;
+    });
+
     builder.addCase(getColumnsInBoards.fulfilled, (state, { payload }) => {
       state.columns = payload;
+    });
+
+    builder.addCase(createColumn.pending, (state) => {
+      state.status = Status.pending;
     });
 
     builder.addCase(createColumn.fulfilled, (state, { payload }) => {
@@ -122,14 +133,16 @@ const columnsSlice = createSlice({
       state.columns = state.columns.map((column) =>
         column._id === payload._id ? payload : column
       );
+      state.columnLoadingArr = state.columnLoadingArr.filter((id) => payload._id !== id);
     });
 
     builder.addCase(deleteColumn.fulfilled, (state, { payload }) => {
       state.columns = state.columns.filter((column) => column._id !== payload._id);
+      state.columnLoadingArr = state.columnLoadingArr.filter((id) => payload._id !== id);
     });
 
     builder.addMatcher(isPendingAction, (state) => {
-      state.status = Status.pending;
+      state.error = null;
     });
 
     builder.addMatcher(isRejectedAction, (state) => {
@@ -144,6 +157,6 @@ const columnsSlice = createSlice({
 
 export default columnsSlice.reducer;
 
-export const { setCurrentBoardId, setCurrentColumnId } = columnsSlice.actions;
+export const { setCurrentColumnId, setColumnLoading } = columnsSlice.actions;
 
 export const columnsSelector = (state: { columnsStore: ColumnsState }) => state.columnsStore;

@@ -1,6 +1,6 @@
 import { createSlice, isFulfilled, isRejected } from '@reduxjs/toolkit';
 import { ActionName, Severity, SliceName } from 'constants/constants';
-import { getTranslationString } from 'utils/getTraslationString';
+import { getTranslationString } from 'utils/getTranslationString';
 
 type NotificationState = {
   message: string;

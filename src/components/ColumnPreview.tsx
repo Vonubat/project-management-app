@@ -1,28 +1,29 @@
-import React, { FC, useState } from 'react';
-import { Box } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import ConfirmModal from './ConfirmModal';
-import { useAppDispatch } from 'hooks/hooks';
-import { deleteColumn } from 'store/columnsSlice';
+import React, { FC } from 'react';
+import { Box, LinearProgress } from '@mui/material';
 import ColumnTextarea from './UI/ColumnTextarea';
-import DeleteBtn from './UI/DeleteBtn';
-import { DefaultColors } from 'constants/constants';
 import TasksPreview from './TasksPreview';
+import { useAppSelector } from 'hooks/hooks';
+import { columnsSelector } from 'store/columnsSlice';
+import { tasksSelector } from 'store/tasksSlice';
 
-type Props = {
-  children?: React.ReactNode;
+type ColumnProps = {
+  children: React.ReactNode;
+  isLoading: boolean;
+};
+
+type ColumnPreviewProps = {
   columnTitle: string;
   columnId: string;
   boardId: string;
   order: number;
 };
 
-const Column: FC<Pick<Props, 'children'>> = ({ children }) => {
+const Column: FC<ColumnProps> = ({ children, isLoading }) => {
   return (
     <Box
       sx={{
         height: 'fit-content',
-        maxHeight: 0.9,
+        maxHeight: 'calc(100% - 30px)',
         py: 1,
         mx: 2,
         maxWidth: 300,
@@ -33,9 +34,19 @@ const Column: FC<Pick<Props, 'children'>> = ({ children }) => {
         alignItems: 'center',
         boxShadow: 3,
         borderRadius: '5px',
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
         overflowX: 'hidden',
         overflowY: 'auto',
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        transition: '.1s linear',
+        opacity: isLoading ? 0.5 : 1,
+        pointerEvents: isLoading ? 'none' : 'auto',
+        '&::-webkit-scrollbar-thumb': {
+          borderRadius: 5,
+        },
+        '&::-webkit-scrollbar-track': {
+          borderTopRightRadius: 5,
+          borderBottomRightRadius: 5,
+        },
       }}
     >
       {children}
@@ -43,38 +54,18 @@ const Column: FC<Pick<Props, 'children'>> = ({ children }) => {
   );
 };
 
-const ColumnPreview: FC<Props> = ({ columnTitle, columnId, boardId, order }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'columns' });
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
-
-  const submit = () => {
-    dispatch(deleteColumn({ boardId, columnId }));
-    closeModal();
-  };
-
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId, boardId, order }) => {
+  const { columnLoadingArr } = useAppSelector(columnsSelector);
+  const isColumnLoading: boolean = columnLoadingArr.some((id) => id === columnId);
+  const { tasksLoadingArr } = useAppSelector(tasksSelector);
+  const isTasksLoading: boolean = tasksLoadingArr.some((id) => id === columnId);
+  const isLoading = isColumnLoading || isTasksLoading;
 
   return (
-    <Column>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-        }}
-      >
-        <ColumnTextarea value={columnTitle} columnId={columnId} boardId={boardId} order={order} />
-        <DeleteBtn size="small" color={DefaultColors.error} cb={openModal} />
-      </Box>
+    <Column isLoading={isLoading}>
+      <ColumnTextarea value={columnTitle} columnId={columnId} boardId={boardId} order={order} />
       <TasksPreview columnId={columnId} boardId={boardId} />
-      <ConfirmModal title={t('delColumn')} isOpen={isOpen} onSubmit={submit} onClose={closeModal} />
+      {isLoading && <LinearProgress sx={{ width: 1 }} />}
     </Column>
   );
 };

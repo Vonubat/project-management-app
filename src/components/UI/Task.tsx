@@ -8,13 +8,15 @@ import {
   setCurrentTaskDescription,
   setCurrentTaskId,
   setCurrentTaskTitle,
+  setTasksLoading,
 } from 'store/tasksSlice';
 import ConfirmModal from 'components/ConfirmModal';
-import DeleteBtn from './DeleteBtn';
+import CustomIconBtn from './CustomIconBtn';
 import { theme } from 'components/Page';
-import isTouchEnabled from 'utils/isTouchEnabled';
-import { openModalForm } from 'store/modalSlice';
 import { setCurrentColumnId } from 'store/columnsSlice';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { openModalForm } from 'store/modalSlice';
+import isTouchEnabled from 'utils/isTouchEnabled';
 
 type Props = {
   children?: React.ReactNode;
@@ -35,6 +37,7 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, boardId, columnId, taskId
 
   const submit = (e: SyntheticEvent) => {
     e.stopPropagation();
+    dispatch(setTasksLoading(columnId));
     dispatch(deleteTask({ boardId, columnId, taskId }));
     closeConfirmModal(e);
   };
@@ -93,7 +96,9 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, boardId, columnId, taskId
         {taskTitle}
       </Typography>
       {(isHovering || isTouchScreenDevice) && (
-        <DeleteBtn size="small" color={DefaultColors.error} cb={openConfirmModal} />
+        <CustomIconBtn size="small" color={DefaultColors.error} cb={openConfirmModal}>
+          <DeleteIcon />
+        </CustomIconBtn>
       )}
       <ConfirmModal
         title={t('delTask')}
