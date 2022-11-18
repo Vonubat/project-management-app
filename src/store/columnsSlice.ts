@@ -91,6 +91,29 @@ export const deleteColumn = createAsyncThunk<ColumnData, string, AsyncThunkConfi
   }
 );
 
+export const changeColumnOrder = createAsyncThunk<
+  ColumnData,
+  { boardId: string; order: number },
+  AsyncThunkConfig
+>('columns/changeOrder', async ({ boardId, order }, { getState, rejectWithValue }) => {
+  const { currentColumnId, columns } = getState().columnsStore;
+  const data = columns.find((c) => c._id === currentColumnId) as ColumnParams;
+
+  try {
+    const res = await ColumnsService.updateColumn(boardId, currentColumnId, { ...data, order });
+
+    return res.data;
+  } catch (err) {
+    const error = err as AxiosError;
+
+    if (!error.response) {
+      throw err;
+    }
+
+    return rejectWithValue(error.response.status);
+  }
+});
+
 interface ColumnsState {
   columns: ColumnData[];
   columnLoadingArr: ColumnData['_id'][];

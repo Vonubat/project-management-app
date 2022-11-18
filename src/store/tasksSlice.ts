@@ -89,6 +89,36 @@ export const deleteTask = createAsyncThunk<
   }
 });
 
+export const changeTaskOrder = createAsyncThunk<
+  ColumnData,
+  { boardId: string; oldColumnId: string; newColumnId: string; order: number },
+  AsyncThunkConfig
+>(
+  'tasks/changeOrder',
+  async ({ boardId, oldColumnId, newColumnId, order }, { getState, rejectWithValue }) => {
+    const { currentTaskId, tasks } = getState().tasksStore;
+    const taskData = tasks[oldColumnId].find((t) => t._id === currentTaskId) as TaskData;
+
+    try {
+      const res = await TasksService.updateTask(boardId, oldColumnId, currentTaskId, {
+        ...taskData,
+        order,
+        columnId: newColumnId,
+      });
+
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
+
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue(error.response.status);
+    }
+  }
+);
+
 interface IInitState {
   tasks: { [index: TaskData['columnId']]: TaskData[] };
   tasksLoadingArr: ColumnData['_id'][];
