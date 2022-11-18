@@ -4,10 +4,11 @@ import ColumnTextarea from './UI/ColumnTextarea';
 import TasksPreview from './TasksPreview';
 import { useAppSelector } from 'hooks/hooks';
 import { columnsSelector } from 'store/columnsSlice';
+import { tasksSelector } from 'store/tasksSlice';
 
 type ColumnProps = {
   children: React.ReactNode;
-  isColumnLoading: boolean;
+  isLoading: boolean;
 };
 
 type ColumnPreviewProps = {
@@ -17,7 +18,7 @@ type ColumnPreviewProps = {
   order: number;
 };
 
-const Column: FC<ColumnProps> = ({ children, isColumnLoading }) => {
+const Column: FC<ColumnProps> = ({ children, isLoading }) => {
   return (
     <Box
       sx={{
@@ -37,8 +38,8 @@ const Column: FC<ColumnProps> = ({ children, isColumnLoading }) => {
         overflowY: 'auto',
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
         transition: '.1s linear',
-        opacity: isColumnLoading ? 0.5 : 1,
-        pointerEvents: isColumnLoading ? 'none' : 'auto',
+        opacity: isLoading ? 0.5 : 1,
+        pointerEvents: isLoading ? 'none' : 'auto',
         '&::-webkit-scrollbar-thumb': {
           borderRadius: 5,
         },
@@ -56,12 +57,15 @@ const Column: FC<ColumnProps> = ({ children, isColumnLoading }) => {
 const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId, boardId, order }) => {
   const { columnLoadingArr } = useAppSelector(columnsSelector);
   const isColumnLoading: boolean = columnLoadingArr.some((id) => id === columnId);
+  const { tasksLoadingArr } = useAppSelector(tasksSelector);
+  const isTasksLoading: boolean = tasksLoadingArr.some((id) => id === columnId);
+  const isLoading = isColumnLoading || isTasksLoading;
 
   return (
-    <Column isColumnLoading={isColumnLoading}>
+    <Column isLoading={isLoading}>
       <ColumnTextarea value={columnTitle} columnId={columnId} boardId={boardId} order={order} />
       <TasksPreview columnId={columnId} boardId={boardId} />
-      {isColumnLoading && <LinearProgress sx={{ width: 1 }} />}
+      {isLoading && <LinearProgress sx={{ width: 1 }} />}
     </Column>
   );
 };

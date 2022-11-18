@@ -58,17 +58,17 @@ export const deleteColumn = createAsyncThunk<ColumnData, { boardId: string; colu
 
 interface IInitState {
   columns: ColumnData[];
-  error: string | null | undefined;
-  columnLoadingArr: string[];
+  columnLoadingArr: ColumnData['_id'][];
   status: Status;
+  error: string | null | undefined;
   currentColumnId: string;
 }
 
 const initState: IInitState = {
   columns: [],
-  error: null,
   columnLoadingArr: [],
   status: Status.idle,
+  error: null,
   currentColumnId: '',
 };
 

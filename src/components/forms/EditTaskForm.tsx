@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import ModalWithForm from 'components/ModalWithForm';
 import ControlledFormInput from 'components/ControlledFormInput';
 import { FormControl } from 'types/formInput';
-import { tasksSelector, updateTask } from 'store/tasksSlice';
+import { setTasksLoading, tasksSelector, updateTask } from 'store/tasksSlice';
 import { TaskFields } from 'types/tasks';
 import { authSelector } from 'store/authSlice';
 import { TypeofModal } from 'constants/constants';
@@ -46,6 +46,7 @@ const EditTaskForm: FC = () => {
 
   const onSubmit = (data: TaskFields) => {
     if (data.title !== taskTitle || data.description !== taskDescription) {
+      dispatch(setTasksLoading(columnId));
       dispatch(
         updateTask({
           boardId: boardId as string,

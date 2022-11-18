@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import ModalWithForm from 'components/ModalWithForm';
 import ControlledFormInput from 'components/ControlledFormInput';
 import { FormControl } from 'types/formInput';
-import { createTask, tasksSelector } from 'store/tasksSlice';
+import { createTask, setTasksLoading, tasksSelector } from 'store/tasksSlice';
 import { TaskFields } from 'types/tasks';
 import { authSelector } from 'store/authSlice';
 import { TypeofModal } from 'constants/constants';
@@ -38,6 +38,7 @@ const AddTaskForm: FC = () => {
   const formControl = control as FormControl;
 
   const onSubmit = (data: TaskFields) => {
+    dispatch(setTasksLoading(columnId));
     dispatch(
       createTask({
         boardId: boardId as string,

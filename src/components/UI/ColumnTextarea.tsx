@@ -49,6 +49,7 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) 
       return;
     }
 
+    dispatch(setColumnLoading(columnId));
     dispatch(
       updateColumn({
         boardId,
