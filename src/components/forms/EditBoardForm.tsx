@@ -9,7 +9,7 @@ import { FormControl } from 'types/formInput';
 import { EditBoardFormFields } from 'types/boards';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
 import { authSelector } from 'store/authSlice';
-import { editBoard, createBoard } from 'store/boardListSlice';
+import { updateBoard, createBoard } from 'store/boardListSlice';
 import { setBoardLoading } from 'store/boardListSlice';
 import { TypeofModal } from 'constants/constants';
 
@@ -38,7 +38,7 @@ const EditBoardForm: FC = () => {
   const onSubmit = (data: EditBoardFormFields) => {
     const boardParams = { ...data, owner: userId as string, users: [] };
     if (boardData) {
-      dispatch(editBoard([boardData._id, boardParams]));
+      dispatch(updateBoard([boardData._id, boardParams]));
       dispatch(setBoardLoading(boardData._id));
     } else {
       dispatch(createBoard(boardParams));

@@ -2,14 +2,14 @@ import { AuthState } from 'types/auth';
 import { getUserDataFromLocalStorage } from './getUserDataFromLocalStorage';
 
 export const getAuthSliceInitialState = (): AuthState => {
-  const { login, id } = getUserDataFromLocalStorage();
+  const { login, userId } = getUserDataFromLocalStorage();
 
   return {
     isLoading: false,
-    isAuth: !!id,
-    name: null,
-    login: login,
-    userId: id,
+    isAuth: !!userId,
+    name: '',
+    login,
+    userId,
     created: null,
   };
 };

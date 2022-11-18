@@ -4,7 +4,7 @@ import UsersService from 'services/usersService';
 import { SignUpOkResponseData, SignUpRequestData } from 'types/auth';
 import { RootState } from './store';
 
-type UserState = {
+type UsersState = {
   name: string;
   login: string;
   userId: string;
@@ -39,7 +39,7 @@ export const getUser = createAsyncThunk<
   SignUpOkResponseData,
   void,
   { state: RootState; rejectValue: number }
->('user/getUser', async (_, { getState, rejectWithValue }) => {
+>('users/getUser', async (_, { getState, rejectWithValue }) => {
   const {
     authStore: { userId },
   } = getState();
@@ -67,9 +67,9 @@ export const updateUser = createAsyncThunk<
   SignUpOkResponseData,
   SignUpRequestData,
   { state: RootState; rejectValue: number }
->('user/update', async (data, { getState, rejectWithValue }) => {
+>('users/update', async (data, { getState, rejectWithValue }) => {
   const {
-    userStore: { userId },
+    usersStore: { userId },
   } = getState();
 
   try {
@@ -91,9 +91,9 @@ export const deleteUser = createAsyncThunk<
   SignUpOkResponseData,
   void,
   { state: RootState; rejectValue: number }
->('user/delete', async (_, { getState, rejectWithValue }) => {
+>('users/delete', async (_, { getState, rejectWithValue }) => {
   const {
-    userStore: { userId },
+    usersStore: { userId },
   } = getState();
 
   try {
@@ -111,7 +111,7 @@ export const deleteUser = createAsyncThunk<
   }
 });
 
-const userSliceInitialState: UserState = {
+const userSliceInitialState: UsersState = {
   name: '',
   login: '',
   userId: '',
@@ -119,8 +119,8 @@ const userSliceInitialState: UserState = {
   isLoading: false,
 };
 
-const userSlice = createSlice({
-  name: 'user',
+const usersSlice = createSlice({
+  name: 'users',
   initialState: userSliceInitialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -156,6 +156,6 @@ const userSlice = createSlice({
   },
 });
 
-export default userSlice.reducer;
+export default usersSlice.reducer;
 
-export const userSelector = (state: { userStore: UserState }) => state.userStore;
+export const usersSelector = (state: { usersStore: UsersState }) => state.usersStore;

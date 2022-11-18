@@ -19,7 +19,7 @@ const CreatedUserWindow: FC<Props> = ({ userData: { name, login } }) => {
     <Container maxWidth="xs">
       <Divider variant="middle" sx={{ pt: '1rem', pb: '1rem' }} />
       <Typography variant="h5" align="center" gutterBottom>
-        {t('authPage.createdSuccessfuly')}
+        {t('authPage.createdSuccessfully')}
       </Typography>
       <Typography variant="subtitle1" align="center" gutterBottom>
         {t('authPage.login')}: {login}
