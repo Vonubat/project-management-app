@@ -1,9 +1,9 @@
 export type AuthState = {
   isLoading: boolean;
   isAuth: boolean;
-  name: string | null;
-  login: string | null;
-  userId: string | null;
+  name: string;
+  login: string;
+  userId: string;
   created: {
     name: string;
     login: string;

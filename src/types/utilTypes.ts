@@ -6,6 +6,6 @@ export type JwtBody = {
 };
 
 export type LocalStorageUserData = {
-  id: string | null;
-  login: string | null;
+  userId: string;
+  login: string;
 };
