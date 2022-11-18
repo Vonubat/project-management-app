@@ -41,28 +41,56 @@ const notificationSlice = createSlice({
       state.severity = Severity.info;
       state.message = 'Info happened';
 
+      console.log(action.type);
+
       if (action.type.startsWith('auth/signIn')) {
         state.message = 'responseSuccess.signIn';
+        return;
       }
 
       if (action.type.startsWith('auth/signUp')) {
         state.message = 'responseSuccess.signUp';
+        return;
       }
 
       if (action.type.startsWith('user/delete')) {
         state.message = 'responseSuccess.deleteUser';
+        return;
       }
 
       if (action.type.startsWith('user/update')) {
         state.message = 'responseSuccess.updateUser';
+        return;
       }
 
       if (action.type.startsWith('board/create')) {
         state.message = 'responseSuccess.boardCreated';
+        return;
       }
 
       if (action.type.startsWith('board/delete')) {
         state.message = 'responseSuccess.boardDeleted';
+        return;
+      }
+
+      if (action.type.startsWith('board/edit')) {
+        state.message = 'responseSuccess.boardEdited';
+        return;
+      }
+
+      if (action.type.startsWith('columns/create')) {
+        state.message = 'responseSuccess.columnsCreate';
+        return;
+      }
+
+      if (action.type.startsWith('columns/update')) {
+        state.message = 'responseSuccess.columnsUpdate';
+        return;
+      }
+
+      if (action.type.startsWith('columns/delete')) {
+        state.message = 'responseSuccess.columnsDelete';
+        return;
       }
     });
   },
