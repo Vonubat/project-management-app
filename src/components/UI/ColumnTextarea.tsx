@@ -75,7 +75,7 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) 
       sx={{
         display: 'flex',
         alignItems: 'flex-start',
-        gap: 1,
+        gap: 2,
       }}
     >
       <TextareaAutosize
@@ -86,7 +86,7 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) 
           marginBottom: '2rem',
           fontSize: '20px',
           border: '0',
-          borderRadius: '7px',
+          borderRadius: '5px',
           cursor: 'pointer',
           resize: 'none',
           overflow: 'hidden',

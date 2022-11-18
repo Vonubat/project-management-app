@@ -30,6 +30,13 @@ const Column: FC<Pick<Props, 'children'>> = ({ children }) => {
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
         overflowX: 'hidden',
         overflowY: 'auto',
+        '&::-webkit-scrollbar-thumb': {
+          borderRadius: 5,
+        },
+        '&::-webkit-scrollbar-track': {
+          borderTopRightRadius: 5,
+          borderBottomRightRadius: 5,
+        },
       }}
     >
       {children}
