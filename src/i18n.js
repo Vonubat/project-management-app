@@ -87,6 +87,10 @@ const resources = {
         title: 'Title',
         description: 'Description',
       },
+      modalForm: {
+        submit: 'Submit',
+        cancel: 'Cancel',
+      },
       confirmModal: {
         yes: 'Delete',
         no: 'Cancel',
@@ -199,8 +203,12 @@ const resources = {
         title: 'Заголовок',
         description: 'Описание',
       },
+      modalForm: {
+        submit: 'Подтвердить',
+        cancel: 'Закрыть',
+      },
       confirmModal: {
-        yes: 'Подтвердить',
+        yes: 'Удалить',
         no: 'Закрыть',
       },
       editProfile: {
