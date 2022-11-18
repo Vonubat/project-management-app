@@ -69,7 +69,7 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
             </Box>
             <Paper
               variant="outlined"
-              className="board-description"
+              className="alternative-scroll"
               sx={{ flexGrow: 1, overflow: 'auto', wordWrap: 'break-word', mb: 1, p: 1 }}
             >
               <Typography variant="caption" align="justify" display="block">
