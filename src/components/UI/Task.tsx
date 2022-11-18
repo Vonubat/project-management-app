@@ -10,11 +10,12 @@ import {
   setCurrentTaskTitle,
 } from 'store/tasksSlice';
 import ConfirmModal from 'components/ConfirmModal';
-import DeleteBtn from './DeleteBtn';
+import CustomIconBtn from './CustomIconBtn';
 import { theme } from 'components/Page';
 import isTouchEnabled from 'utils/isTouchEnabled';
 import { openModalForm } from 'store/modalSlice';
 import { setCurrentColumnId } from 'store/columnsSlice';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 type Props = {
   children?: React.ReactNode;
@@ -93,7 +94,9 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, boardId, columnId, taskId
         {taskTitle}
       </Typography>
       {(isHovering || isTouchScreenDevice) && (
-        <DeleteBtn size="small" color={DefaultColors.error} cb={openConfirmModal} />
+        <CustomIconBtn size="small" color={DefaultColors.error} cb={openConfirmModal}>
+          <DeleteIcon />
+        </CustomIconBtn>
       )}
       <ConfirmModal
         title={t('delTask')}

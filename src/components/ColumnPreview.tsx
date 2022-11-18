@@ -5,9 +5,10 @@ import ConfirmModal from './ConfirmModal';
 import { useAppDispatch } from 'hooks/hooks';
 import { deleteColumn } from 'store/columnsSlice';
 import ColumnTextarea from './UI/ColumnTextarea';
-import DeleteBtn from './UI/DeleteBtn';
+import CustomIconBtn from './UI/CustomIconBtn';
 import { DefaultColors } from 'constants/constants';
 import TasksPreview from './TasksPreview';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 type Props = {
   children?: React.ReactNode;
@@ -50,14 +51,14 @@ const ColumnPreview: FC<Props> = ({ columnTitle, columnId, boardId, order }) => 
 
   const submit = () => {
     dispatch(deleteColumn({ boardId, columnId }));
-    closeModal();
+    closeConfirmModal();
   };
 
-  const openModal = () => {
+  const openConfirmModal = () => {
     setIsOpen(true);
   };
 
-  const closeModal = () => {
+  const closeConfirmModal = () => {
     setIsOpen(false);
   };
 
@@ -71,10 +72,17 @@ const ColumnPreview: FC<Props> = ({ columnTitle, columnId, boardId, order }) => 
         }}
       >
         <ColumnTextarea value={columnTitle} columnId={columnId} boardId={boardId} order={order} />
-        <DeleteBtn size="small" color={DefaultColors.error} cb={openModal} />
+        <CustomIconBtn size="small" color={DefaultColors.error} cb={openConfirmModal}>
+          <DeleteIcon />
+        </CustomIconBtn>
       </Box>
       <TasksPreview columnId={columnId} boardId={boardId} />
-      <ConfirmModal title={t('delColumn')} isOpen={isOpen} onSubmit={submit} onClose={closeModal} />
+      <ConfirmModal
+        title={t('delColumn')}
+        isOpen={isOpen}
+        onSubmit={submit}
+        onClose={closeConfirmModal}
+      />
     </Column>
   );
 };
