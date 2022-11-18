@@ -12,19 +12,20 @@ import { TaskFields } from 'types/tasks';
 import { authSelector } from 'store/authSlice';
 import { TypeofModal } from 'constants/constants';
 import { columnsSelector } from 'store/columnsSlice';
+import { useParams } from 'react-router-dom';
 
 const EditTaskForm: FC = () => {
   const { currentTaskTitle: taskTitle } = useAppSelector(tasksSelector);
   const { currentTaskDescription: taskDescription } = useAppSelector(tasksSelector);
   const { currentTaskId: taskId } = useAppSelector(tasksSelector);
-  const { currentBoardId: boardId } = useAppSelector(columnsSelector);
   const { currentColumnId: columnId } = useAppSelector(columnsSelector);
+  const { boardId } = useParams();
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.editTask}`;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const { userId } = useAppSelector(authSelector);
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
   const { tasks } = useAppSelector(tasksSelector);
-  const currentPosition: number = (tasks[boardId]?.length || 0) + 1;
+  const currentPosition: number = (tasks[boardId as string]?.length || 0) + 1;
   const dispatch = useAppDispatch();
 
   const {
@@ -47,7 +48,7 @@ const EditTaskForm: FC = () => {
     if (data.title !== taskTitle || data.description !== taskDescription) {
       dispatch(
         updateTask({
-          boardId,
+          boardId: boardId as string,
           columnId,
           taskId,
           data: {

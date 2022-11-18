@@ -91,6 +91,7 @@ const resources = {
         modalTitle: 'Change profile',
       },
       columns: {
+        back: 'Back to boards',
         title: 'Title',
         addTask: 'Add task',
         addColumn: 'Add column',
@@ -194,6 +195,7 @@ const resources = {
         modalTitle: 'Изменить профиль',
       },
       columns: {
+        back: 'Назад к доскам',
         title: 'Название',
         addTask: 'Добавить задачу',
         addColumn: 'Добавить колонку',

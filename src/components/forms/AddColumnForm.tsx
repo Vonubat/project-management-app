@@ -10,9 +10,10 @@ import ModalWithForm from 'components/ModalWithForm';
 import ControlledFormInput from 'components/ControlledFormInput';
 import { FormControl } from 'types/formInput';
 import { TypeofModal } from 'constants/constants';
+import { useParams } from 'react-router-dom';
 
 const AddColumnForm: FC = () => {
-  const { currentBoardId: boardId } = useAppSelector(columnsSelector);
+  const { boardId } = useParams();
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.addColumn}`;
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
@@ -35,7 +36,7 @@ const AddColumnForm: FC = () => {
   const onSubmit = (data: AddColumnFields) => {
     dispatch(
       createColumn({
-        boardId: boardId,
+        boardId: boardId as string,
         data: { title: data.title, order: currentPosition },
       })
     );

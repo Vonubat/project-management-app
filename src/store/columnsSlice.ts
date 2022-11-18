@@ -60,7 +60,6 @@ interface IInitState {
   columns: ColumnData[];
   error: string | null | undefined;
   status: Status;
-  currentBoardId: string;
   currentColumnId: string;
 }
 
@@ -68,7 +67,6 @@ const initState: IInitState = {
   columns: [],
   error: null,
   status: Status.idle,
-  currentBoardId: '',
   currentColumnId: '',
 };
 
@@ -76,9 +74,6 @@ const columnsSlice = createSlice({
   name: 'columns',
   initialState: initState,
   reducers: {
-    setCurrentBoardId: (state, action: PayloadAction<string>) => {
-      state.currentBoardId = action.payload;
-    },
     setCurrentColumnId: (state, action: PayloadAction<string>) => {
       state.currentColumnId = action.payload;
     },
@@ -121,6 +116,6 @@ const columnsSlice = createSlice({
 
 export default columnsSlice.reducer;
 
-export const { setCurrentBoardId, setCurrentColumnId } = columnsSlice.actions;
+export const { setCurrentColumnId } = columnsSlice.actions;
 
 export const columnsSelector = (state: { columnsStore: IInitState }) => state.columnsStore;
