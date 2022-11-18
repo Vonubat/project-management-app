@@ -91,17 +91,21 @@ export const deleteTask = createAsyncThunk<
 
 export const changeTaskOrder = createAsyncThunk<
   ColumnData,
-  { boardId: string; oldColumnId: string; newColumnId: string; order: number },
+  { id: string; boardId: string; oldColumnId: string; newColumnId: string; order: number },
   AsyncThunkConfig
 >(
   'tasks/changeOrder',
-  async ({ boardId, oldColumnId, newColumnId, order }, { getState, rejectWithValue }) => {
-    const { currentTaskId, tasks } = getState().tasksStore;
-    const taskData = tasks[oldColumnId].find((t) => t._id === currentTaskId) as TaskData;
+  async ({ id, boardId, oldColumnId, newColumnId, order }, { getState, rejectWithValue }) => {
+    const { tasks } = getState().tasksStore;
+    const taskData = tasks[oldColumnId].find((t) => t._id === id) as TaskData;
+
+    const task = { ...taskData } as Partial<TaskData>;
+    delete task._id;
+    delete task.boardId;
 
     try {
-      const res = await TasksService.updateTask(boardId, oldColumnId, currentTaskId, {
-        ...taskData,
+      const res = await TasksService.updateTask(boardId, oldColumnId, id, {
+        ...(task as TaskParamsUpdate),
         order,
         columnId: newColumnId,
       });
