@@ -88,7 +88,7 @@ const resources = {
         description: 'Description',
       },
       confirmModal: {
-        yes: 'Submit',
+        yes: 'Delete',
         no: 'Cancel',
       },
       editProfile: {
