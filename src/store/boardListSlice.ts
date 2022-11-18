@@ -13,7 +13,7 @@ export const getBoardsByUser = createAsyncThunk<
   BoardData[],
   void,
   { state: RootState; rejectValue: number }
->('board/getAll', async (_, { getState, rejectWithValue }) => {
+>('boards/getAll', async (_, { getState, rejectWithValue }) => {
   const {
     authStore: { userId },
   } = getState();
@@ -34,7 +34,7 @@ export const getBoardsByUser = createAsyncThunk<
 });
 
 export const createBoard = createAsyncThunk<BoardData, BoardParams, { rejectValue: number }>(
-  'board/create',
+  'boards/create',
   async (createBoardData, { rejectWithValue }) => {
     try {
       const res = await BoardsService.createBoard(createBoardData);
@@ -52,11 +52,11 @@ export const createBoard = createAsyncThunk<BoardData, BoardParams, { rejectValu
   }
 );
 
-export const editBoard = createAsyncThunk<
+export const updateBoard = createAsyncThunk<
   BoardData,
   Parameters<typeof BoardsService.updateBoard>,
   { rejectValue: number }
->('board/edit', async (params, { rejectWithValue }) => {
+>('boards/update', async (params, { rejectWithValue }) => {
   try {
     const res = await BoardsService.updateBoard(...params);
 
@@ -73,7 +73,7 @@ export const editBoard = createAsyncThunk<
 });
 
 export const deleteBoard = createAsyncThunk<BoardData, string, { rejectValue: number }>(
-  'board/delete',
+  'boards/delete',
   async (boardId, { rejectWithValue }) => {
     try {
       const res = await BoardsService.deleteBoard(boardId);
@@ -106,7 +106,7 @@ const initialBoardsState: BoardsState = {
 };
 
 const boardListSlice = createSlice({
-  name: 'board',
+  name: 'boards',
   initialState: initialBoardsState,
   reducers: {
     setBoardLoading: (state, action: PayloadAction<string>) => {
@@ -132,7 +132,7 @@ const boardListSlice = createSlice({
       state.isAddBoardLoading = false;
     });
 
-    builder.addCase(editBoard.fulfilled, (state, { payload }) => {
+    builder.addCase(updateBoard.fulfilled, (state, { payload }) => {
       state.boards = state.boards.map((board) => (board._id === payload._id ? payload : board));
       state.boardLoadingArr = state.boardLoadingArr.filter((id) => payload._id !== id);
     });
