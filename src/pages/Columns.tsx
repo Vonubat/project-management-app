@@ -31,7 +31,7 @@ const StyledBox: FC<Props> = ({ children }) => {
         alignItems: 'baseline',
         overflowX: 'auto',
         overflowY: 'hidden',
-        height: isBreakPoint ? 'calc(100vh - 170px)' : 'calc(100vh - 330px)',
+        height: isBreakPoint ? 'calc(100vh - 210px)' : 'calc(100vh - 370px)',
         gap: '1rem',
       }}
     >

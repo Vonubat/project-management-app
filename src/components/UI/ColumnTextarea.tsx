@@ -1,6 +1,6 @@
-import { Box, TextareaAutosize } from '@mui/material';
+import { Badge, Box, TextareaAutosize } from '@mui/material';
 import { DefaultColors, GRAY_700 } from 'constants/constants';
-import { useAppDispatch } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import React, { FC, useState, ChangeEvent } from 'react';
 import { deleteColumn, updateColumn } from 'store/columnsSlice';
 import CustomIconBtn from './CustomIconBtn';
@@ -9,6 +9,7 @@ import ConfirmModal from 'components/ConfirmModal';
 import { useTranslation } from 'react-i18next';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { tasksSelector } from 'store/tasksSlice';
 
 type TextareaProps = {
   children?: React.ReactNode;
@@ -24,6 +25,8 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) 
   const [hasFocus, setFocus] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
   const [previousValue, setPreviousValue] = useState(value);
+  const { tasks } = useAppSelector(tasksSelector);
+  const numberOfTasks: number = tasks[columnId]?.length || 0;
   const dispatch = useAppDispatch();
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -108,7 +111,16 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) 
       >
         {!hasFocus && (
           <CustomIconBtn size="small" color={DefaultColors.error} cb={openConfirmModal}>
-            <DeleteIcon />
+            <Badge
+              color={DefaultColors.secondary}
+              badgeContent={numberOfTasks}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+            >
+              <DeleteIcon />
+            </Badge>
           </CustomIconBtn>
         )}
         {hasFocus && (

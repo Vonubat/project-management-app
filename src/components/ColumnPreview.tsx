@@ -16,7 +16,7 @@ const Column: FC<Pick<Props, 'children'>> = ({ children }) => {
     <Box
       sx={{
         height: 'fit-content',
-        maxHeight: 0.9,
+        maxHeight: 'calc(100% - 30px)',
         py: 1,
         mx: 2,
         maxWidth: 300,
