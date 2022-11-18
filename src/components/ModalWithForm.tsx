@@ -13,6 +13,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { closeModalForm, modalSelector } from 'store/modalSlice';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { DefaultColors } from 'constants/constants';
 
 type Props = {
   uniqueId: string;
@@ -45,7 +47,12 @@ const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, sx, uniqueId
             {children}
             <DialogActions sx={{ p: 0, pt: 2 }}>
               <Button onClick={closeModal}>{t('no')}</Button>
-              <Button type="submit" disabled={isSubmitDisabled}>
+              <Button
+                type="submit"
+                disabled={isSubmitDisabled}
+                color={DefaultColors.success}
+                endIcon={<CheckCircleIcon />}
+              >
                 {t('yes')}
               </Button>
             </DialogActions>
