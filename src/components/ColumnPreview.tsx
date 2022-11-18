@@ -1,14 +1,7 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { Box } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import ConfirmModal from './ConfirmModal';
-import { useAppDispatch } from 'hooks/hooks';
-import { deleteColumn } from 'store/columnsSlice';
 import ColumnTextarea from './UI/ColumnTextarea';
-import CustomIconBtn from './UI/CustomIconBtn';
-import { DefaultColors } from 'constants/constants';
 import TasksPreview from './TasksPreview';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 type Props = {
   children?: React.ReactNode;
@@ -45,44 +38,10 @@ const Column: FC<Pick<Props, 'children'>> = ({ children }) => {
 };
 
 const ColumnPreview: FC<Props> = ({ columnTitle, columnId, boardId, order }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'columns' });
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
-
-  const submit = () => {
-    dispatch(deleteColumn({ boardId, columnId }));
-    closeConfirmModal();
-  };
-
-  const openConfirmModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeConfirmModal = () => {
-    setIsOpen(false);
-  };
-
   return (
     <Column>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-        }}
-      >
-        <ColumnTextarea value={columnTitle} columnId={columnId} boardId={boardId} order={order} />
-        <CustomIconBtn size="small" color={DefaultColors.error} cb={openConfirmModal}>
-          <DeleteIcon />
-        </CustomIconBtn>
-      </Box>
+      <ColumnTextarea value={columnTitle} columnId={columnId} boardId={boardId} order={order} />
       <TasksPreview columnId={columnId} boardId={boardId} />
-      <ConfirmModal
-        title={t('delColumn')}
-        isOpen={isOpen}
-        onSubmit={submit}
-        onClose={closeConfirmModal}
-      />
     </Column>
   );
 };

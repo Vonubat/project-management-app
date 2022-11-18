@@ -33,7 +33,7 @@ const DeleteBtn: FC<BtnProps> = ({ size, color, cb, children }) => (
     size={size}
     color={color}
     onClick={cb}
-    sx={{ animation: `${appendAnimate} .1s linear` }}
+    sx={{ animation: `${appendAnimate} .1s linear`, p: 0 }}
   >
     {children}
   </IconButton>

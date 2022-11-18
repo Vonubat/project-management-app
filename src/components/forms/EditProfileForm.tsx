@@ -45,7 +45,7 @@ const EditProfileForm: FC<Props> = ({ login, name }) => {
   };
 
   useEffect(() => {
-    dispatch(setIsSubmitDisabled({ uniqueId: userId, flag: !isValid }));
+    dispatch(setIsSubmitDisabled({ uniqueId: userId as string, flag: !isValid }));
   }, [isValid, dispatch, userId]);
 
   useEffect(() => {
