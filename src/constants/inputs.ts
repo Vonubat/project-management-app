@@ -10,6 +10,11 @@ const VALIDATION_RULE_MAX_LENGTH_400 = {
   message: 'maxLength400',
 };
 
+const VALIDATION_RULE_MAX_LENGTH_28 = {
+  value: 30,
+  message: 'maxLength30',
+};
+
 const VALIDATION_RULE_MAX_LENGTH_16 = {
   value: 16,
   message: 'maxLength16',
@@ -83,8 +88,7 @@ export const titleInput: InputOptions = {
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
     minLength: VALIDATION_RULE_MIN_LENGTH_3,
-    maxLength: VALIDATION_RULE_MAX_LENGTH_16,
-    pattern: VALIDATION_RULE_PASSWORD_PATTERN,
+    maxLength: VALIDATION_RULE_MAX_LENGTH_28,
   },
 };
 
@@ -94,10 +98,7 @@ export const descriptionInput: InputOptions = {
   type: 'text',
   rows: 4,
   validationOptions: {
-    required: VALIDATION_RULE_REQUIRED,
-    minLength: VALIDATION_RULE_MIN_LENGTH_8,
     maxLength: VALIDATION_RULE_MAX_LENGTH_400,
-    pattern: VALIDATION_RULE_PASSWORD_PATTERN,
   },
 };
 
