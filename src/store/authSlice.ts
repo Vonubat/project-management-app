@@ -1,4 +1,4 @@
-import { Action, AnyAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { StatusCode, TOKEN } from 'constants/constants';
 import { AuthService } from 'services/authService';
@@ -9,65 +9,48 @@ import {
   SignUpOkResponseData,
   SignUpRequestData,
 } from 'types/auth';
-import { PendingAction, RejectedAction } from 'types/store';
+import { AsyncThunkConfig } from 'types/store';
+import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
 import { getAuthSliceInitialState } from 'utils/getAuthSliceInitialState';
 import { parseJwt } from 'utils/parseJwt';
 
-interface FulFilledAction extends Action {
-  payload: SignUpOkResponseData | SignInOkResponseData;
-}
+export const signUp = createAsyncThunk<SignUpOkResponseData, SignUpRequestData, AsyncThunkConfig>(
+  'auth/signUp',
+  async (signUpData, { rejectWithValue }) => {
+    try {
+      const res = await AuthService.sighUp(signUpData);
 
-function isRejectedAction(action: AnyAction): action is RejectedAction {
-  return action.type.endsWith('rejected');
-}
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
 
-function isPendingAction(action: AnyAction): action is PendingAction {
-  return action.type.endsWith('pending');
-}
+      if (!error.response) {
+        throw err;
+      }
 
-function isFulfilledAction(action: AnyAction): action is FulFilledAction {
-  return action.type.endsWith('fulfilled');
-}
-
-export const signUp = createAsyncThunk<
-  SignUpOkResponseData,
-  SignUpRequestData,
-  { rejectValue: number }
->('auth/signUp', async (signUpData, { rejectWithValue }) => {
-  try {
-    const res = await AuthService.sighUp(signUpData);
-
-    return res.data;
-  } catch (err) {
-    const error = err as AxiosError;
-
-    if (!error.response) {
-      throw err;
+      return rejectWithValue(error.response.status);
     }
-
-    return rejectWithValue(error.response.status);
   }
-});
+);
 
-export const signIn = createAsyncThunk<
-  SignInOkResponseData,
-  SignInRequestData,
-  { rejectValue: number }
->('auth/signIn', async (signInData, { rejectWithValue }) => {
-  try {
-    const res = await AuthService.sighIn(signInData);
+export const signIn = createAsyncThunk<SignInOkResponseData, SignInRequestData, AsyncThunkConfig>(
+  'auth/signIn',
+  async (signInData, { rejectWithValue }) => {
+    try {
+      const res = await AuthService.sighIn(signInData);
 
-    return res.data;
-  } catch (err) {
-    const error = err as AxiosError;
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
 
-    if (!error.response) {
-      throw err;
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue(error.response.status);
     }
-
-    return rejectWithValue(error.response.status);
   }
-});
+);
 
 const authSlice = createSlice({
   name: 'auth',

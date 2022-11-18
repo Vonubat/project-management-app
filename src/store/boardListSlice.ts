@@ -1,39 +1,34 @@
-import { AnyAction, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import BoardsService from 'services/boardsService';
 import { BoardData, BoardParams } from 'types/boards';
-import { RejectedAction } from 'types/store';
-import { RootState } from './store';
+import { AsyncThunkConfig } from 'types/store';
+import { isRejectedAction } from 'utils/actionTypePredicates';
 
-function isRejectedAction(action: AnyAction): action is RejectedAction {
-  return action.type.endsWith('rejected');
-}
+export const getBoardsByUser = createAsyncThunk<BoardData[], void, AsyncThunkConfig>(
+  'boards/getAll',
+  async (_, { getState, rejectWithValue }) => {
+    const {
+      authStore: { userId },
+    } = getState();
 
-export const getBoardsByUser = createAsyncThunk<
-  BoardData[],
-  void,
-  { state: RootState; rejectValue: number }
->('boards/getAll', async (_, { getState, rejectWithValue }) => {
-  const {
-    authStore: { userId },
-  } = getState();
+    try {
+      const res = await BoardsService.getUserBoardsSet(userId);
 
-  try {
-    const res = await BoardsService.getUserBoardsSet(userId);
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
 
-    return res.data;
-  } catch (err) {
-    const error = err as AxiosError;
+      if (!error.response) {
+        throw err;
+      }
 
-    if (!error.response) {
-      throw err;
+      return rejectWithValue(error.response.status);
     }
-
-    return rejectWithValue(error.response.status);
   }
-});
+);
 
-export const createBoard = createAsyncThunk<BoardData, BoardParams, { rejectValue: number }>(
+export const createBoard = createAsyncThunk<BoardData, BoardParams, AsyncThunkConfig>(
   'boards/create',
   async (createBoardData, { rejectWithValue }) => {
     try {
@@ -55,7 +50,7 @@ export const createBoard = createAsyncThunk<BoardData, BoardParams, { rejectValu
 export const updateBoard = createAsyncThunk<
   BoardData,
   Parameters<typeof BoardsService.updateBoard>,
-  { rejectValue: number }
+  AsyncThunkConfig
 >('boards/update', async (params, { rejectWithValue }) => {
   try {
     const res = await BoardsService.updateBoard(...params);
@@ -72,7 +67,7 @@ export const updateBoard = createAsyncThunk<
   }
 });
 
-export const deleteBoard = createAsyncThunk<BoardData, string, { rejectValue: number }>(
+export const deleteBoard = createAsyncThunk<BoardData, string, AsyncThunkConfig>(
   'boards/delete',
   async (boardId, { rejectWithValue }) => {
     try {
