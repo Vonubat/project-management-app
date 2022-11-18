@@ -9,7 +9,7 @@ import EditBoardForm from 'components/forms/EditBoardForm';
 import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
 import { clearBoardParams, openModalForm } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { TypeofModal } from 'constants/constants';
+import { MediaQuery, TypeofModal } from 'constants/constants';
 
 const StyledBox = styled(Box)({
   display: 'flex',
@@ -19,7 +19,7 @@ const StyledBox = styled(Box)({
 });
 
 export default function Boards() {
-  const isLargeScreen = useMediaQuery('(min-width:380px)');
+  const isLargeScreen = useMediaQuery(MediaQuery.minWidth380);
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const { boards, isLoading, isAddBoardLoading } = useAppSelector(boardListSelector);
   const dispatch = useAppDispatch();

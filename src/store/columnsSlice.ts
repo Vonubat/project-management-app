@@ -1,27 +1,12 @@
-import { Action, AnyAction, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import ColumnsService from 'services/columnsService';
 import { ColumnData, ColumnParams } from 'types/columns';
-import { PendingAction, RejectedAction, StatusType } from 'types/store';
+import { AsyncThunkConfig, StatusType } from 'types/store';
+import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
 
-interface FulFilledAction extends Action {
-  payload: ColumnData[] | ColumnData;
-}
-
-function isRejectedAction(action: AnyAction): action is RejectedAction {
-  return action.type.endsWith('rejected');
-}
-
-function isPendingAction(action: AnyAction): action is PendingAction {
-  return action.type.endsWith('pending');
-}
-
-function isFulFilledAction(action: AnyAction): action is FulFilledAction {
-  return action.type.endsWith('fulfilled');
-}
-
-export const getColumnsInBoards = createAsyncThunk<ColumnData[], string, { rejectValue: number }>(
+export const getColumnsInBoards = createAsyncThunk<ColumnData[], string, AsyncThunkConfig>(
   'columns/getAll',
   async (boardId, { rejectWithValue }) => {
     try {
@@ -43,7 +28,7 @@ export const getColumnsInBoards = createAsyncThunk<ColumnData[], string, { rejec
 export const createColumn = createAsyncThunk<
   ColumnData,
   { boardId: string; data: ColumnParams },
-  { rejectValue: number }
+  AsyncThunkConfig
 >('columns/create', async ({ boardId, data }, { rejectWithValue }) => {
   try {
     const res = await ColumnsService.createColumn(boardId, data);
@@ -63,7 +48,7 @@ export const createColumn = createAsyncThunk<
 export const updateColumn = createAsyncThunk<
   ColumnData,
   { boardId: string; columnId: string; data: ColumnParams },
-  { rejectValue: number }
+  AsyncThunkConfig
 >('columns/update', async (arg, { rejectWithValue }) => {
   try {
     const res = await ColumnsService.updateColumn(arg.boardId, arg.columnId, arg.data);
@@ -151,7 +136,7 @@ const columnsSlice = createSlice({
       state.status = Status.failed;
     });
 
-    builder.addMatcher(isFulFilledAction, (state) => {
+    builder.addMatcher(isFulfilledAction, (state) => {
       state.status = Status.succeeded;
     });
   },

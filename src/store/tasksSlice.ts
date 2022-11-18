@@ -1,25 +1,10 @@
-import { Action, AnyAction, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import TasksService from 'services/tasksService';
-import { RejectedAction, StatusType } from 'types/store';
+import { AsyncThunkConfig, StatusType } from 'types/store';
 import { TaskData, TaskParamsCreate, TaskParamsUpdate } from 'types/tasks';
-
-interface FulFilledAction extends Action {
-  payload: TaskData[] | TaskData;
-}
-
-function isRejectedAction(action: AnyAction): action is RejectedAction {
-  return action.type.endsWith('rejected');
-}
-
-function isPendingAction(action: AnyAction): action is Action {
-  return action.type.endsWith('pending');
-}
-
-function isFulFilledAction(action: AnyAction): action is FulFilledAction {
-  return action.type.endsWith('fulfilled');
-}
+import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
 
 export const getAllTasks = createAsyncThunk<TaskData[], { boardId: string; columnId: string }>(
   'tasks/getAll',
@@ -32,7 +17,7 @@ export const getAllTasks = createAsyncThunk<TaskData[], { boardId: string; colum
 export const createTask = createAsyncThunk<
   TaskData,
   { boardId: string; columnId: string; data: TaskParamsCreate },
-  { rejectValue: number }
+  AsyncThunkConfig
 >('tasks/create', async (arg, { rejectWithValue }) => {
   try {
     const res = await TasksService.createTask(arg.boardId, arg.columnId, arg.data);
@@ -51,7 +36,7 @@ export const createTask = createAsyncThunk<
 export const updateTask = createAsyncThunk<
   TaskData,
   { boardId: string; columnId: string; taskId: string; data: TaskParamsUpdate },
-  { rejectValue: number }
+  AsyncThunkConfig
 >('tasks/update', async ({ boardId, columnId, taskId, data }, { rejectWithValue }) => {
   try {
     const res = await TasksService.updateTask(boardId, columnId, taskId, data);
@@ -70,9 +55,7 @@ export const updateTask = createAsyncThunk<
 export const deleteTask = createAsyncThunk<
   TaskData,
   { boardId: string; columnId: string; taskId: string },
-  {
-    rejectValue: number;
-  }
+  AsyncThunkConfig
 >('tasks/delete', async ({ boardId, columnId, taskId }, { rejectWithValue }) => {
   try {
     const res = await TasksService.deleteTask(boardId, columnId, taskId);
@@ -148,7 +131,7 @@ const tasksSlice = createSlice({
       state.status = Status.failed;
     });
 
-    builder.addMatcher(isFulFilledAction, (state) => {
+    builder.addMatcher(isFulfilledAction, (state) => {
       state.status = Status.succeeded;
     });
   },

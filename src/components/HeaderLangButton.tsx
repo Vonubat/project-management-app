@@ -1,5 +1,6 @@
 import React, { FC, ReactNode, MouseEvent } from 'react';
 import { Button, useMediaQuery } from '@mui/material';
+import { MediaQuery } from 'constants/constants';
 
 type Props = {
   startIcon: ReactNode;
@@ -8,7 +9,7 @@ type Props = {
 };
 
 const HeaderLangButton: FC<Props> = ({ startIcon, buttonText, onClick }) => {
-  const isLargeScreen = useMediaQuery('(min-width:715px)');
+  const isLargeScreen = useMediaQuery(MediaQuery.minWidth715);
 
   return (
     <Button
