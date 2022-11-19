@@ -100,7 +100,7 @@ interface BoardsState {
   boardLoadingArr: string[];
   usersLoading: boolean;
   isLoading: boolean;
-  currentBoard: string;
+  currentBoardId: string;
 }
 
 const initialBoardsState: BoardsState = {
@@ -110,7 +110,7 @@ const initialBoardsState: BoardsState = {
   boardLoadingArr: [],
   usersLoading: false,
   isLoading: false,
-  currentBoard: '',
+  currentBoardId: '',
 };
 
 const boardListSlice = createSlice({
@@ -121,7 +121,7 @@ const boardListSlice = createSlice({
       state.boardLoadingArr.push(action.payload);
     },
     setCurrentBoard: (state, action: PayloadAction<string>) => {
-      state.currentBoard = action.payload;
+      state.currentBoardId = action.payload;
     },
   },
   extraReducers: (builder) => {

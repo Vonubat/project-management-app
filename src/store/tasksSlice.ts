@@ -10,9 +10,9 @@ import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/acti
 export const getAllTasks = createAsyncThunk<TaskData[], string, AsyncThunkConfig>(
   'tasks/getAll',
   async (columnId, { getState }) => {
-    const { currentBoard } = getState().boardListStore;
+    const { currentBoardId } = getState().boardListStore;
 
-    const res = await TasksService.getAllTasks(currentBoard, columnId);
+    const res = await TasksService.getAllTasks(currentBoardId, columnId);
     return res.data;
   }
 );
@@ -20,7 +20,7 @@ export const getAllTasks = createAsyncThunk<TaskData[], string, AsyncThunkConfig
 export const createTask = createAsyncThunk<TaskData, CreateTaskParams, AsyncThunkWithMeta>(
   'tasks/create',
   async (data, { getState, rejectWithValue, fulfillWithValue }) => {
-    const { currentBoard } = getState().boardListStore;
+    const { currentBoardId } = getState().boardListStore;
     const { currentColumnId: columnId } = getState().columnsStore;
     const { userId } = getState().authStore;
     const taskList = getState().tasksStore.tasks[columnId] || [];
@@ -28,7 +28,7 @@ export const createTask = createAsyncThunk<TaskData, CreateTaskParams, AsyncThun
     const params = { ...data, userId, order };
 
     try {
-      const res = await TasksService.createTask(currentBoard, columnId, params);
+      const res = await TasksService.createTask(currentBoardId, columnId, params);
       return fulfillWithValue(res.data, [columnId]);
     } catch (err) {
       const error = err as AxiosError;
@@ -47,14 +47,14 @@ export const updateTask = createAsyncThunk<
   { taskId: string; data: UpdateTaskParams },
   AsyncThunkConfig
 >('tasks/update', async ({ taskId, data }, { getState, rejectWithValue }) => {
-  const { currentBoard } = getState().boardListStore;
+  const { currentBoardId } = getState().boardListStore;
   const { currentColumnId: columnId } = getState().columnsStore;
   const { userId } = getState().authStore;
   const order = getState().tasksStore.tasks[columnId].find((t) => t._id === taskId)?.order;
   const params = { ...data, userId, order: order || 1, columnId };
 
   try {
-    const res = await TasksService.updateTask(currentBoard, columnId, taskId, params);
+    const res = await TasksService.updateTask(currentBoardId, columnId, taskId, params);
 
     return res.data;
   } catch (err) {
@@ -73,9 +73,9 @@ export const deleteTask = createAsyncThunk<
   { columnId: string; taskId: string },
   AsyncThunkConfig
 >('tasks/delete', async ({ columnId, taskId }, { getState, rejectWithValue }) => {
-  const { currentBoard } = getState().boardListStore;
+  const { currentBoardId } = getState().boardListStore;
   try {
-    const res = await TasksService.deleteTask(currentBoard, columnId, taskId);
+    const res = await TasksService.deleteTask(currentBoardId, columnId, taskId);
 
     return res.data;
   } catch (err) {

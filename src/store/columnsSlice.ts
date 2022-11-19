@@ -28,13 +28,13 @@ export const getColumnsInBoards = createAsyncThunk<ColumnData[], string, AsyncTh
 export const createColumn = createAsyncThunk<ColumnData, { title: string }, AsyncThunkConfig>(
   'columns/create',
   async (data, { getState, rejectWithValue }) => {
-    const { currentBoard } = getState().boardListStore;
+    const { currentBoardId } = getState().boardListStore;
     const { columns } = getState().columnsStore;
 
     const order = columns.length + 1;
 
     try {
-      const res = await ColumnsService.createColumn(currentBoard, { ...data, order });
+      const res = await ColumnsService.createColumn(currentBoardId, { ...data, order });
 
       return res.data;
     } catch (err) {
@@ -52,11 +52,11 @@ export const createColumn = createAsyncThunk<ColumnData, { title: string }, Asyn
 export const updateColumn = createAsyncThunk<ColumnData, ColumnParams, AsyncThunkConfig>(
   'columns/update',
   async (data, { getState, rejectWithValue }) => {
-    const { currentBoard } = getState().boardListStore;
+    const { currentBoardId } = getState().boardListStore;
     const { currentColumnId } = getState().columnsStore;
 
     try {
-      const res = await ColumnsService.updateColumn(currentBoard, currentColumnId, data);
+      const res = await ColumnsService.updateColumn(currentBoardId, currentColumnId, data);
 
       return res.data;
     } catch (err) {
@@ -74,9 +74,9 @@ export const updateColumn = createAsyncThunk<ColumnData, ColumnParams, AsyncThun
 export const deleteColumn = createAsyncThunk<ColumnData, string, AsyncThunkConfig>(
   'columns/delete',
   async (columnId, { rejectWithValue, getState }) => {
-    const { currentBoard } = getState().boardListStore;
+    const { currentBoardId } = getState().boardListStore;
     try {
-      const res = await ColumnsService.deleteColumn(currentBoard, columnId);
+      const res = await ColumnsService.deleteColumn(currentBoardId, columnId);
 
       return res.data;
     } catch (err) {
