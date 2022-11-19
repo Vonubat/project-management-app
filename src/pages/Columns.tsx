@@ -55,7 +55,7 @@ const Columns = () => {
   useImperativeDisableScroll(BODY);
 
   return (
-    <Page sx={{ marginTop: '1rem' }}>
+    <Page sx={{ marginTop: '0rem' }}>
       <ColumnsBackBtn />
       <StyledBox>
         {columns.map(({ _id, title, boardId, order }: ColumnData) => (

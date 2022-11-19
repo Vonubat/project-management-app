@@ -25,7 +25,7 @@ const EditTaskForm: FC = () => {
   const { userId } = useAppSelector(authSelector);
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
   const { tasks } = useAppSelector(tasksSelector);
-  const currentPosition: number = (tasks[boardId as string]?.length || 0) + 1;
+  const currentPosition: number = (tasks[columnId]?.length || 0) + 1;
   const dispatch = useAppDispatch();
 
   const {
