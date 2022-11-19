@@ -59,19 +59,21 @@ const checkListStyles = {
 };
 
 type Props = {
+  userId: string | null;
   users: UserData[];
   checkedUsersID: string[];
   handleToggle(id: string): void;
 };
 
-const UserSearchBar: FC<Props> = ({ users, checkedUsersID, handleToggle }) => {
+const UserSearchBar: FC<Props> = ({ userId, users, checkedUsersID, handleToggle }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const [searchValue, setSearchValue] = useState('');
-  const checkedUsers = users.filter(
-    ({ name, login }) =>
-      name.toLowerCase().includes(searchValue.toLowerCase()) ||
-      login.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  const filteredUsers = users.filter(({ name, login, _id }) => {
+    const lowName = name.toLowerCase();
+    const lowLogin = login.toLowerCase();
+    const lowSearchVal = searchValue.toLowerCase();
+    return _id !== userId && (lowName.includes(lowSearchVal) || lowLogin.includes(lowSearchVal));
+  });
 
   return (
     <Paper variant="outlined" sx={{ ':hover': { borderColor: 'black' }, mt: 2, mb: 1 }}>
@@ -88,7 +90,7 @@ const UserSearchBar: FC<Props> = ({ users, checkedUsersID, handleToggle }) => {
       </Search>
       <Divider />
       <List className="alternative-scroll" sx={checkListStyles}>
-        {checkedUsers.map(({ name, login, _id }) => (
+        {filteredUsers.map(({ name, login, _id }) => (
           <ListItem key={_id} disablePadding>
             <ListItemButton role={undefined} onClick={() => handleToggle(_id)} dense>
               <ListItemIcon>
