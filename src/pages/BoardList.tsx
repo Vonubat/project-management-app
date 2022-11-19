@@ -7,7 +7,6 @@ import BoardPreview from 'components/BoardPreview';
 import Loader from 'components/Loader';
 import EditBoardForm from 'components/forms/EditBoardForm';
 import { boardListSelector, getBoardsByUser, getAllUsers } from 'store/boardListSlice';
-import { authSelector } from 'store/authSlice';
 import { clearBoardParams, openModalForm } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { MediaQuery, TypeofModal } from 'constants/constants';

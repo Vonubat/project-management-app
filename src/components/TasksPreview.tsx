@@ -23,8 +23,8 @@ const StyledBox = styled(Box)({
 });
 
 const TasksPreview: FC<Props> = ({ columnId }) => {
-  const { tasks } = useAppSelector(tasksSelector);
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
+  const { tasks } = useAppSelector(tasksSelector);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

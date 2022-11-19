@@ -3,13 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { DefaultColors, GRAY_700, TypeofModal } from 'constants/constants';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'hooks/hooks';
-import {
-  deleteTask,
-  setCurrentTaskDescription,
-  setCurrentTaskId,
-  setCurrentTaskTitle,
-  setTasksLoading,
-} from 'store/tasksSlice';
+import { deleteTask, setCurrentTaskInfo, setTasksLoading } from 'store/tasksSlice';
 import ConfirmModal from 'components/ConfirmModal';
 import CustomIconBtn from './CustomIconBtn';
 import { theme } from 'components/Page';
@@ -27,8 +21,9 @@ const taskStyles = {
   maxWidth: 280,
   maxHeight: 40,
   minHeight: 40,
-  margin: '0 1rem',
-  padding: '5px',
+  mx: 1,
+  my: 0.3,
+  p: 0.625,
   borderRadius: '3px',
   fontSize: 20,
   color: GRAY_700,
@@ -47,9 +42,9 @@ type Props = {
 };
 
 const Task: FC<Props> = ({ taskTitle, taskDescription, columnId, taskId }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
-  const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const dispatch = useAppDispatch();
   const isTouchScreenDevice: boolean = isTouchEnabled();
 
@@ -71,10 +66,14 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, columnId, taskId }) => {
   };
 
   const openEditTaskModal = () => {
+    dispatch(
+      setCurrentTaskInfo({
+        currentTaskId: taskId,
+        currentTaskTitle: taskTitle,
+        currentTaskDescription: taskDescription,
+      })
+    );
     dispatch(setCurrentColumnId(columnId));
-    dispatch(setCurrentTaskId(taskId));
-    dispatch(setCurrentTaskTitle(taskTitle));
-    dispatch(setCurrentTaskDescription(taskDescription));
     dispatch(openModalForm(TypeofModal.editTask));
   };
 
@@ -96,6 +95,7 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, columnId, taskId }) => {
       <Typography variant="h6" noWrap>
         {taskTitle}
       </Typography>
+
       {(isHovering || isTouchScreenDevice) && (
         <CustomIconBtn size="small" color={DefaultColors.error} cb={openConfirmModal}>
           <DeleteIcon />

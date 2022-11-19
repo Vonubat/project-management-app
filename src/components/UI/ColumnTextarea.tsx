@@ -2,7 +2,12 @@ import { Badge, Box, TextareaAutosize } from '@mui/material';
 import { DefaultColors, GRAY_700 } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import React, { FC, useState, ChangeEvent } from 'react';
-import { deleteColumn, setColumnLoading, updateColumn } from 'store/columnsSlice';
+import {
+  deleteColumn,
+  setColumnLoading,
+  setCurrentColumnId,
+  updateColumn,
+} from 'store/columnsSlice';
 import CustomIconBtn from './CustomIconBtn';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmModal from 'components/ConfirmModal';
@@ -48,6 +53,7 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId, order }) => {
       return;
     }
 
+    dispatch(setCurrentColumnId(columnId));
     dispatch(setColumnLoading(columnId));
     dispatch(updateColumn({ title: currentValue, order }));
 
@@ -78,6 +84,7 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId, order }) => {
     >
       <TextareaAutosize
         minRows={2}
+        maxLength={100}
         style={{
           width: 230,
           padding: '5px',
