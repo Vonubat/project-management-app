@@ -13,13 +13,12 @@ import { tasksSelector } from 'store/tasksSlice';
 
 type TextareaProps = {
   children?: React.ReactNode;
-  boardId: string;
   columnId: string;
   order: number;
   value: string;
 };
 
-const ColumnTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) => {
+const ColumnTextarea: FC<TextareaProps> = ({ value, columnId, order }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [hasFocus, setFocus] = useState(false);
@@ -50,20 +49,14 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) 
     }
 
     dispatch(setColumnLoading(columnId));
-    dispatch(
-      updateColumn({
-        boardId,
-        columnId,
-        data: { title: currentValue, order },
-      })
-    );
+    dispatch(updateColumn({ title: currentValue, order }));
 
     setPreviousValue(currentValue);
   };
 
   const submit = () => {
     dispatch(setColumnLoading(columnId));
-    dispatch(deleteColumn({ boardId, columnId }));
+    dispatch(deleteColumn(columnId));
     closeConfirmModal();
   };
 

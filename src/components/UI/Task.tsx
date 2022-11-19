@@ -1,5 +1,5 @@
 import React, { FC, SyntheticEvent, useState } from 'react';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { DefaultColors, GRAY_700, TypeofModal } from 'constants/constants';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'hooks/hooks';
@@ -18,17 +18,35 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { openModalForm } from 'store/modalSlice';
 import isTouchEnabled from 'utils/isTouchEnabled';
 
+const taskStyles = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  boxSizing: 'border-box',
+  minWidth: 280,
+  maxWidth: 280,
+  maxHeight: 40,
+  minHeight: 40,
+  margin: '0 1rem',
+  padding: '5px',
+  borderRadius: '3px',
+  fontSize: 20,
+  color: GRAY_700,
+  backgroundColor: 'rgba(255, 255, 255, 1)',
+  cursor: 'pointer',
+  boxShadow: `${theme.shadows[3]}`,
+};
+
 type Props = {
   children?: React.ReactNode;
   taskTitle: string;
   taskDescription: string;
   columnId: string;
-  boardId: string;
   taskId: string;
   order: number;
 };
 
-const Task: FC<Props> = ({ taskTitle, taskDescription, boardId, columnId, taskId }) => {
+const Task: FC<Props> = ({ taskTitle, taskDescription, columnId, taskId }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
@@ -38,7 +56,7 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, boardId, columnId, taskId
   const submit = (e: SyntheticEvent) => {
     e.stopPropagation();
     dispatch(setTasksLoading(columnId));
-    dispatch(deleteTask({ boardId, columnId, taskId }));
+    dispatch(deleteTask({ columnId, taskId }));
     closeConfirmModal(e);
   };
 
@@ -69,25 +87,8 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, boardId, columnId, taskId
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        boxSizing: 'border-box',
-        minWidth: 280,
-        maxWidth: 280,
-        maxHeight: 40,
-        minHeight: 40,
-        margin: '0 1rem',
-        padding: '5px',
-        borderRadius: '3px',
-        fontSize: 20,
-        color: GRAY_700,
-        backgroundColor: 'rgba(255, 255, 255, 1)',
-        cursor: 'pointer',
-        boxShadow: `${theme.shadows[3]}`,
-      }}
+    <Box
+      sx={taskStyles}
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
       onClick={openEditTaskModal}
@@ -106,11 +107,8 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, boardId, columnId, taskId
         onSubmit={submit}
         onClose={closeConfirmModal}
       />
-    </div>
+    </Box>
   );
 };
 
 export default Task;
-
-{
-}
