@@ -25,51 +25,58 @@ export const getColumnsInBoards = createAsyncThunk<ColumnData[], string, AsyncTh
   }
 );
 
-export const createColumn = createAsyncThunk<
-  ColumnData,
-  { boardId: string; data: ColumnParams },
-  AsyncThunkConfig
->('columns/create', async ({ boardId, data }, { rejectWithValue }) => {
-  try {
-    const res = await ColumnsService.createColumn(boardId, data);
+export const createColumn = createAsyncThunk<ColumnData, { title: string }, AsyncThunkConfig>(
+  'columns/create',
+  async (data, { getState, rejectWithValue }) => {
+    const { currentBoardId } = getState().boardListStore;
+    const { columns } = getState().columnsStore;
 
-    return res.data;
-  } catch (err) {
-    const error = err as AxiosError;
+    const order = columns.length + 1;
 
-    if (!error.response) {
-      throw err;
-    }
-
-    return rejectWithValue(error.response.status);
-  }
-});
-
-export const updateColumn = createAsyncThunk<
-  ColumnData,
-  { boardId: string; columnId: string; data: ColumnParams },
-  AsyncThunkConfig
->('columns/update', async (arg, { rejectWithValue }) => {
-  try {
-    const res = await ColumnsService.updateColumn(arg.boardId, arg.columnId, arg.data);
-
-    return res.data;
-  } catch (err) {
-    const error = err as AxiosError;
-
-    if (!error.response) {
-      throw err;
-    }
-
-    return rejectWithValue(error.response.status);
-  }
-});
-
-export const deleteColumn = createAsyncThunk<ColumnData, { boardId: string; columnId: string }>(
-  'columns/delete',
-  async (arg, { rejectWithValue }) => {
     try {
-      const res = await ColumnsService.deleteColumn(arg.boardId, arg.columnId);
+      const res = await ColumnsService.createColumn(currentBoardId, { ...data, order });
+
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
+
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue(error.response.status);
+    }
+  }
+);
+
+export const updateColumn = createAsyncThunk<ColumnData, ColumnParams, AsyncThunkConfig>(
+  'columns/update',
+  async (data, { getState, rejectWithValue }) => {
+    const { currentBoardId } = getState().boardListStore;
+    const { currentColumnId } = getState().columnsStore;
+
+    try {
+      const res = await ColumnsService.updateColumn(currentBoardId, currentColumnId, data);
+
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
+
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue(error.response.status);
+    }
+  }
+);
+
+export const deleteColumn = createAsyncThunk<ColumnData, string, AsyncThunkConfig>(
+  'columns/delete',
+  async (columnId, { rejectWithValue, getState }) => {
+    const { currentBoardId } = getState().boardListStore;
+    try {
+      const res = await ColumnsService.deleteColumn(currentBoardId, columnId);
 
       return res.data;
     } catch (err) {

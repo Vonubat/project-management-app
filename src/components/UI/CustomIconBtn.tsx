@@ -1,31 +1,14 @@
 import { IconButton } from '@mui/material';
 import React, { FC, SyntheticEvent } from 'react';
 import { DefaultColors } from 'constants/constants';
-import { keyframes } from '@mui/system';
+import { appendAnimate } from 'utils/animations';
 
 type BtnProps = {
   children: React.ReactNode;
   size: 'small' | 'large';
-  color:
-    | DefaultColors.primary
-    | DefaultColors.secondary
-    | DefaultColors.error
-    | DefaultColors.warning
-    | DefaultColors.info
-    | DefaultColors.success;
+  color: DefaultColors;
   cb: (e: SyntheticEvent) => void;
 };
-
-const appendAnimate = keyframes`
-  from {
-		transform: scale(0);
-		opacity: 0;
-	}
-	to {
-		transform: scale(1);
-		opacity: 1;
-	}
-`;
 
 const DeleteBtn: FC<BtnProps> = ({ size, color, cb, children }) => (
   <IconButton

@@ -12,20 +12,18 @@ import { TaskFields } from 'types/tasks';
 import { authSelector } from 'store/authSlice';
 import { TypeofModal } from 'constants/constants';
 import { columnsSelector } from 'store/columnsSlice';
-import { useParams } from 'react-router-dom';
 
 const EditTaskForm: FC = () => {
-  const { currentTaskTitle: taskTitle } = useAppSelector(tasksSelector);
-  const { currentTaskDescription: taskDescription } = useAppSelector(tasksSelector);
-  const { currentTaskId: taskId } = useAppSelector(tasksSelector);
-  const { currentColumnId: columnId } = useAppSelector(columnsSelector);
-  const { boardId } = useParams();
-  const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.editTask}`;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
+  const {
+    currentTaskInfo: { currentTaskId: taskId },
+    currentTaskInfo: { currentTaskDescription: description },
+    currentTaskInfo: { currentTaskTitle: title },
+  } = useAppSelector(tasksSelector);
+  const { currentColumnId: columnId } = useAppSelector(columnsSelector);
   const { userId } = useAppSelector(authSelector);
+  const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.editTask}`;
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
-  const { tasks } = useAppSelector(tasksSelector);
-  const currentPosition: number = (tasks[boardId as string]?.length || 0) + 1;
   const dispatch = useAppDispatch();
 
   const {
@@ -35,8 +33,8 @@ const EditTaskForm: FC = () => {
     formState: { isValid },
   } = useForm<TaskFields>({
     defaultValues: {
-      title: taskTitle,
-      description: taskDescription,
+      title,
+      description,
     },
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -45,23 +43,9 @@ const EditTaskForm: FC = () => {
   const formControl = control as FormControl;
 
   const onSubmit = (data: TaskFields) => {
-    if (data.title !== taskTitle || data.description !== taskDescription) {
+    if (data.title !== title || data.description !== description) {
       dispatch(setTasksLoading(columnId));
-      dispatch(
-        updateTask({
-          boardId: boardId as string,
-          columnId,
-          taskId,
-          data: {
-            columnId,
-            title: data.title,
-            description: data.description,
-            order: currentPosition,
-            userId: userId as string,
-            users: [userId as string], // temporary plug
-          },
-        })
-      );
+      dispatch(updateTask({ taskId, data: { ...data, users: [userId] } })); //TODO fix users // temporary plug
     }
     dispatch(closeModalForm(TypeofModal.editTask));
   };
@@ -71,8 +55,8 @@ const EditTaskForm: FC = () => {
   }, [isValid, dispatch]);
 
   const resetForm: () => void = useCallback((): void => {
-    reset({ title: taskTitle, description: taskDescription });
-  }, [reset, taskTitle, taskDescription]);
+    reset({ title, description });
+  }, [reset, title, description]);
 
   useEffect(() => {
     if (isOpen) {

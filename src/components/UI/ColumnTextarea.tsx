@@ -2,7 +2,12 @@ import { Badge, Box, TextareaAutosize } from '@mui/material';
 import { DefaultColors, GRAY_700 } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import React, { FC, useState, ChangeEvent } from 'react';
-import { deleteColumn, setColumnLoading, updateColumn } from 'store/columnsSlice';
+import {
+  deleteColumn,
+  setColumnLoading,
+  setCurrentColumnId,
+  updateColumn,
+} from 'store/columnsSlice';
 import CustomIconBtn from './CustomIconBtn';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmModal from 'components/ConfirmModal';
@@ -13,13 +18,12 @@ import { tasksSelector } from 'store/tasksSlice';
 
 type TextareaProps = {
   children?: React.ReactNode;
-  boardId: string;
   columnId: string;
   order: number;
   value: string;
 };
 
-const ColumnTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) => {
+const ColumnTextarea: FC<TextareaProps> = ({ value, columnId, order }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [hasFocus, setFocus] = useState(false);
@@ -49,21 +53,16 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) 
       return;
     }
 
+    dispatch(setCurrentColumnId(columnId));
     dispatch(setColumnLoading(columnId));
-    dispatch(
-      updateColumn({
-        boardId,
-        columnId,
-        data: { title: currentValue, order },
-      })
-    );
+    dispatch(updateColumn({ title: currentValue, order }));
 
     setPreviousValue(currentValue);
   };
 
   const submit = () => {
     dispatch(setColumnLoading(columnId));
-    dispatch(deleteColumn({ boardId, columnId }));
+    dispatch(deleteColumn(columnId));
     closeConfirmModal();
   };
 
@@ -85,6 +84,7 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, boardId, columnId, order }) 
     >
       <TextareaAutosize
         minRows={2}
+        maxLength={100}
         style={{
           width: 230,
           padding: '5px',

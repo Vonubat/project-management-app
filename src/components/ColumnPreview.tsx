@@ -14,7 +14,6 @@ type ColumnProps = {
 type ColumnPreviewProps = {
   columnTitle: string;
   columnId: string;
-  boardId: string;
   order: number;
 };
 
@@ -54,17 +53,17 @@ const Column: FC<ColumnProps> = ({ children, isLoading }) => {
   );
 };
 
-const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId, boardId, order }) => {
+const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId, order }) => {
   const { columnLoadingArr } = useAppSelector(columnsSelector);
-  const isColumnLoading: boolean = columnLoadingArr.some((id) => id === columnId);
   const { tasksLoadingArr } = useAppSelector(tasksSelector);
+  const isColumnLoading: boolean = columnLoadingArr.some((id) => id === columnId);
   const isTasksLoading: boolean = tasksLoadingArr.some((id) => id === columnId);
   const isLoading = isColumnLoading || isTasksLoading;
 
   return (
     <Column isLoading={isLoading}>
-      <ColumnTextarea value={columnTitle} columnId={columnId} boardId={boardId} order={order} />
-      <TasksPreview columnId={columnId} boardId={boardId} />
+      <ColumnTextarea value={columnTitle} columnId={columnId} order={order} />
+      <TasksPreview columnId={columnId} />
       {isLoading && <LinearProgress sx={{ width: 1 }} />}
     </Column>
   );

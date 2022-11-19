@@ -5,6 +5,11 @@ const VALIDATION_RULE_REQUIRED = {
   message: 'required',
 };
 
+const VALIDATION_RULE_MAX_LENGTH_100 = {
+  value: 100,
+  message: 'maxLength100',
+};
+
 const VALIDATION_RULE_MAX_LENGTH_400 = {
   value: 400,
   message: 'maxLength400',
@@ -114,6 +119,7 @@ export const columnTitleInput: InputOptions = {
   rows: 3,
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
+    maxLength: VALIDATION_RULE_MAX_LENGTH_100,
   },
 };
 
@@ -124,6 +130,7 @@ export const taskTitleInput: InputOptions = {
   rows: 2,
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
+    maxLength: VALIDATION_RULE_MAX_LENGTH_100,
   },
 };
 
@@ -134,6 +141,7 @@ export const taskDescriptionInput: InputOptions = {
   rows: 7,
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
+    maxLength: VALIDATION_RULE_MAX_LENGTH_400,
   },
 };
 

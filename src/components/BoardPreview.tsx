@@ -25,8 +25,8 @@ type Props = {
 };
 
 const BoardPreview: FC<Props> = ({ boardData }) => {
-  const { _id, title, description } = boardData;
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
+  const { _id, title, description } = boardData;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const { boardLoadingArr } = useAppSelector(boardListSelector);
