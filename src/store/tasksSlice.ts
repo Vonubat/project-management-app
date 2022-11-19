@@ -4,7 +4,13 @@ import { Status } from 'constants/constants';
 import TasksService from 'services/tasksService';
 import { ColumnData } from 'types/columns';
 import { AsyncThunkConfig, AsyncThunkWithMeta } from 'types/store';
-import { CreateTaskParams, CurrentTaskInfo, TaskData, UpdateTaskParams } from 'types/tasks';
+import {
+  CreateTaskParams,
+  CurrentTaskInfo,
+  TaskData,
+  TaskParamsUpdate,
+  UpdateTaskParams,
+} from 'types/tasks';
 import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
 
 export const getAllTasks = createAsyncThunk<TaskData[], string, AsyncThunkConfig>(
