@@ -98,6 +98,7 @@ export const descriptionInput: InputOptions = {
   type: 'text',
   rows: 4,
   validationOptions: {
+    required: VALIDATION_RULE_REQUIRED,
     maxLength: VALIDATION_RULE_MAX_LENGTH_400,
   },
 };
