@@ -12,20 +12,16 @@ import { TaskFields } from 'types/tasks';
 import { authSelector } from 'store/authSlice';
 import { TypeofModal } from 'constants/constants';
 import { columnsSelector } from 'store/columnsSlice';
-import { useParams } from 'react-router-dom';
 
 const EditTaskForm: FC = () => {
   const { currentTaskTitle: taskTitle } = useAppSelector(tasksSelector);
   const { currentTaskDescription: taskDescription } = useAppSelector(tasksSelector);
   const { currentTaskId: taskId } = useAppSelector(tasksSelector);
   const { currentColumnId: columnId } = useAppSelector(columnsSelector);
-  const { boardId } = useParams();
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.editTask}`;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const { userId } = useAppSelector(authSelector);
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
-  const { tasks } = useAppSelector(tasksSelector);
-  const currentPosition: number = (tasks[columnId]?.length || 0) + 1;
   const dispatch = useAppDispatch();
 
   const {
@@ -47,21 +43,7 @@ const EditTaskForm: FC = () => {
   const onSubmit = (data: TaskFields) => {
     if (data.title !== taskTitle || data.description !== taskDescription) {
       dispatch(setTasksLoading(columnId));
-      dispatch(
-        updateTask({
-          boardId: boardId as string,
-          columnId,
-          taskId,
-          data: {
-            columnId,
-            title: data.title,
-            description: data.description,
-            order: currentPosition,
-            userId: userId as string,
-            users: [userId as string], // temporary plug
-          },
-        })
-      );
+      dispatch(updateTask({ taskId, data: { ...data, users: [userId] } })); //TODO fix users // temporary plug
     }
     dispatch(closeModalForm(TypeofModal.editTask));
   };

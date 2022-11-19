@@ -7,7 +7,6 @@ import BoardPreview from 'components/BoardPreview';
 import Loader from 'components/Loader';
 import EditBoardForm from 'components/forms/EditBoardForm';
 import { boardListSelector, getBoardsByUser, getAllUsers } from 'store/boardListSlice';
-import { authSelector } from 'store/authSlice';
 import { clearBoardParams, openModalForm } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { MediaQuery, TypeofModal } from 'constants/constants';
@@ -38,7 +37,7 @@ export default function Boards() {
   return (
     <Page>
       <StyledBox sx={{ mx: isLargeScreen ? 4 : 1 }}>
-        {isLoading ? (
+        {isLoading || usersLoading ? (
           <Loader />
         ) : (
           <>
@@ -51,7 +50,7 @@ export default function Boards() {
               onClick={openAddBoardModalForm}
               disabled={isAddBoardLoading}
             >
-              {isAddBoardLoading && usersLoading ? (
+              {isAddBoardLoading ? (
                 <CircularProgress color="inherit" size={100} />
               ) : (
                 <Typography variant="h4">{t('add')}</Typography>

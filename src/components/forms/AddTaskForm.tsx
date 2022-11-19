@@ -7,22 +7,18 @@ import { useForm } from 'react-hook-form';
 import ModalWithForm from 'components/ModalWithForm';
 import ControlledFormInput from 'components/ControlledFormInput';
 import { FormControl } from 'types/formInput';
-import { createTask, setTasksLoading, tasksSelector } from 'store/tasksSlice';
+import { createTask, setTasksLoading } from 'store/tasksSlice';
 import { TaskFields } from 'types/tasks';
 import { authSelector } from 'store/authSlice';
 import { TypeofModal } from 'constants/constants';
 import { columnsSelector } from 'store/columnsSlice';
-import { useParams } from 'react-router-dom';
 
 const AddTaskForm: FC = () => {
-  const { boardId } = useParams();
   const { currentColumnId: columnId } = useAppSelector(columnsSelector);
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.addTask}`;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const { userId } = useAppSelector(authSelector);
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
-  const { tasks } = useAppSelector(tasksSelector);
-  const currentPosition: number = (tasks[columnId]?.length || 0) + 1;
   const dispatch = useAppDispatch();
 
   const {
@@ -41,15 +37,9 @@ const AddTaskForm: FC = () => {
     dispatch(setTasksLoading(columnId));
     dispatch(
       createTask({
-        boardId: boardId as string,
-        columnId,
-        data: {
-          title: data.title,
-          description: data.description,
-          order: currentPosition,
-          userId: userId as string,
-          users: [userId as string], // temporary plug
-        },
+        title: data.title,
+        description: data.description,
+        users: [userId], //temporary plug
       })
     );
     dispatch(closeModalForm(TypeofModal.addTask));

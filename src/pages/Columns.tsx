@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Page from 'components/Page';
 import { Box, Typography, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -15,57 +15,49 @@ import { openModalForm } from 'store/modalSlice';
 import AddTaskForm from 'components/forms/AddTaskForm';
 import EditTaskForm from 'components/forms/EditTaskForm';
 import ColumnsBackBtn from 'components/UI/ColumnsBackBtn';
+import styled from '@emotion/styled';
+import { setCurrentBoard } from 'store/boardListSlice';
 
-type Props = {
-  children?: React.ReactNode;
-};
-
-const StyledBox: FC<Props> = ({ children }) => {
-  const isBreakPoint: boolean = useMediaQuery(MediaQuery.minWidth750);
-
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'start',
-        alignItems: 'baseline',
-        overflowX: 'auto',
-        overflowY: 'hidden',
-        height: isBreakPoint ? 'calc(100vh - 210px)' : 'calc(100vh - 370px)',
-        gap: '1rem',
-      }}
-    >
-      {children}
-    </Box>
-  );
-};
+const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPoint' })<{
+  isBreakPoint: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+}>(({ theme, isBreakPoint }) => ({
+  display: 'flex',
+  justifyContent: 'start',
+  alignItems: 'baseline',
+  overflowX: 'auto',
+  overflowY: 'hidden',
+  height: isBreakPoint ? 'calc(100vh - 210px)' : 'calc(100vh - 370px)',
+  gap: '1rem',
+}));
 
 const Columns = () => {
+  const isBreakPoint = useMediaQuery(MediaQuery.minWidth750);
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const { boardId } = useParams();
   const { columns, status } = useAppSelector(columnsSelector);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
-  const isLoading: boolean = status === Status.pending;
-  const BODY: HTMLElement = document.body;
 
   useEffect(() => {
-    dispatch(getColumnsInBoards(boardId as string));
+    if (boardId) {
+      dispatch(setCurrentBoard(boardId));
+      dispatch(getColumnsInBoards(boardId));
+    }
   }, [dispatch, boardId]);
 
-  useImperativeDisableScroll(BODY);
+  useImperativeDisableScroll();
+
+  useEffect(() => {
+    setIsLoading(status === Status.pending);
+  }, [status]);
 
   return (
     <Page sx={{ marginTop: '0rem' }}>
       <ColumnsBackBtn />
-      <StyledBox>
-        {columns.map(({ _id, title, boardId, order }: ColumnData) => (
-          <ColumnPreview
-            key={_id}
-            columnId={_id}
-            boardId={boardId}
-            columnTitle={title}
-            order={order}
-          />
+      <StyledBox isBreakPoint={isBreakPoint}>
+        {columns.map(({ _id, title, order }: ColumnData) => (
+          <ColumnPreview key={_id} columnId={_id} columnTitle={title} order={order} />
         ))}
 
         <ColumnsAddBtn cb={() => dispatch(openModalForm(TypeofModal.addColumn))}>

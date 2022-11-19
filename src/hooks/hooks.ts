@@ -6,16 +6,18 @@ import type { RootState, AppDispatch } from '../store/store';
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export const useImperativeDisableScroll = (element: HTMLElement): void => {
+export const useImperativeDisableScroll = (): void => {
+  const body = document.body;
+
   useEffect(() => {
-    if (!element) {
+    if (!body) {
       return;
     }
 
-    element.style.overflowY = 'hidden';
+    body.style.overflowY = 'hidden';
 
     return () => {
-      element.style.overflowY = 'scroll';
+      body.style.overflowY = 'scroll';
     };
-  }, [element]);
+  }, [body]);
 };
