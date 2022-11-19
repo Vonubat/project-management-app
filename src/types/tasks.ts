@@ -37,3 +37,9 @@ export type TaskFields = {
   description: string;
   // users: UserData['_id'][];
 };
+
+export type CurrentTaskInfo = {
+  currentTaskId: TaskData['_id'];
+  currentTaskTitle: TaskData['title'];
+  currentTaskDescription: TaskData['description'];
+};

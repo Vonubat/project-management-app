@@ -14,11 +14,11 @@ import { TypeofModal } from 'constants/constants';
 import { columnsSelector } from 'store/columnsSlice';
 
 const AddTaskForm: FC = () => {
-  const { currentColumnId: columnId } = useAppSelector(columnsSelector);
-  const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.addTask}`;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
-  const { userId } = useAppSelector(authSelector);
+  const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.addTask}`;
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
+  const { userId } = useAppSelector(authSelector);
+  const { currentColumnId: columnId } = useAppSelector(columnsSelector);
   const dispatch = useAppDispatch();
 
   const {
@@ -37,9 +37,8 @@ const AddTaskForm: FC = () => {
     dispatch(setTasksLoading(columnId));
     dispatch(
       createTask({
-        title: data.title,
-        description: data.description,
-        users: [userId], //temporary plug
+        ...data,
+        users: [userId], //TODO fix users // temporary plug
       })
     );
     dispatch(closeModalForm(TypeofModal.addTask));

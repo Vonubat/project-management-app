@@ -1,4 +1,14 @@
-import { Avatar, Box, Button, CardMedia, Link, Typography, useMediaQuery } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  CardMedia,
+  Link,
+  SxProps,
+  Theme,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
 import Page from 'components/Page';
 import Diversity1Icon from '@mui/icons-material/Diversity1';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
@@ -22,6 +32,7 @@ type Props = {
   isReverse?: boolean;
   width?: string;
   source?: string;
+  sx?: SxProps<Theme>;
 };
 
 const SectionWrapper: FC<Props> = ({ children, breakPoint, isReverse }) => (
@@ -43,7 +54,6 @@ const ColumnWrapper: FC<Props> = ({ children, width, breakPoint }) => (
     sx={{
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
       gap: '1rem',
       width: breakPoint ? width : '100%',
     }}
@@ -52,10 +62,11 @@ const ColumnWrapper: FC<Props> = ({ children, width, breakPoint }) => (
   </Box>
 );
 
-const TextTitle: FC<Props> = ({ children }) => (
+const TextTitle: FC<Props> = ({ children, sx }) => (
   <Typography
     variant="h3"
     sx={{
+      ...sx,
       fontWeight: 'bold',
     }}
   >
@@ -68,7 +79,7 @@ const TextBody: FC<Props> = ({ children }) => <Typography variant="h4">{children
 const VideoTutorial: FC<Props> = ({ source, width, breakPoint }) => (
   <CardMedia
     component="video"
-    sx={{ minWidth: 200, width: breakPoint ? width : '100%', borderRadius: '1rem' }}
+    sx={{ minWidth: 200, maxWidth: 1000, width: breakPoint ? width : '100%', borderRadius: '1rem' }}
     image={source}
     autoPlay
     loop
@@ -200,7 +211,7 @@ const Home = () => {
 
       <ColumnWrapper>
         <Box component="img" src={Logo2} sx={{ width: '100%' }}></Box>
-        <TextTitle>{t('team')}</TextTitle>
+        <TextTitle sx={{ textAlign: 'center' }}>{t('team')}</TextTitle>
         <TeammateCardWrapper>
           <TeammateCard
             avatar={VonubatAvatar}

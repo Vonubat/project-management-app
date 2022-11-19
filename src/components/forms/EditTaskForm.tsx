@@ -14,13 +14,15 @@ import { TypeofModal } from 'constants/constants';
 import { columnsSelector } from 'store/columnsSlice';
 
 const EditTaskForm: FC = () => {
-  const { currentTaskTitle: taskTitle } = useAppSelector(tasksSelector);
-  const { currentTaskDescription: taskDescription } = useAppSelector(tasksSelector);
-  const { currentTaskId: taskId } = useAppSelector(tasksSelector);
-  const { currentColumnId: columnId } = useAppSelector(columnsSelector);
-  const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.editTask}`;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
+  const {
+    currentTaskInfo: { currentTaskId: taskId },
+    currentTaskInfo: { currentTaskDescription: description },
+    currentTaskInfo: { currentTaskTitle: title },
+  } = useAppSelector(tasksSelector);
+  const { currentColumnId: columnId } = useAppSelector(columnsSelector);
   const { userId } = useAppSelector(authSelector);
+  const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.editTask}`;
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
   const dispatch = useAppDispatch();
 
@@ -31,8 +33,8 @@ const EditTaskForm: FC = () => {
     formState: { isValid },
   } = useForm<TaskFields>({
     defaultValues: {
-      title: taskTitle,
-      description: taskDescription,
+      title,
+      description,
     },
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -41,7 +43,7 @@ const EditTaskForm: FC = () => {
   const formControl = control as FormControl;
 
   const onSubmit = (data: TaskFields) => {
-    if (data.title !== taskTitle || data.description !== taskDescription) {
+    if (data.title !== title || data.description !== description) {
       dispatch(setTasksLoading(columnId));
       dispatch(updateTask({ taskId, data: { ...data, users: [userId] } })); //TODO fix users // temporary plug
     }
@@ -53,8 +55,8 @@ const EditTaskForm: FC = () => {
   }, [isValid, dispatch]);
 
   const resetForm: () => void = useCallback((): void => {
-    reset({ title: taskTitle, description: taskDescription });
-  }, [reset, taskTitle, taskDescription]);
+    reset({ title, description });
+  }, [reset, title, description]);
 
   useEffect(() => {
     if (isOpen) {

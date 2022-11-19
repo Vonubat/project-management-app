@@ -55,8 +55,8 @@ const Column: FC<ColumnProps> = ({ children, isLoading }) => {
 
 const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId, order }) => {
   const { columnLoadingArr } = useAppSelector(columnsSelector);
-  const isColumnLoading: boolean = columnLoadingArr.some((id) => id === columnId);
   const { tasksLoadingArr } = useAppSelector(tasksSelector);
+  const isColumnLoading: boolean = columnLoadingArr.some((id) => id === columnId);
   const isTasksLoading: boolean = tasksLoadingArr.some((id) => id === columnId);
   const isLoading = isColumnLoading || isTasksLoading;
 

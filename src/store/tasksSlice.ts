@@ -4,7 +4,7 @@ import { Status } from 'constants/constants';
 import TasksService from 'services/tasksService';
 import { ColumnData } from 'types/columns';
 import { AsyncThunkConfig, AsyncThunkWithMeta } from 'types/store';
-import { CreateTaskParams, TaskData, UpdateTaskParams } from 'types/tasks';
+import { CreateTaskParams, CurrentTaskInfo, TaskData, UpdateTaskParams } from 'types/tasks';
 import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
 
 export const getAllTasks = createAsyncThunk<TaskData[], string, AsyncThunkConfig>(
@@ -94,9 +94,7 @@ interface IInitState {
   tasksLoadingArr: ColumnData['_id'][];
   status: Status;
   error: string | null | undefined;
-  currentTaskTitle: string;
-  currentTaskDescription: string;
-  currentTaskId: string;
+  currentTaskInfo: CurrentTaskInfo;
 }
 
 const initState: IInitState = {
@@ -104,23 +102,15 @@ const initState: IInitState = {
   tasksLoadingArr: [],
   status: Status.idle,
   error: null,
-  currentTaskTitle: '',
-  currentTaskDescription: '',
-  currentTaskId: '',
+  currentTaskInfo: { currentTaskId: '', currentTaskTitle: '', currentTaskDescription: '' },
 };
 
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState: initState,
   reducers: {
-    setCurrentTaskTitle: (state, action: PayloadAction<string>) => {
-      state.currentTaskTitle = action.payload;
-    },
-    setCurrentTaskDescription: (state, action: PayloadAction<string>) => {
-      state.currentTaskDescription = action.payload;
-    },
-    setCurrentTaskId: (state, action: PayloadAction<string>) => {
-      state.currentTaskId = action.payload;
+    setCurrentTaskInfo: (state, action: PayloadAction<CurrentTaskInfo>) => {
+      state.currentTaskInfo = action.payload;
     },
     setTasksLoading: (state, action: PayloadAction<ColumnData['_id']>) => {
       state.tasksLoadingArr.push(action.payload);
@@ -172,7 +162,6 @@ const tasksSlice = createSlice({
 
 export default tasksSlice.reducer;
 
-export const { setCurrentTaskTitle, setCurrentTaskDescription, setCurrentTaskId, setTasksLoading } =
-  tasksSlice.actions;
+export const { setCurrentTaskInfo, setTasksLoading } = tasksSlice.actions;
 
 export const tasksSelector = (state: { tasksStore: IInitState }) => state.tasksStore;

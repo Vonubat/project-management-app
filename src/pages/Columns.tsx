@@ -53,7 +53,7 @@ const Columns = () => {
   }, [status]);
 
   return (
-    <Page sx={{ marginTop: '0rem' }}>
+    <Page sx={{ my: '0rem' }}>
       <ColumnsBackBtn />
       <StyledBox isBreakPoint={isBreakPoint}>
         {columns.map(({ _id, title, order }: ColumnData) => (

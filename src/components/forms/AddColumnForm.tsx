@@ -12,8 +12,8 @@ import { FormControl } from 'types/formInput';
 import { TypeofModal } from 'constants/constants';
 
 const AddColumnForm: FC = () => {
-  const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.addColumn}`;
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
+  const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.addColumn}`;
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
   const dispatch = useAppDispatch();
 
