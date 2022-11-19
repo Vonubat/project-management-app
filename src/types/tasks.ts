@@ -2,6 +2,18 @@ import { BoardData } from './boards';
 import { ColumnData } from './columns';
 import { UserData } from './users';
 
+export type CreateTaskParams = {
+  title: string;
+  description: string;
+  users: Array<UserData['_id']>;
+};
+
+export type UpdateTaskParams = {
+  title: string;
+  description: string;
+  users: Array<UserData['_id']>;
+};
+
 export type TaskData = TaskParamsCreate & {
   _id: string;
   boardId: BoardData['_id'];

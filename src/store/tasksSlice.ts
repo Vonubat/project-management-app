@@ -3,44 +3,59 @@ import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import TasksService from 'services/tasksService';
 import { ColumnData } from 'types/columns';
-import { AsyncThunkConfig } from 'types/store';
-import { TaskData, TaskParamsCreate, TaskParamsUpdate } from 'types/tasks';
+import { AsyncThunkConfig, AsyncThunkWithMeta } from 'types/store';
+import { CreateTaskParams, TaskData, UpdateTaskParams } from 'types/tasks';
 import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
 
-export const getAllTasks = createAsyncThunk<TaskData[], { boardId: string; columnId: string }>(
+export const getAllTasks = createAsyncThunk<TaskData[], string, AsyncThunkConfig>(
   'tasks/getAll',
-  async (arg) => {
-    const res = await TasksService.getAllTasks(arg.boardId, arg.columnId);
+  async (columnId, { getState }) => {
+    const { currentBoard } = getState().boardListStore;
+
+    const res = await TasksService.getAllTasks(currentBoard, columnId);
     return res.data;
   }
 );
 
-export const createTask = createAsyncThunk<
-  TaskData,
-  { boardId: string; columnId: string; data: TaskParamsCreate },
-  AsyncThunkConfig
->('tasks/create', async (arg, { rejectWithValue }) => {
-  try {
-    const res = await TasksService.createTask(arg.boardId, arg.columnId, arg.data);
-    return res.data;
-  } catch (err) {
-    const error = err as AxiosError;
+export const createTask = createAsyncThunk<TaskData, CreateTaskParams, AsyncThunkWithMeta>(
+  'tasks/create',
+  async (data, { getState, rejectWithValue, fulfillWithValue }) => {
+    const { currentBoard } = getState().boardListStore;
+    const { currentColumnId: columnId } = getState().columnsStore;
+    const { userId } = getState().authStore;
+    const taskList = getState().tasksStore.tasks[columnId] || [];
+    const order = taskList.length + 1;
+    const params = { ...data, userId, order };
 
-    if (!error.response) {
-      throw err;
+    try {
+      const res = await TasksService.createTask(currentBoard, columnId, params);
+      return fulfillWithValue(res.data, [columnId]);
+    } catch (err) {
+      const error = err as AxiosError;
+
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue(error.response.status);
     }
-
-    return rejectWithValue(error.response.status);
   }
-});
+);
 
 export const updateTask = createAsyncThunk<
   TaskData,
-  { boardId: string; columnId: string; taskId: string; data: TaskParamsUpdate },
+  { taskId: string; data: UpdateTaskParams },
   AsyncThunkConfig
->('tasks/update', async ({ boardId, columnId, taskId, data }, { rejectWithValue }) => {
+>('tasks/update', async ({ taskId, data }, { getState, rejectWithValue }) => {
+  const { currentBoard } = getState().boardListStore;
+  const { currentColumnId: columnId } = getState().columnsStore;
+  const { userId } = getState().authStore;
+  const order = getState().tasksStore.tasks[columnId].find((t) => t._id === taskId)?.order;
+  const params = { ...data, userId, order: order || 1, columnId };
+
   try {
-    const res = await TasksService.updateTask(boardId, columnId, taskId, data);
+    const res = await TasksService.updateTask(currentBoard, columnId, taskId, params);
+
     return res.data;
   } catch (err) {
     const error = err as AxiosError;
@@ -55,11 +70,12 @@ export const updateTask = createAsyncThunk<
 
 export const deleteTask = createAsyncThunk<
   TaskData,
-  { boardId: string; columnId: string; taskId: string },
+  { columnId: string; taskId: string },
   AsyncThunkConfig
->('tasks/delete', async ({ boardId, columnId, taskId }, { rejectWithValue }) => {
+>('tasks/delete', async ({ columnId, taskId }, { getState, rejectWithValue }) => {
+  const { currentBoard } = getState().boardListStore;
   try {
-    const res = await TasksService.deleteTask(boardId, columnId, taskId);
+    const res = await TasksService.deleteTask(currentBoard, columnId, taskId);
 
     return res.data;
   } catch (err) {
@@ -112,18 +128,18 @@ const tasksSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getAllTasks.fulfilled, (state, { payload, meta }) => {
-      state.tasks[meta.arg.columnId] = payload;
+      state.tasks[meta.arg] = payload;
     });
 
     builder.addCase(createTask.fulfilled, (state, { payload, meta }) => {
-      state.tasks[meta.arg.columnId].push(payload);
+      state.tasks[meta['0']].push(payload);
       state.tasksLoadingArr = state.tasksLoadingArr.filter(
         (columnId) => payload.columnId !== columnId
       );
     });
 
-    builder.addCase(updateTask.fulfilled, (state, { payload, meta }) => {
-      state.tasks[meta.arg.columnId] = state.tasks[meta.arg.columnId].map((task) =>
+    builder.addCase(updateTask.fulfilled, (state, { payload }) => {
+      state.tasks[payload.columnId] = state.tasks[payload.columnId].map((task) =>
         task._id === payload._id ? payload : task
       );
       state.tasksLoadingArr = state.tasksLoadingArr.filter(

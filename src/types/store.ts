@@ -29,3 +29,9 @@ export type AsyncThunkConfig = {
   state: RootState;
   rejectValue: number;
 };
+
+export type AsyncThunkWithMeta = {
+  state: RootState;
+  rejectValue: number;
+  fulfilledMeta: string[];
+};
