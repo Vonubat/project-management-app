@@ -2,9 +2,11 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import ColumnsService from 'services/columnsService';
-import { ColumnData, ColumnParams } from 'types/columns';
+import { ColumnData, ColumnParams, DndColumnData } from 'types/columns';
 import { AsyncThunkConfig } from 'types/store';
 import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
+import { moveItem } from 'utils/moveItem';
+import { sortOrder } from 'utils/sortByOrder';
 
 export const getColumnsInBoards = createAsyncThunk<ColumnData[], string, AsyncThunkConfig>(
   'columns/getAll',
@@ -31,7 +33,9 @@ export const createColumn = createAsyncThunk<ColumnData, { title: string }, Asyn
     const { currentBoardId } = getState().boardListStore;
     const { columns } = getState().columnsStore;
 
-    const order = columns.length + 1;
+    const order = !columns.length
+      ? 1
+      : columns.reduce((prev, current) => (prev.order < current.order ? current : prev)).order + 1;
 
     try {
       const res = await ColumnsService.createColumn(currentBoardId, { ...data, order });
@@ -91,28 +95,32 @@ export const deleteColumn = createAsyncThunk<ColumnData, string, AsyncThunkConfi
   }
 );
 
-export const changeColumnOrder = createAsyncThunk<
-  ColumnData,
-  { boardId: string; order: number },
-  AsyncThunkConfig
->('columns/changeOrder', async ({ boardId, order }, { getState, rejectWithValue }) => {
-  const { currentColumnId, columns } = getState().columnsStore;
-  const data = columns.find((c) => c._id === currentColumnId) as ColumnParams;
+export const changeColumnOrder = createAsyncThunk<void, void, AsyncThunkConfig>(
+  'columns/changeOrder',
+  async (_, { getState, rejectWithValue, dispatch }) => {
+    const boardId = getState().boardListStore.currentBoardId;
+    const columnSetData = getState().columnsStore.columns.map((c) => ({
+      _id: c._id,
+      order: c.order,
+    }));
 
-  try {
-    const res = await ColumnsService.updateColumn(boardId, currentColumnId, { ...data, order });
+    try {
+      await ColumnsService.updateColumnsSet(columnSetData);
+    } catch (err) {
+      const error = err as AxiosError;
 
-    return res.data;
-  } catch (err) {
-    const error = err as AxiosError;
+      console.log(err);
 
-    if (!error.response) {
-      throw err;
+      if (!error.response) {
+        throw err;
+      }
+
+      dispatch(getColumnsInBoards(boardId));
+
+      return rejectWithValue(error.response.status);
     }
-
-    return rejectWithValue(error.response.status);
   }
-});
+);
 
 interface ColumnsState {
   columns: ColumnData[];
@@ -140,6 +148,13 @@ const columnsSlice = createSlice({
     setColumnLoading: (state, action: PayloadAction<string>) => {
       state.columnLoadingArr.push(action.payload);
     },
+    changeLocalColumnOrder: (
+      state,
+      { payload: { dragOrder, dropOrder } }: PayloadAction<DndColumnData>
+    ) => {
+      moveItem(state.columns, dragOrder - 1, dropOrder - 1);
+      state.columns = state.columns.map((c, index) => ({ ...c, order: index + 1 }));
+    },
   },
 
   extraReducers: (builder) => {
@@ -148,7 +163,7 @@ const columnsSlice = createSlice({
     });
 
     builder.addCase(getColumnsInBoards.fulfilled, (state, { payload }) => {
-      state.columns = payload;
+      state.columns = payload.sort(sortOrder);
     });
 
     builder.addCase(createColumn.pending, (state) => {
@@ -187,6 +202,7 @@ const columnsSlice = createSlice({
 
 export default columnsSlice.reducer;
 
-export const { setCurrentColumnId, setColumnLoading } = columnsSlice.actions;
+export const { setCurrentColumnId, setColumnLoading, changeLocalColumnOrder } =
+  columnsSlice.actions;
 
 export const columnsSelector = (state: { columnsStore: ColumnsState }) => state.columnsStore;

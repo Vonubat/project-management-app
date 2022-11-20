@@ -16,6 +16,8 @@ import AddTaskForm from 'components/forms/AddTaskForm';
 import EditTaskForm from 'components/forms/EditTaskForm';
 import ColumnsBackBtn from 'components/UI/ColumnsBackBtn';
 import styled from '@emotion/styled';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { setCurrentBoard } from 'store/boardListSlice';
 
 const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPoint' })<{
@@ -56,17 +58,18 @@ const Columns = () => {
     <Page sx={{ my: '0rem' }}>
       <ColumnsBackBtn />
       <StyledBox isBreakPoint={isBreakPoint}>
-        {columns.map(({ _id, title, order }: ColumnData) => (
-          <ColumnPreview key={_id} columnId={_id} columnTitle={title} order={order} />
-        ))}
-
-        <ColumnsAddBtn cb={() => dispatch(openModalForm(TypeofModal.addColumn))}>
-          <Typography variant="h6">{t('addColumn')}</Typography>
-        </ColumnsAddBtn>
-        <AddColumnForm />
-        <AddTaskForm />
-        <EditTaskForm />
+        <DndProvider backend={HTML5Backend}>
+          {columns.map(({ _id, title, order }: ColumnData) => (
+            <ColumnPreview key={_id} columnId={_id} columnTitle={title} order={order} />
+          ))}
+          <ColumnsAddBtn cb={() => dispatch(openModalForm(TypeofModal.addColumn))}>
+            <Typography variant="h6">{t('addColumn')}</Typography>
+          </ColumnsAddBtn>
+        </DndProvider>
       </StyledBox>
+      <AddColumnForm />
+      <AddTaskForm />
+      <EditTaskForm />
       {isLoading && <Loader />}
     </Page>
   );

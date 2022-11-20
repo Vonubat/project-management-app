@@ -1,6 +1,6 @@
 import { Action } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
-import { RootState } from 'store/store';
+import { AppDispatch, RootState } from 'store/store';
 import { SignInOkResponseData, SignUpOkResponseData } from './auth';
 import { TaskData } from './tasks';
 import { ColumnData } from './columns';
@@ -28,6 +28,7 @@ export type PendingAction = Action;
 export type AsyncThunkConfig = {
   state: RootState;
   rejectValue: number;
+  dispatch: AppDispatch;
 };
 
 export type AsyncThunkWithMeta = {
