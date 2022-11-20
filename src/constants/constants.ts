@@ -87,3 +87,8 @@ export enum ActionName {
 export enum SliceName {
   auth = 'auth',
 }
+
+export enum DndType {
+  task = 'task',
+  column = 'column',
+}

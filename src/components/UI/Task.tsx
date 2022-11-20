@@ -1,6 +1,6 @@
 import React, { FC, SyntheticEvent, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { DefaultColors, GRAY_700, TypeofModal } from 'constants/constants';
+import { DefaultColors, DndType, GRAY_700, TypeofModal } from 'constants/constants';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'hooks/hooks';
 import {
@@ -35,7 +35,6 @@ const taskStyles = {
   borderRadius: '3px',
   fontSize: 20,
   color: GRAY_700,
-  // backgroundColor: 'rgba(255, 255, 255, 1)',
   cursor: 'pointer',
   boxShadow: `${theme.shadows[3]}`,
 };
@@ -56,7 +55,7 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, columnId, taskId, order }
   const dispatch = useAppDispatch();
   const isTouchScreenDevice: boolean = isTouchEnabled();
   const [{ isDragging }, drag] = useDrag({
-    type: 'task',
+    type: DndType.task,
     item: {
       id: taskId,
       columnId,
@@ -68,7 +67,7 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, columnId, taskId, order }
   });
 
   const [{ isOver }, drop] = useDrop({
-    accept: 'task',
+    accept: DndType.task,
     drop(item: DropTaskItem) {
       if (item.columnId !== columnId || item.order !== order) {
         dispatch(

@@ -32,9 +32,9 @@ export const createTask = createAsyncThunk<TaskData, CreateTaskParams, AsyncThun
     const { currentColumnId: columnId } = getState().columnsStore;
     const { userId } = getState().authStore;
     const taskList = getState().tasksStore.tasks[columnId] || [];
-    const order = !taskList.length
-      ? 1
-      : taskList.reduce((prev, current) => (prev.order < current.order ? current : prev)).order + 1;
+    const order = taskList.length
+      ? taskList.reduce((prev, current) => (prev.order < current.order ? current : prev)).order + 1
+      : 0;
 
     const params = { ...data, userId, order };
 
@@ -157,37 +157,36 @@ const tasksSlice = createSlice({
       const { dragOrder, dragColumnId, dropOrder, dropColumnId } = payload;
 
       if (dragColumnId === dropColumnId) {
-        moveItem(state.tasks[dragColumnId], dragOrder - 1, dropOrder - 1);
+        moveItem(state.tasks[dragColumnId], dragOrder, dropOrder);
 
         state.tasks[dragColumnId] = state.tasks[dragColumnId].map((c, index) => ({
           ...c,
-          order: index + 1,
+          order: index,
         }));
         return;
       }
 
       if (dragColumnId !== dropColumnId) {
-        const [dragTask] = state.tasks[dragColumnId].splice(dragOrder - 1, 1);
-
+        const [dragTask] = state.tasks[dragColumnId].splice(dragOrder, 1);
         dragTask.columnId = dropColumnId;
 
         if (!state.tasks[dropColumnId].length) {
           state.tasks[dropColumnId].push(dragTask);
         } else {
-          state.tasks[dropColumnId].splice(dropOrder - 1, 0, dragTask);
+          state.tasks[dropColumnId].splice(dropOrder, 0, dragTask);
         }
 
         if (state.tasks[dragColumnId].length) {
           state.tasks[dragColumnId] = state.tasks[dragColumnId]?.map((c, index) => ({
             ...c,
-            order: index + 1,
+            order: index,
           }));
         }
 
         if (state.tasks[dropColumnId].length) {
           state.tasks[dropColumnId] = state.tasks[dropColumnId].map((c, index) => ({
             ...c,
-            order: index + 1,
+            order: index,
           }));
         }
       }

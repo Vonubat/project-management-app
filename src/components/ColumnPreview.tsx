@@ -7,6 +7,7 @@ import { changeColumnOrder, changeLocalColumnOrder, columnsSelector } from 'stor
 import { tasksSelector } from 'store/tasksSlice';
 import { ConnectableElement, useDrag, useDrop } from 'react-dnd';
 import { DropColumnItem } from 'types/columns';
+import { DndType } from 'constants/constants';
 
 type ColumnPreviewProps = {
   columnTitle: string;
@@ -52,7 +53,7 @@ const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId, order })
   const dispatch = useAppDispatch();
 
   const [{ isDragging }, drag] = useDrag({
-    type: 'column',
+    type: DndType.column,
     item: {
       order,
     },
@@ -62,7 +63,7 @@ const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId, order })
   });
 
   const [{ isOver }, drop] = useDrop({
-    accept: 'column',
+    accept: DndType.column,
     drop(item: DropColumnItem) {
       if (item.order !== order) {
         dispatch(changeLocalColumnOrder({ dragOrder: item.order, dropOrder: order }));
@@ -78,9 +79,8 @@ const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId, order })
     <Box
       sx={{
         ...style,
-        opacity: isLoading ? 0.5 : 1,
+        opacity: isLoading ? 0.5 : isDragging ? 0 : 1,
         pointerEvents: isLoading ? 'none' : 'auto',
-        ml: isOver ? 8 : 2,
         backgroundColor: isOver ? 'green' : 'white',
       }}
       ref={(node: ConnectableElement) => drag(drop(node))}

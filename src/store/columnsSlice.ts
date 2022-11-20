@@ -33,9 +33,9 @@ export const createColumn = createAsyncThunk<ColumnData, { title: string }, Asyn
     const { currentBoardId } = getState().boardListStore;
     const { columns } = getState().columnsStore;
 
-    const order = !columns.length
-      ? 1
-      : columns.reduce((prev, current) => (prev.order < current.order ? current : prev)).order + 1;
+    const order = columns.length
+      ? columns.reduce((prev, current) => (prev.order < current.order ? current : prev)).order + 1
+      : 0;
 
     try {
       const res = await ColumnsService.createColumn(currentBoardId, { ...data, order });
@@ -146,12 +146,11 @@ const columnsSlice = createSlice({
     setColumnLoading: (state, action: PayloadAction<string>) => {
       state.columnLoadingArr.push(action.payload);
     },
-    changeLocalColumnOrder: (
-      state,
-      { payload: { dragOrder, dropOrder } }: PayloadAction<DndColumnData>
-    ) => {
-      moveItem(state.columns, dragOrder - 1, dropOrder - 1);
-      state.columns = state.columns.map((c, index) => ({ ...c, order: index + 1 }));
+    changeLocalColumnOrder: (state, { payload }: PayloadAction<DndColumnData>) => {
+      const { dragOrder, dropOrder } = payload;
+
+      moveItem(state.columns, dragOrder, dropOrder);
+      state.columns = state.columns.map((c, index) => ({ ...c, order: index }));
     },
   },
 

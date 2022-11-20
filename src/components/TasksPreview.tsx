@@ -12,7 +12,7 @@ import {
 import Task from './UI/Task';
 import { DropTaskItem, TaskData } from 'types/tasks';
 import { openModalForm } from 'store/modalSlice';
-import { TypeofModal } from 'constants/constants';
+import { DndType, TypeofModal } from 'constants/constants';
 import { setCurrentColumnId } from 'store/columnsSlice';
 import { useDrop } from 'react-dnd';
 
@@ -33,22 +33,20 @@ const TasksPreview: FC<Props> = ({ columnId }) => {
   const { tasks } = useAppSelector(tasksSelector);
   const dispatch = useAppDispatch();
   const [{ isOver }, drop] = useDrop({
-    accept: 'task',
+    accept: DndType.task,
     drop(item: DropTaskItem, monitor) {
+      const didDrop = monitor.didDrop();
+
+      if (didDrop) return;
+
       if (columnId !== item.columnId) {
-        const didDrop = monitor.didDrop();
-
-        if (didDrop) {
-          return;
-        }
-
         dispatch(
           changeLocalTaskOrder({
             dragOrder: item.order,
             dragColumnId: item.columnId,
             dropOrder: tasks[columnId].length
               ? tasks[columnId][tasks[columnId].length - 1].order + 1
-              : 1,
+              : 0,
             dropColumnId: columnId,
           })
         );
