@@ -7,11 +7,13 @@ import { AsyncThunkConfig, AsyncThunkWithMeta } from 'types/store';
 import {
   CreateTaskParams,
   CurrentTaskInfo,
+  DndTaskData,
   TaskData,
-  TaskParamsUpdate,
   UpdateTaskParams,
 } from 'types/tasks';
 import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
+import { moveItem } from 'utils/moveItem';
+import { sortOrder } from 'utils/sortByOrder';
 
 export const getAllTasks = createAsyncThunk<TaskData[], string, AsyncThunkConfig>(
   'tasks/getAll',
@@ -30,7 +32,10 @@ export const createTask = createAsyncThunk<TaskData, CreateTaskParams, AsyncThun
     const { currentColumnId: columnId } = getState().columnsStore;
     const { userId } = getState().authStore;
     const taskList = getState().tasksStore.tasks[columnId] || [];
-    const order = taskList.length + 1;
+    const order = !taskList.length
+      ? 1
+      : taskList.reduce((prev, current) => (prev.order < current.order ? current : prev)).order + 1;
+
     const params = { ...data, userId, order };
 
     try {
@@ -95,34 +100,27 @@ export const deleteTask = createAsyncThunk<
   }
 });
 
-export const changeTaskOrder = createAsyncThunk<
-  ColumnData,
-  { id: string; boardId: string; oldColumnId: string; newColumnId: string; order: number },
-  AsyncThunkConfig
->(
+export const changeTaskOrder = createAsyncThunk<void, string[], AsyncThunkConfig>(
   'tasks/changeOrder',
-  async ({ id, boardId, oldColumnId, newColumnId, order }, { getState, rejectWithValue }) => {
-    const { tasks } = getState().tasksStore;
-    const taskData = tasks[oldColumnId].find((t) => t._id === id) as TaskData;
+  async (columnsId, { getState, rejectWithValue, dispatch }) => {
+    const tasks = Object.values(getState().tasksStore.tasks).flat();
 
-    const task = { ...taskData } as Partial<TaskData>;
-    delete task._id;
-    delete task.boardId;
+    const data = tasks.map((t) => ({
+      _id: t._id,
+      order: t.order,
+      columnId: t.columnId,
+    }));
 
     try {
-      const res = await TasksService.updateTask(boardId, oldColumnId, id, {
-        ...(task as TaskParamsUpdate),
-        order,
-        columnId: newColumnId,
-      });
-
-      return res.data;
+      await TasksService.updateTaskSet(data);
     } catch (err) {
       const error = err as AxiosError;
 
       if (!error.response) {
         throw err;
       }
+
+      columnsId.forEach((id) => dispatch(getAllTasks(id)));
 
       return rejectWithValue(error.response.status);
     }
@@ -155,10 +153,49 @@ const tasksSlice = createSlice({
     setTasksLoading: (state, action: PayloadAction<ColumnData['_id']>) => {
       state.tasksLoadingArr.push(action.payload);
     },
+    changeLocalTaskOrder: (state, { payload }: PayloadAction<DndTaskData>) => {
+      const { dragOrder, dragColumnId, dropOrder, dropColumnId } = payload;
+
+      if (dragColumnId === dropColumnId) {
+        moveItem(state.tasks[dragColumnId], dragOrder - 1, dropOrder - 1);
+
+        state.tasks[dragColumnId] = state.tasks[dragColumnId].map((c, index) => ({
+          ...c,
+          order: index + 1,
+        }));
+        return;
+      }
+
+      if (dragColumnId !== dropColumnId) {
+        const [dragTask] = state.tasks[dragColumnId].splice(dragOrder - 1, 1);
+
+        dragTask.columnId = dropColumnId;
+
+        if (!state.tasks[dropColumnId].length) {
+          state.tasks[dropColumnId].push(dragTask);
+        } else {
+          state.tasks[dropColumnId].splice(dropOrder - 1, 0, dragTask);
+        }
+
+        if (state.tasks[dragColumnId].length) {
+          state.tasks[dragColumnId] = state.tasks[dragColumnId]?.map((c, index) => ({
+            ...c,
+            order: index + 1,
+          }));
+        }
+
+        if (state.tasks[dropColumnId].length) {
+          state.tasks[dropColumnId] = state.tasks[dropColumnId].map((c, index) => ({
+            ...c,
+            order: index + 1,
+          }));
+        }
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllTasks.fulfilled, (state, { payload, meta }) => {
-      state.tasks[meta.arg] = payload;
+      state.tasks[meta.arg] = payload.sort(sortOrder);
     });
 
     builder.addCase(createTask.fulfilled, (state, { payload, meta }) => {
@@ -202,6 +239,6 @@ const tasksSlice = createSlice({
 
 export default tasksSlice.reducer;
 
-export const { setCurrentTaskInfo, setTasksLoading } = tasksSlice.actions;
+export const { setCurrentTaskInfo, setTasksLoading, changeLocalTaskOrder } = tasksSlice.actions;
 
 export const tasksSelector = (state: { tasksStore: IInitState }) => state.tasksStore;

@@ -12,6 +12,7 @@ export enum ApiRoutes {
   columns = '/columns',
   columnsSet = '/columnsSet',
   tasks = '/tasks',
+  tasksSet = '/tasksSet',
   file = '/file',
   points = '/points',
 }

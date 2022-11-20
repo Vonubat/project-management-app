@@ -109,8 +109,6 @@ export const changeColumnOrder = createAsyncThunk<void, void, AsyncThunkConfig>(
     } catch (err) {
       const error = err as AxiosError;
 
-      console.log(err);
-
       if (!error.response) {
         throw err;
       }
