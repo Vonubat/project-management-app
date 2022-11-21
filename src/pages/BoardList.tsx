@@ -5,10 +5,11 @@ import { useTranslation } from 'react-i18next';
 import Page from 'components/Page';
 import BoardPreview from 'components/BoardPreview';
 import EditBoardForm from 'components/forms/EditBoardForm';
-import { boardListSelector, getBoardsByUser, getAllUsers } from 'store/boardListSlice';
+import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
 import { clearBoardParams, openModalForm } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { MediaQuery, TypeofModal } from 'constants/constants';
+import { getAllUsers } from 'store/usersSlice';
 
 const StyledBox = styled(Box)({
   display: 'flex',

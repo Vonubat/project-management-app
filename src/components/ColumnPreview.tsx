@@ -32,9 +32,6 @@ const style = {
   overflowY: 'auto',
   backgroundColor: 'rgba(255, 255, 255, 0.7)',
   transition: '.1s linear',
-  //TODO remove if no need
-  // opacity: isLoading ? 0.5 : 1,
-  // pointerEvents: isLoading ? 'none' : 'auto',
   '&::-webkit-scrollbar-thumb': {
     borderRadius: 5,
   },
@@ -81,7 +78,7 @@ const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId, order })
         ...style,
         opacity: isLoading ? 0.5 : isDragging ? 0 : 1,
         pointerEvents: isLoading ? 'none' : 'auto',
-        backgroundColor: isOver ? 'green' : 'white',
+        backgroundColor: isOver ? 'green' : 'rgba(255, 255, 255, 0.7)',
       }}
       ref={(node: ConnectableElement) => drag(drop(node))}
     >

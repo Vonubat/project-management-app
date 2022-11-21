@@ -74,7 +74,7 @@ const TasksPreview: FC<Props> = ({ columnId }) => {
         sx={{
           width: '100%',
           minHeight: isOver ? '300px' : '50px',
-          backgroundColor: isOver ? 'blue' : 'white',
+          backgroundColor: isOver ? 'blue' : 'transparent',
         }}
       >
         {tasks[columnId]?.map((task) => (

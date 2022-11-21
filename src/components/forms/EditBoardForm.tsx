@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { useTranslation } from 'react-i18next';
@@ -11,36 +11,18 @@ import { FormControl } from 'types/formInput';
 import { EditBoardFormFields } from 'types/boards';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
 import { authSelector } from 'store/authSlice';
-import {
-  boardListSelector,
-  updateBoard,
-  createBoard,
-  updateLocalBoard,
-} from 'store/boardListSlice';
+import { updateBoard, createBoard, updateLocalBoard } from 'store/boardListSlice';
 import { Add as AddIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
-import { Chip, Collapse, Grow, Paper } from '@mui/material';
+import { Chip, Collapse, Grow } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
-
-const paperStyles = {
-  display: 'flex',
-  justifyContent: 'left',
-  flexWrap: 'wrap',
-  boxSizing: 'border-box',
-  height: 78,
-  p: 0.25,
-  mt: 2,
-  listStyle: 'none',
-  overflow: 'auto',
-  borderColor: 'white',
-  outline: '1px solid #e6e6e6',
-  ':hover': { outlineColor: 'black' },
-};
+import { usersSelector } from 'store/usersSlice';
+import CustomPaper from 'components/UI/CustomPaper';
 
 const EditBoardForm: FC = () => {
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.board}`;
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const { userId } = useAppSelector(authSelector);
-  const { users } = useAppSelector(boardListSelector);
+  const { users } = useAppSelector(usersSelector);
   const { [isOpenKey]: isOpen, boardData } = useAppSelector(modalSelector);
   const dispatch = useAppDispatch();
 
@@ -87,8 +69,8 @@ const EditBoardForm: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  const [isSearchWin, setSearchWin] = React.useState(false);
-  const [checkedUsersID, setCheckedUsersID] = React.useState<string[]>([]);
+  const [isSearchWin, setSearchWin] = useState(false);
+  const [checkedUsersID, setCheckedUsersID] = useState<string[]>([]);
   const checkedUsers = users.filter(({ _id }) => checkedUsersID.includes(_id));
 
   function handleToggle(value: string) {
@@ -111,7 +93,7 @@ const EditBoardForm: FC = () => {
       <Collapse in={isSearchWin}>
         <UserSearchBar users={users} checkedUsersID={checkedUsersID} handleToggle={handleToggle} />
       </Collapse>
-      <Paper variant="outlined" className="alternative-scroll" sx={paperStyles}>
+      <CustomPaper>
         <Chip
           color="primary"
           sx={{ ':hover': { cursor: 'pointer' }, m: 0.25 }}
@@ -126,7 +108,7 @@ const EditBoardForm: FC = () => {
             </Grow>
           ))}
         </TransitionGroup>
-      </Paper>
+      </CustomPaper>
     </ModalWithForm>
   );
 };

@@ -1,12 +1,6 @@
 import { isAsyncThunkAction } from '@reduxjs/toolkit';
 import { signIn, signUp } from './authSlice';
-import {
-  createBoard,
-  deleteBoard,
-  getAllUsers,
-  getBoardsByUser,
-  updateBoard,
-} from './boardListSlice';
+import { createBoard, deleteBoard, getBoardsByUser, updateBoard } from './boardListSlice';
 import {
   changeColumnOrder,
   createColumn,
@@ -15,7 +9,7 @@ import {
   updateColumn,
 } from './columnsSlice';
 import { changeTaskOrder, createTask, deleteTask, getAllTasks, updateTask } from './tasksSlice';
-import { deleteUser, getUser, updateUser } from './usersSlice';
+import { deleteUser, getUser, updateUser, getAllUsers } from './usersSlice';
 
 export const isGetAction = isAsyncThunkAction(
   getBoardsByUser,
