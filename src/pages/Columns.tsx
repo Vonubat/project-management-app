@@ -18,6 +18,7 @@ import styled from '@emotion/styled';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { setCurrentBoard } from 'store/boardListSlice';
+import { getAllUsers } from 'store/usersSlice';
 import { clearAllLocalTasks } from 'store/tasksSlice';
 
 const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPoint' })<{
@@ -44,6 +45,7 @@ const Columns = () => {
     if (boardId) {
       dispatch(setCurrentBoard(boardId));
       dispatch(getColumnsInBoards(boardId));
+      dispatch(getAllUsers());
     }
   }, [dispatch, boardId]);
 

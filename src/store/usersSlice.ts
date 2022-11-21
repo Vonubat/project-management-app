@@ -3,11 +3,14 @@ import { AxiosError } from 'axios';
 import UsersService from 'services/usersService';
 import { SignUpOkResponseData, SignUpRequestData } from 'types/auth';
 import { AsyncThunkConfig } from 'types/store';
+import { UserData } from 'types/users';
 
 type UsersState = {
   name: string;
   login: string;
   userId: string;
+  usersLoading: boolean;
+  users: UserData[];
 };
 
 export const getUser = createAsyncThunk<SignUpOkResponseData, void, AsyncThunkConfig>(
@@ -78,10 +81,30 @@ export const deleteUser = createAsyncThunk<SignUpOkResponseData, void, AsyncThun
   }
 );
 
+export const getAllUsers = createAsyncThunk<UserData[], void, AsyncThunkConfig>(
+  'users/getAll',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await UsersService.getAllUsers();
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
+
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue(error.response.status);
+    }
+  }
+);
+
 const userSliceInitialState: UsersState = {
   name: '',
   login: '',
   userId: '',
+  usersLoading: false,
+  users: [],
 };
 
 const usersSlice = createSlice({
@@ -98,6 +121,15 @@ const usersSlice = createSlice({
     builder.addCase(updateUser.fulfilled, (state, { payload: { name, login } }) => {
       state.name = name;
       state.login = login;
+    });
+
+    builder.addCase(getAllUsers.pending, (state) => {
+      state.usersLoading = true;
+    });
+
+    builder.addCase(getAllUsers.fulfilled, (state, { payload }) => {
+      state.users = payload;
+      state.usersLoading = false;
     });
   },
 });
