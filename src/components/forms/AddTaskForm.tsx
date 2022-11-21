@@ -9,16 +9,35 @@ import ControlledFormInput from 'components/ControlledFormInput';
 import { FormControl } from 'types/formInput';
 import { createTask, setTasksLoading } from 'store/tasksSlice';
 import { TaskFields } from 'types/tasks';
-import { authSelector } from 'store/authSlice';
 import { TypeofModal } from 'constants/constants';
 import { columnsSelector } from 'store/columnsSlice';
+import { Add as AddIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
+import { TransitionGroup } from 'react-transition-group';
+import { Collapse, Paper, Chip, Grow } from '@mui/material';
+import UserSearchBar from 'components/UserSearchBar';
+import { usersSelector } from 'store/usersSlice';
+
+const paperStyles = {
+  display: 'flex',
+  justifyContent: 'left',
+  flexWrap: 'wrap',
+  boxSizing: 'border-box',
+  height: 78,
+  p: 0.25,
+  mt: 2,
+  listStyle: 'none',
+  overflow: 'auto',
+  borderColor: 'white',
+  outline: '1px solid #e6e6e6',
+  ':hover': { outlineColor: 'black' },
+};
 
 const AddTaskForm: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.addTask}`;
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
-  const { userId } = useAppSelector(authSelector);
   const { currentColumnId: columnId } = useAppSelector(columnsSelector);
+  const { users } = useAppSelector(usersSelector);
   const dispatch = useAppDispatch();
 
   const {
@@ -38,11 +57,22 @@ const AddTaskForm: FC = () => {
     dispatch(
       createTask({
         ...data,
-        users: [userId], //TODO fix users // temporary plug
+        users: checkedUsersId,
       })
     );
     dispatch(closeModalForm(TypeofModal.addTask));
   };
+
+  const [isSearchWin, setSearchWin] = React.useState(false);
+  const [checkedUsersId, setCheckedUsersId] = React.useState<string[]>([]);
+  const checkedUsers = users.filter(({ _id }) => checkedUsersId.includes(_id));
+
+  function handleToggle(value: string) {
+    const curInd = checkedUsersId.indexOf(value);
+    const newChecked = [...checkedUsersId];
+    curInd === -1 ? newChecked.push(value) : newChecked.splice(curInd, 1);
+    setCheckedUsersId(newChecked);
+  }
 
   useEffect(() => {
     dispatch(setIsSubmitDisabled({ uniqueId: TypeofModal.addTask, flag: !isValid }));
@@ -60,8 +90,29 @@ const AddTaskForm: FC = () => {
       uniqueId={TypeofModal.addTask}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <ControlledFormInput control={formControl} inputOptions={taskTitleInput} />
-      <ControlledFormInput control={formControl} inputOptions={taskDescriptionInput} />
+      <Collapse in={!isSearchWin}>
+        <ControlledFormInput control={formControl} inputOptions={taskTitleInput} />
+        <ControlledFormInput control={formControl} inputOptions={taskDescriptionInput} />
+      </Collapse>
+      <Collapse in={isSearchWin}>
+        <UserSearchBar users={users} checkedUsersID={checkedUsersId} handleToggle={handleToggle} />
+      </Collapse>
+      <Paper variant="outlined" className="alternative-scroll" sx={paperStyles}>
+        <Chip
+          color="primary"
+          sx={{ ':hover': { cursor: 'pointer' }, m: 0.25 }}
+          label={isSearchWin ? t('back') : t('addUsers')}
+          icon={isSearchWin ? <ChevronLeftIcon /> : <AddIcon />}
+          onClick={() => setSearchWin((prev) => !prev)}
+        />
+        <TransitionGroup>
+          {checkedUsers.map(({ login, _id }) => (
+            <Grow key={_id}>
+              <Chip label={login} onDelete={() => handleToggle(_id)} sx={{ m: 0.25 }} />
+            </Grow>
+          ))}
+        </TransitionGroup>
+      </Paper>
     </ModalWithForm>
   );
 };

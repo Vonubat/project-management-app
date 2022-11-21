@@ -11,15 +11,11 @@ import { FormControl } from 'types/formInput';
 import { EditBoardFormFields } from 'types/boards';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
 import { authSelector } from 'store/authSlice';
-import {
-  boardListSelector,
-  updateBoard,
-  createBoard,
-  updateLocalBoard,
-} from 'store/boardListSlice';
+import { updateBoard, createBoard, updateLocalBoard } from 'store/boardListSlice';
 import { Add as AddIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
 import { Chip, Collapse, Grow, Paper } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
+import { usersSelector } from 'store/usersSlice';
 
 const paperStyles = {
   display: 'flex',
@@ -40,7 +36,7 @@ const EditBoardForm: FC = () => {
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.board}`;
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const { userId } = useAppSelector(authSelector);
-  const { users } = useAppSelector(boardListSelector);
+  const { users } = useAppSelector(usersSelector);
   const { [isOpenKey]: isOpen, boardData } = useAppSelector(modalSelector);
   const dispatch = useAppDispatch();
 

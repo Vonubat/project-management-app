@@ -121,6 +121,11 @@ const resources = {
         editTask: 'Edit task',
         delTask: 'Are you sure you want to delete the task?',
       },
+      search: {
+        search: 'Search…',
+        back: 'Back',
+        addUsers: 'Add users',
+      },
     },
   },
   ru: {
@@ -241,6 +246,11 @@ const resources = {
         addTask: 'Добавить задачу',
         editTask: 'Редактировать задачу',
         delTask: 'Вы действительно хотите удалить задачу?',
+      },
+      search: {
+        search: 'Поиск…',
+        back: 'Назад',
+        addUsers: 'Добавить пользователей',
       },
     },
   },
