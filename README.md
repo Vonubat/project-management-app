@@ -14,7 +14,10 @@ https://project-management-system-app.netlify.app/
 - [x] Create column page.
 - [x] Add column functionality (add, edit, delete, loading).
 - [x] Add tasks functionality (add, edit, delete, loading).
-- [x] Pressing the Sign In / Sign up button redirects a user to the route with the Sign In / Sign up form. **(AlexanderSUS)**
+- [x] Refactor, fixes various parts of app.
+- [ ] Add functionality of tasks assigning to another users.
+- [ ] Capture the feature video tutorials for welcome page.
+- [ ] Create templetes of columns/tasks for new users.
 
 ### Tasks list (AlexanderSUS)
 
