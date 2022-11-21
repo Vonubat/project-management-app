@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import ColumnsService from 'services/columnsService';
-import { ColumnData, ColumnParams, DndColumnData } from 'types/columns';
+import { ColumnData, DndColumnData } from 'types/columns';
 import { AsyncThunkConfig } from 'types/store';
 import { moveItem } from 'utils/moveItem';
 import { sortOrder } from 'utils/sortByOrder';
@@ -52,14 +52,20 @@ export const createColumn = createAsyncThunk<ColumnData, { title: string }, Asyn
   }
 );
 
-export const updateColumn = createAsyncThunk<ColumnData, ColumnParams, AsyncThunkConfig>(
+export const updateColumn = createAsyncThunk<ColumnData, { title: string }, AsyncThunkConfig>(
   'columns/update',
-  async (data, { getState, rejectWithValue, dispatch }) => {
+  async (title, { getState, rejectWithValue, dispatch }) => {
     const { currentBoardId } = getState().boardListStore;
     const { currentColumnId } = getState().columnsStore;
 
     try {
-      const res = await ColumnsService.updateColumn(currentBoardId, currentColumnId, data);
+      const currentColumn = getState().columnsStore.columns.find((c) => c._id === currentColumnId);
+      if (!currentColumn) throw new Error('COLUMN ID IS NOT DEFINED'); // TODO HANDLE THIS CASE
+
+      const res = await ColumnsService.updateColumn(currentBoardId, currentColumnId, {
+        ...currentColumn,
+        ...title,
+      });
 
       return res.data;
     } catch (err) {
@@ -154,7 +160,7 @@ const columnsSlice = createSlice({
       moveItem(state.columns, dragOrder, dropOrder);
       state.columns = state.columns.map((c, index) => ({ ...c, order: index }));
     },
-    updateLocalColumn: (state, { payload }: PayloadAction<ColumnParams>) => {
+    updateLocalColumn: (state, { payload }: PayloadAction<{ title: string }>) => {
       const updateIndex = state.columns.findIndex((c) => c._id === state.currentColumnId);
       state.columns[updateIndex] = { ...state.columns[updateIndex], ...payload };
     },

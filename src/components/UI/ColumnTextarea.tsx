@@ -20,11 +20,10 @@ import { tasksSelector } from 'store/tasksSlice';
 type TextareaProps = {
   children?: React.ReactNode;
   columnId: string;
-  order: number;
   value: string;
 };
 
-const ColumnTextarea: FC<TextareaProps> = ({ value, columnId, order }) => {
+const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [hasFocus, setFocus] = useState(false);
@@ -55,9 +54,8 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId, order }) => {
     }
 
     dispatch(setCurrentColumnId(columnId));
-    //TODO find out can we remove order from here
-    dispatch(updateLocalColumn({ title: currentValue, order }));
-    dispatch(updateColumn({ title: currentValue, order }));
+    dispatch(updateLocalColumn({ title: currentValue }));
+    dispatch(updateColumn({ title: currentValue }));
 
     setPreviousValue(currentValue);
   };
