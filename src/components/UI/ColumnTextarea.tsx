@@ -15,7 +15,7 @@ import ConfirmModal from 'components/ConfirmModal';
 import { useTranslation } from 'react-i18next';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { tasksSelector } from 'store/tasksSlice';
+import { clearLocalTaskByColumnId, tasksSelector } from 'store/tasksSlice';
 
 type TextareaProps = {
   children?: React.ReactNode;
@@ -54,8 +54,8 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
     }
 
     dispatch(setCurrentColumnId(columnId));
-    dispatch(updateLocalColumn({ title: currentValue }));
-    dispatch(updateColumn({ title: currentValue }));
+    dispatch(updateLocalColumn(currentValue));
+    dispatch(updateColumn(currentValue));
 
     setPreviousValue(currentValue);
   };
@@ -64,6 +64,7 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
     //TODO find out can we use currentColumnId
     dispatch(deleteLocalColumn(columnId));
     dispatch(deleteColumn(columnId));
+    dispatch(clearLocalTaskByColumnId(columnId));
     closeConfirmModal();
   };
 
