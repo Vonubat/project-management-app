@@ -88,10 +88,23 @@ export const deleteBoard = createAsyncThunk<BoardData, string, AsyncThunkConfig>
   }
 );
 
-export const getAllUsers = createAsyncThunk<UserData[]>('users/getAll', async () => {
-  const res = await UsersService.getAllUsers();
-  return res.data;
-});
+export const getAllUsers = createAsyncThunk<UserData[], void, AsyncThunkConfig>(
+  'users/getAll',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await UsersService.getAllUsers();
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
+
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue(error.response.status);
+    }
+  }
+);
 
 interface BoardsState {
   boards: BoardData[];
@@ -99,7 +112,6 @@ interface BoardsState {
   isAddBoardLoading: boolean;
   boardLoadingArr: string[];
   usersLoading: boolean;
-  isLoading: boolean;
   currentBoardId: string;
 }
 
@@ -109,7 +121,6 @@ const initialBoardsState: BoardsState = {
   isAddBoardLoading: false,
   boardLoadingArr: [],
   usersLoading: false,
-  isLoading: false,
   currentBoardId: '',
 };
 
@@ -125,13 +136,8 @@ const boardListSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getBoardsByUser.pending, (state) => {
-      state.isLoading = true;
-    });
-
     builder.addCase(getBoardsByUser.fulfilled, (state, { payload }) => {
       state.boards = payload;
-      state.isLoading = false;
     });
 
     builder.addCase(createBoard.pending, (state) => {
@@ -163,7 +169,6 @@ const boardListSlice = createSlice({
     });
 
     builder.addMatcher(isRejectedAction, (state) => {
-      state.isLoading = false;
       state.usersLoading = false;
       state.boardLoadingArr = [];
     });

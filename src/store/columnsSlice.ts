@@ -4,7 +4,6 @@ import { Status } from 'constants/constants';
 import ColumnsService from 'services/columnsService';
 import { ColumnData, ColumnParams, DndColumnData } from 'types/columns';
 import { AsyncThunkConfig } from 'types/store';
-import { isFulfilledAction, isRejectedAction } from 'utils/actionTypePredicates';
 import { moveItem } from 'utils/moveItem';
 import { sortOrder } from 'utils/sortByOrder';
 
@@ -153,10 +152,6 @@ const columnsSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    builder.addCase(getColumnsInBoards.pending, (state) => {
-      state.status = Status.pending;
-    });
-
     builder.addCase(getColumnsInBoards.fulfilled, (state, { payload }) => {
       state.columns = payload.sort(sortOrder);
     });
@@ -179,14 +174,6 @@ const columnsSlice = createSlice({
     builder.addCase(deleteColumn.fulfilled, (state, { payload }) => {
       state.columns = state.columns.filter((column) => column._id !== payload._id);
       state.columnLoadingArr = state.columnLoadingArr.filter((id) => payload._id !== id);
-    });
-
-    builder.addMatcher(isRejectedAction, (state) => {
-      state.status = Status.failed;
-    });
-
-    builder.addMatcher(isFulfilledAction, (state) => {
-      state.status = Status.succeeded;
     });
   },
 });
