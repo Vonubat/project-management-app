@@ -10,7 +10,7 @@ import {
   tasksSelector,
 } from 'store/tasksSlice';
 import Task from './UI/Task';
-import { DropTaskItem, TaskData } from 'types/tasks';
+import { DropTaskItem } from 'types/tasks';
 import { openModalForm } from 'store/modalSlice';
 import { DndType, TypeofModal } from 'constants/constants';
 import { setCurrentColumnId } from 'store/columnsSlice';
@@ -77,15 +77,8 @@ const TasksPreview: FC<Props> = ({ columnId }) => {
           backgroundColor: isOver ? 'blue' : 'white',
         }}
       >
-        {tasks[columnId]?.map(({ _id, title, description, columnId, order }: TaskData) => (
-          <Task
-            key={_id}
-            taskId={_id}
-            columnId={columnId}
-            taskTitle={title}
-            taskDescription={description}
-            order={order}
-          />
+        {tasks[columnId]?.map((task) => (
+          <Task key={task._id} taskData={task} />
         ))}
       </StyledBox>
       <ColumnsAddBtn sx={{ mt: 3 }} cb={openModal}>

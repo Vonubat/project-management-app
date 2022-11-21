@@ -62,3 +62,8 @@ export type DndTaskData = {
   dropOrder: number;
   dropColumnId: string;
 };
+
+export type UpdateLocalTaskParam = {
+  taskId: string;
+  data: UpdateTaskParams;
+};
