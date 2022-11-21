@@ -13,11 +13,11 @@ import { Edit, OpenWith, Delete } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import ConfirmModal from './ConfirmModal';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { deleteBoard } from 'store/boardListSlice';
+import { deleteBoard, deleteLocalBoard } from 'store/boardListSlice';
 import { Path } from 'constants/routing';
 import { BoardData } from 'types/boards';
 import { openModalForm, setBoardParams } from 'store/modalSlice';
-import { boardListSelector, setBoardLoading } from 'store/boardListSlice';
+import { boardListSelector } from 'store/boardListSlice';
 import { TypeofModal } from 'constants/constants';
 
 type Props = {
@@ -33,8 +33,9 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
   const dispatch = useAppDispatch();
 
   function submit() {
-    dispatch(setBoardLoading(_id));
     dispatch(deleteBoard(_id));
+    dispatch(deleteLocalBoard(_id));
+
     closeModal();
   }
 

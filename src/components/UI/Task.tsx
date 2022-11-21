@@ -7,8 +7,8 @@ import {
   changeLocalTaskOrder,
   changeTaskOrder,
   deleteTask,
-  setCurrentTaskInfo,
-  setTasksLoading,
+  deleteLocalTask,
+  setCurrentTask,
 } from 'store/tasksSlice';
 import ConfirmModal from 'components/ConfirmModal';
 import CustomIconBtn from './CustomIconBtn';
@@ -18,7 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { openModalForm } from 'store/modalSlice';
 import isTouchEnabled from 'utils/isTouchEnabled';
 import { ConnectableElement, useDrag, useDrop } from 'react-dnd';
-import { DropTaskItem } from 'types/tasks';
+import { DropTaskItem, TaskData } from 'types/tasks';
 
 const taskStyles = {
   display: 'flex',
@@ -41,14 +41,11 @@ const taskStyles = {
 
 type Props = {
   children?: React.ReactNode;
-  taskTitle: string;
-  taskDescription: string;
-  columnId: string;
-  taskId: string;
-  order: number;
+  taskData: TaskData;
 };
 
-const Task: FC<Props> = ({ taskTitle, taskDescription, columnId, taskId, order }) => {
+const Task: FC<Props> = ({ taskData }) => {
+  const { _id, columnId, title, order } = taskData;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
@@ -57,7 +54,7 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, columnId, taskId, order }
   const [{ isDragging }, drag] = useDrag({
     type: DndType.task,
     item: {
-      id: taskId,
+      id: _id,
       columnId,
       order,
     },
@@ -88,8 +85,9 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, columnId, taskId, order }
 
   const submit = (e: SyntheticEvent) => {
     e.stopPropagation();
-    dispatch(setTasksLoading(columnId));
-    dispatch(deleteTask({ columnId, taskId }));
+    dispatch(setCurrentTask(taskData));
+    dispatch(deleteLocalTask());
+    dispatch(deleteTask());
     closeConfirmModal(e);
   };
 
@@ -104,13 +102,7 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, columnId, taskId, order }
   };
 
   const openEditTaskModal = () => {
-    dispatch(
-      setCurrentTaskInfo({
-        currentTaskId: taskId,
-        currentTaskTitle: taskTitle,
-        currentTaskDescription: taskDescription,
-      })
-    );
+    dispatch(setCurrentTask(taskData));
     dispatch(setCurrentColumnId(columnId));
     dispatch(openModalForm(TypeofModal.editTask));
   };
@@ -132,7 +124,7 @@ const Task: FC<Props> = ({ taskTitle, taskDescription, columnId, taskId, order }
       onClick={openEditTaskModal}
     >
       <Typography variant="h6" noWrap>
-        {taskTitle}
+        {title}
       </Typography>
 
       {(isHovering || isTouchScreenDevice) && (

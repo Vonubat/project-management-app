@@ -1,17 +1,20 @@
-import { createSlice, isFulfilled, isRejected } from '@reduxjs/toolkit';
-import { ActionName, Severity, SliceName } from 'constants/constants';
+import { createSlice, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
+import { Severity } from 'constants/constants';
 import { getTranslationString } from 'utils/getTranslationString';
+import { isGetAction, isInfoAction, isNoNotificationAction, isSuccessAction } from './util';
 
 type NotificationState = {
   message: string;
   severity: Severity;
   isOpen: boolean;
+  isLoading: boolean;
 };
 
 const notificationInitialState: NotificationState = {
   message: '',
   severity: Severity.info,
   isOpen: false,
+  isLoading: false,
 };
 
 const notificationSlice = createSlice({
@@ -23,9 +26,19 @@ const notificationSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addMatcher(isPending, (state, action) => {
+      if (isGetAction(action)) {
+        state.isLoading = true;
+      }
+    });
+
     builder.addMatcher(isRejected, (state, action) => {
       state.severity = Severity.error;
       state.isOpen = true;
+
+      if (isGetAction(action)) {
+        state.isLoading = false;
+      }
 
       if (action.payload) {
         state.message = `responseError.error${action.payload}`;
@@ -39,26 +52,25 @@ const notificationSlice = createSlice({
     });
 
     builder.addMatcher(isFulfilled, (state, action) => {
-      const [sliceName, actionName] = action.type.split('/');
+      if (isGetAction(action)) {
+        state.isLoading = false;
+      }
 
-      if (
-        actionName === ActionName.getAll ||
-        actionName === ActionName.getUser ||
-        actionName === ActionName.changeOrder
-      ) {
+      if (isNoNotificationAction(action)) {
         return;
       }
 
       state.isOpen = true;
       state.message = `responseSuccess.${getTranslationString(action)}`;
 
-      if (sliceName === SliceName.auth || actionName == ActionName.delete) {
+      if (isInfoAction(action)) {
         state.severity === Severity.info;
         return;
       }
 
-      if (actionName === ActionName.create || actionName === ActionName.update) {
+      if (isSuccessAction(action)) {
         state.severity = Severity.success;
+        return;
       }
     });
   },

@@ -2,9 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { Status } from 'constants/constants';
 import ColumnsService from 'services/columnsService';
-import { ColumnData, ColumnParams, DndColumnData } from 'types/columns';
+import { ColumnData, DndColumnData } from 'types/columns';
 import { AsyncThunkConfig } from 'types/store';
-import { isFulfilledAction, isRejectedAction } from 'utils/actionTypePredicates';
 import { moveItem } from 'utils/moveItem';
 import { sortOrder } from 'utils/sortByOrder';
 
@@ -53,14 +52,20 @@ export const createColumn = createAsyncThunk<ColumnData, { title: string }, Asyn
   }
 );
 
-export const updateColumn = createAsyncThunk<ColumnData, ColumnParams, AsyncThunkConfig>(
+export const updateColumn = createAsyncThunk<ColumnData, { title: string }, AsyncThunkConfig>(
   'columns/update',
-  async (data, { getState, rejectWithValue }) => {
+  async (title, { getState, rejectWithValue, dispatch }) => {
     const { currentBoardId } = getState().boardListStore;
     const { currentColumnId } = getState().columnsStore;
 
     try {
-      const res = await ColumnsService.updateColumn(currentBoardId, currentColumnId, data);
+      const currentColumn = getState().columnsStore.columns.find((c) => c._id === currentColumnId);
+      if (!currentColumn) throw new Error('COLUMN ID IS NOT DEFINED'); // TODO HANDLE THIS CASE
+
+      const res = await ColumnsService.updateColumn(currentBoardId, currentColumnId, {
+        ...currentColumn,
+        ...title,
+      });
 
       return res.data;
     } catch (err) {
@@ -70,14 +75,17 @@ export const updateColumn = createAsyncThunk<ColumnData, ColumnParams, AsyncThun
         throw err;
       }
 
+      dispatch(getColumnsInBoards(currentBoardId));
+
       return rejectWithValue(error.response.status);
     }
   }
 );
 
+//TODO check if we can use currentColumnId
 export const deleteColumn = createAsyncThunk<ColumnData, string, AsyncThunkConfig>(
   'columns/delete',
-  async (columnId, { rejectWithValue, getState }) => {
+  async (columnId, { rejectWithValue, getState, dispatch }) => {
     const { currentBoardId } = getState().boardListStore;
     try {
       const res = await ColumnsService.deleteColumn(currentBoardId, columnId);
@@ -89,6 +97,8 @@ export const deleteColumn = createAsyncThunk<ColumnData, string, AsyncThunkConfi
       if (!error.response) {
         throw err;
       }
+
+      dispatch(getColumnsInBoards(currentBoardId));
 
       return rejectWithValue(error.response.status);
     }
@@ -150,13 +160,17 @@ const columnsSlice = createSlice({
       moveItem(state.columns, dragOrder, dropOrder);
       state.columns = state.columns.map((c, index) => ({ ...c, order: index }));
     },
+    updateLocalColumn: (state, { payload }: PayloadAction<{ title: string }>) => {
+      const updateIndex = state.columns.findIndex((c) => c._id === state.currentColumnId);
+      state.columns[updateIndex] = { ...state.columns[updateIndex], ...payload };
+    },
+    //TODO check can we use currentColumnId
+    deleteLocalColumn: (state, { payload }: PayloadAction<string>) => {
+      state.columns = state.columns.filter((c) => c._id !== payload);
+    },
   },
 
   extraReducers: (builder) => {
-    builder.addCase(getColumnsInBoards.pending, (state) => {
-      state.status = Status.pending;
-    });
-
     builder.addCase(getColumnsInBoards.fulfilled, (state, { payload }) => {
       state.columns = payload.sort(sortOrder);
     });
@@ -168,32 +182,17 @@ const columnsSlice = createSlice({
     builder.addCase(createColumn.fulfilled, (state, { payload }) => {
       state.columns.push(payload);
     });
-
-    builder.addCase(updateColumn.fulfilled, (state, { payload }) => {
-      state.columns = state.columns.map((column) =>
-        column._id === payload._id ? payload : column
-      );
-      state.columnLoadingArr = state.columnLoadingArr.filter((id) => payload._id !== id);
-    });
-
-    builder.addCase(deleteColumn.fulfilled, (state, { payload }) => {
-      state.columns = state.columns.filter((column) => column._id !== payload._id);
-      state.columnLoadingArr = state.columnLoadingArr.filter((id) => payload._id !== id);
-    });
-
-    builder.addMatcher(isRejectedAction, (state) => {
-      state.status = Status.failed;
-    });
-
-    builder.addMatcher(isFulfilledAction, (state) => {
-      state.status = Status.succeeded;
-    });
   },
 });
 
 export default columnsSlice.reducer;
 
-export const { setCurrentColumnId, setColumnLoading, changeLocalColumnOrder } =
-  columnsSlice.actions;
+export const {
+  setCurrentColumnId,
+  setColumnLoading,
+  changeLocalColumnOrder,
+  updateLocalColumn,
+  deleteLocalColumn,
+} = columnsSlice.actions;
 
 export const columnsSelector = (state: { columnsStore: ColumnsState }) => state.columnsStore;

@@ -85,7 +85,7 @@ const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId, order })
       }}
       ref={(node: ConnectableElement) => drag(drop(node))}
     >
-      <ColumnTextarea value={columnTitle} columnId={columnId} order={order} />
+      <ColumnTextarea value={columnTitle} columnId={columnId} />
       <TasksPreview columnId={columnId} />
       {isLoading && <LinearProgress sx={{ width: 1 }} />}
     </Box>

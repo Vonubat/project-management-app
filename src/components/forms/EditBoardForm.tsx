@@ -11,7 +11,12 @@ import { FormControl } from 'types/formInput';
 import { EditBoardFormFields } from 'types/boards';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
 import { authSelector } from 'store/authSlice';
-import { boardListSelector, updateBoard, createBoard, setBoardLoading } from 'store/boardListSlice';
+import {
+  boardListSelector,
+  updateBoard,
+  createBoard,
+  updateLocalBoard,
+} from 'store/boardListSlice';
 import { Add as AddIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
 import { Chip, Collapse, Grow, Paper } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
@@ -59,7 +64,7 @@ const EditBoardForm: FC = () => {
     const boardParams = { ...data, owner: userId as string, users: checkedUsersID };
     if (boardData) {
       dispatch(updateBoard([boardData._id, boardParams]));
-      dispatch(setBoardLoading(boardData._id));
+      dispatch(updateLocalBoard([boardData._id, boardParams]));
     } else {
       dispatch(createBoard(boardParams));
     }

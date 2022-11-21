@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Page from 'components/Page';
 import { Box, Typography, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector, useImperativeDisableScroll } from 'hooks/hooks';
-import Loader from 'components/Loader';
-import { MediaQuery, Status, TypeofModal } from 'constants/constants';
+import { MediaQuery, TypeofModal } from 'constants/constants';
 import { columnsSelector, getColumnsInBoards } from 'store/columnsSlice';
 import { useParams } from 'react-router-dom';
 import { ColumnData } from 'types/columns';
@@ -37,8 +36,7 @@ const Columns = () => {
   const isBreakPoint = useMediaQuery(MediaQuery.minWidth750);
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const { boardId } = useParams();
-  const { columns, status } = useAppSelector(columnsSelector);
-  const [isLoading, setIsLoading] = useState(false);
+  const { columns } = useAppSelector(columnsSelector);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -49,10 +47,6 @@ const Columns = () => {
   }, [dispatch, boardId]);
 
   useImperativeDisableScroll();
-
-  useEffect(() => {
-    setIsLoading(status === Status.pending);
-  }, [status]);
 
   return (
     <Page sx={{ my: '0rem' }}>
@@ -70,7 +64,6 @@ const Columns = () => {
       <AddColumnForm />
       <AddTaskForm />
       <EditTaskForm />
-      {isLoading && <Loader />}
     </Page>
   );
 };

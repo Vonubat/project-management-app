@@ -93,3 +93,14 @@ export enum DndType {
   task = 'task',
   column = 'column',
 }
+
+export const EMPTY_TASK = {
+  _id: '',
+  boardId: '',
+  columnId: '',
+  description: '',
+  order: 0,
+  title: '',
+  userId: '',
+  users: [],
+};
