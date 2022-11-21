@@ -4,7 +4,7 @@ import { Box, Typography, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector, useImperativeDisableScroll } from 'hooks/hooks';
 import { MediaQuery, TypeofModal } from 'constants/constants';
-import { columnsSelector, getColumnsInBoards } from 'store/columnsSlice';
+import { clearLocalColumns, columnsSelector, getColumnsInBoards } from 'store/columnsSlice';
 import { useParams } from 'react-router-dom';
 import { ColumnData } from 'types/columns';
 import ColumnPreview from 'components/ColumnPreview';
@@ -18,6 +18,7 @@ import styled from '@emotion/styled';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { setCurrentBoard } from 'store/boardListSlice';
+import { clearAllLocalTasks } from 'store/tasksSlice';
 
 const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPoint' })<{
   isBreakPoint: boolean;
@@ -45,6 +46,13 @@ const Columns = () => {
       dispatch(getColumnsInBoards(boardId));
     }
   }, [dispatch, boardId]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearAllLocalTasks());
+      dispatch(clearLocalColumns());
+    };
+  }, [dispatch]);
 
   useImperativeDisableScroll();
 

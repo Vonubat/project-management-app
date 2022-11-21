@@ -200,6 +200,13 @@ const tasksSlice = createSlice({
     deleteLocalTask: (state) => {
       const { columnId, order } = state.currentTask;
       state.tasks[columnId].splice(order, 1);
+      state.tasks[columnId] = state.tasks[columnId].map((t, index) => ({ ...t, order: index }));
+    },
+    clearAllLocalTasks: (state) => {
+      state.tasks = {};
+    },
+    clearLocalTaskByColumnId: (state, { payload }: PayloadAction<string>) => {
+      delete state.tasks[payload];
     },
   },
   extraReducers: (builder) => {
@@ -236,6 +243,8 @@ export const {
   changeLocalTaskOrder,
   updateLocalTask,
   deleteLocalTask,
+  clearAllLocalTasks,
+  clearLocalTaskByColumnId,
 } = tasksSlice.actions;
 
 export const tasksSelector = (state: { tasksStore: TasksState }) => state.tasksStore;
