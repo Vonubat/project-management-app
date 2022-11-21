@@ -7,20 +7,16 @@ import { useForm } from 'react-hook-form';
 import ModalWithForm from 'components/ModalWithForm';
 import ControlledFormInput from 'components/ControlledFormInput';
 import { FormControl } from 'types/formInput';
-import { setTasksLoading, tasksSelector, updateTask } from 'store/tasksSlice';
+import { tasksSelector, updateLocalTask, updateTask } from 'store/tasksSlice';
 import { TaskFields } from 'types/tasks';
 import { authSelector } from 'store/authSlice';
 import { TypeofModal } from 'constants/constants';
-import { columnsSelector } from 'store/columnsSlice';
 
 const EditTaskForm: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const {
-    currentTaskInfo: { currentTaskId: taskId },
-    currentTaskInfo: { currentTaskDescription: description },
-    currentTaskInfo: { currentTaskTitle: title },
+    currentTask: { _id: taskId, description, title },
   } = useAppSelector(tasksSelector);
-  const { currentColumnId: columnId } = useAppSelector(columnsSelector);
   const { userId } = useAppSelector(authSelector);
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.editTask}`;
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
@@ -44,8 +40,11 @@ const EditTaskForm: FC = () => {
 
   const onSubmit = (data: TaskFields) => {
     if (data.title !== title || data.description !== description) {
-      dispatch(setTasksLoading(columnId));
-      dispatch(updateTask({ taskId, data: { ...data, users: [userId] } })); //TODO fix users // temporary plug
+      //TODO fix users // temporary plug
+      const updateParams = { taskId, data: { ...data, users: [userId] } };
+
+      dispatch(updateLocalTask(updateParams));
+      dispatch(updateTask(updateParams));
     }
     dispatch(closeModalForm(TypeofModal.editTask));
   };

@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { ApiRoutes } from 'constants/constants';
-import { TaskData, TaskParamsCreate, TaskParamsUpdate } from 'types/tasks';
+import { TaskData, TaskParamsCreate, TaskParamsUpdate, UpdateTaskSetData } from 'types/tasks';
 import api from './api';
 
 export default class TasksService {
@@ -51,5 +51,9 @@ export default class TasksService {
     return api.delete(
       `${ApiRoutes.boards}/${boardId}${ApiRoutes.columns}/${columnId}${ApiRoutes.tasks}/${taskId}`
     );
+  }
+
+  static updateTaskSet(data: UpdateTaskSetData): Promise<AxiosResponse<TaskData[]>> {
+    return api.patch(ApiRoutes.tasksSet, data);
   }
 }

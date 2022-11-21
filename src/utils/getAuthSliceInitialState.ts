@@ -5,7 +5,6 @@ export const getAuthSliceInitialState = (): AuthState => {
   const { login, userId } = getUserDataFromLocalStorage();
 
   return {
-    isLoading: false,
     isAuth: !!userId,
     name: '',
     login,

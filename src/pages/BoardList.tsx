@@ -4,7 +4,6 @@ import styled from '@emotion/styled';
 import { useTranslation } from 'react-i18next';
 import Page from 'components/Page';
 import BoardPreview from 'components/BoardPreview';
-import Loader from 'components/Loader';
 import EditBoardForm from 'components/forms/EditBoardForm';
 import { boardListSelector, getBoardsByUser, getAllUsers } from 'store/boardListSlice';
 import { clearBoardParams, openModalForm } from 'store/modalSlice';
@@ -21,7 +20,7 @@ const StyledBox = styled(Box)({
 export default function Boards() {
   const isLargeScreen = useMediaQuery(MediaQuery.minWidth380);
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
-  const { boards, isLoading, isAddBoardLoading, usersLoading } = useAppSelector(boardListSelector);
+  const { boards, isAddBoardLoading } = useAppSelector(boardListSelector);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -37,27 +36,21 @@ export default function Boards() {
   return (
     <Page>
       <StyledBox sx={{ mx: isLargeScreen ? 4 : 1 }}>
-        {isLoading || usersLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {boards.map((board) => (
-              <BoardPreview key={board._id} boardData={board} />
-            ))}
-            <Button
-              sx={{ width: 310, height: 310 }}
-              variant="outlined"
-              onClick={openAddBoardModalForm}
-              disabled={isAddBoardLoading}
-            >
-              {isAddBoardLoading ? (
-                <CircularProgress color="inherit" size={100} />
-              ) : (
-                <Typography variant="h4">{t('add')}</Typography>
-              )}
-            </Button>
-          </>
-        )}
+        {boards.map((board) => (
+          <BoardPreview key={board._id} boardData={board} />
+        ))}
+        <Button
+          sx={{ width: 310, height: 310 }}
+          variant="outlined"
+          onClick={openAddBoardModalForm}
+          disabled={isAddBoardLoading}
+        >
+          {isAddBoardLoading ? (
+            <CircularProgress color="inherit" size={100} />
+          ) : (
+            <Typography variant="h4">{t('add')}</Typography>
+          )}
+        </Button>
       </StyledBox>
       <EditBoardForm />
     </Page>

@@ -14,7 +14,7 @@ const ToastBox = () => {
       open={isOpen}
       autoHideDuration={6000}
       onClose={() => dispatch(closeToast())}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
     >
       <Alert variant="filled" severity={severity}>
         {t(message)}
