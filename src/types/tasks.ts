@@ -43,3 +43,27 @@ export type CurrentTaskInfo = {
   currentTaskTitle: TaskData['title'];
   currentTaskDescription: TaskData['description'];
 };
+
+export type UpdateTaskSetData = Array<{
+  _id: string;
+  order: number;
+  columnId: string;
+}>;
+
+export type DropTaskItem = {
+  id: string;
+  order: number;
+  columnId: string;
+};
+
+export type DndTaskData = {
+  dragOrder: number;
+  dragColumnId: string;
+  dropOrder: number;
+  dropColumnId: string;
+};
+
+export type UpdateLocalTaskParam = {
+  taskId: string;
+  data: UpdateTaskParams;
+};

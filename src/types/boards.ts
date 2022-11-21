@@ -1,3 +1,4 @@
+import BoardsService from 'services/boardsService';
 import { UserData } from './users';
 
 export type BoardData = BoardParams & {
@@ -12,3 +13,5 @@ export type BoardParams = {
 };
 
 export type EditBoardFormFields = Pick<BoardParams, 'title' | 'description'>;
+
+export type BoardServiceUpdateParams = Parameters<typeof BoardsService.updateBoard>;

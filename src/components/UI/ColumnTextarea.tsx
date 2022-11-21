@@ -4,9 +4,10 @@ import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import React, { FC, useState, ChangeEvent } from 'react';
 import {
   deleteColumn,
-  setColumnLoading,
+  deleteLocalColumn,
   setCurrentColumnId,
   updateColumn,
+  updateLocalColumn,
 } from 'store/columnsSlice';
 import CustomIconBtn from './CustomIconBtn';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -19,11 +20,10 @@ import { tasksSelector } from 'store/tasksSlice';
 type TextareaProps = {
   children?: React.ReactNode;
   columnId: string;
-  order: number;
   value: string;
 };
 
-const ColumnTextarea: FC<TextareaProps> = ({ value, columnId, order }) => {
+const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [hasFocus, setFocus] = useState(false);
@@ -54,14 +54,15 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId, order }) => {
     }
 
     dispatch(setCurrentColumnId(columnId));
-    dispatch(setColumnLoading(columnId));
-    dispatch(updateColumn({ title: currentValue, order }));
+    dispatch(updateLocalColumn({ title: currentValue }));
+    dispatch(updateColumn({ title: currentValue }));
 
     setPreviousValue(currentValue);
   };
 
   const submit = () => {
-    dispatch(setColumnLoading(columnId));
+    //TODO find out can we use currentColumnId
+    dispatch(deleteLocalColumn(columnId));
     dispatch(deleteColumn(columnId));
     closeConfirmModal();
   };

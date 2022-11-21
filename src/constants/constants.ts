@@ -12,6 +12,7 @@ export enum ApiRoutes {
   columns = '/columns',
   columnsSet = '/columnsSet',
   tasks = '/tasks',
+  tasksSet = '/tasksSet',
   file = '/file',
   points = '/points',
 }
@@ -81,8 +82,25 @@ export enum ActionName {
   create = 'create',
   update = 'update',
   delete = 'delete',
+  changeOrder = 'changeOrder',
 }
 
 export enum SliceName {
   auth = 'auth',
 }
+
+export enum DndType {
+  task = 'task',
+  column = 'column',
+}
+
+export const EMPTY_TASK = {
+  _id: '',
+  boardId: '',
+  columnId: '',
+  description: '',
+  order: 0,
+  title: '',
+  userId: '',
+  users: [],
+};

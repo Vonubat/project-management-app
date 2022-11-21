@@ -3,9 +3,8 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Page from 'components/Page';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { authSelector, clearAuthPageData } from 'store/authSlice';
-import Loader from 'components/Loader';
+import { useAppDispatch } from 'hooks/hooks';
+import { clearAuthPageData } from 'store/authSlice';
 import { Typography } from '@mui/material';
 
 const boxStyles = {
@@ -27,7 +26,6 @@ type Props = {
 };
 
 const AuthPage: FC<Props> = ({ icon, children, pageTitle }) => {
-  const { isLoading } = useAppSelector(authSelector);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -38,21 +36,15 @@ const AuthPage: FC<Props> = ({ icon, children, pageTitle }) => {
 
   return (
     <Page>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          <Container component="div" maxWidth="xs">
-            <Box sx={boxStyles}>
-              <Avatar sx={avatarStyle}>{icon}</Avatar>
-              <Typography component="h1" variant="h5">
-                {pageTitle}
-              </Typography>
-            </Box>
-            {children}
-          </Container>
-        </>
-      )}
+      <Container component="div" maxWidth="xs">
+        <Box sx={boxStyles}>
+          <Avatar sx={avatarStyle}>{icon}</Avatar>
+          <Typography component="h1" variant="h5">
+            {pageTitle}
+          </Typography>
+        </Box>
+        {children}
+      </Container>
     </Page>
   );
 };

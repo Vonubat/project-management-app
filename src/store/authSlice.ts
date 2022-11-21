@@ -58,7 +58,6 @@ const authSlice = createSlice({
   reducers: {
     clearAuthPageData: (state) => {
       state.created = null;
-      state.isLoading = false;
     },
     logOut: (state) => {
       state.isAuth = false;
@@ -86,21 +85,11 @@ const authSlice = createSlice({
       }
     });
 
-    builder.addMatcher(isPendingAction, (state) => {
-      state.isLoading = true;
-    });
-
     builder.addMatcher(isRejectedAction, (state, action) => {
-      state.isLoading = false;
-
       if (action.payload && action.payload === StatusCode.unauthorized) {
         state.isAuth = false;
         localStorage.removeItem(TOKEN);
       }
-    });
-
-    builder.addMatcher(isFulfilledAction, (state) => {
-      state.isLoading = false;
     });
   },
 });
