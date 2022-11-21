@@ -81,14 +81,15 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
       sx={{
         display: 'flex',
         alignItems: 'flex-start',
-        gap: 2,
+        justifyContent: 'space-between',
+        width: 280,
       }}
     >
       <TextareaAutosize
-        minRows={2}
+        minRows={1}
         maxLength={100}
         style={{
-          width: 230,
+          width: 220,
           padding: '5px',
           marginBottom: '2rem',
           fontSize: '20px',
@@ -128,14 +129,18 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
           </CustomIconBtn>
         )}
         {hasFocus && (
-          <>
+          <Box
+            sx={{
+              display: 'flex',
+            }}
+          >
             <CustomIconBtn size="small" color={DefaultColors.success} cb={() => handleBlur(false)}>
               <CheckCircleIcon />
             </CustomIconBtn>
             <CustomIconBtn size="small" color={DefaultColors.error} cb={() => handleBlur(true)}>
               <CancelIcon />
             </CustomIconBtn>
-          </>
+          </Box>
         )}
       </Box>
 
