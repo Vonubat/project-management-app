@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import BoardsService from 'services/boardsService';
-import { BoardData, BoardParams } from 'types/boards';
+import { BoardData, BoardParams, BoardServiceUpdateParams } from 'types/boards';
 import { AsyncThunkConfig } from 'types/store';
 import { isRejectedAction } from 'utils/actionTypePredicates';
 import { SignUpOkResponseData as UserData } from 'types/auth';
@@ -49,29 +49,30 @@ export const createBoard = createAsyncThunk<BoardData, BoardParams, AsyncThunkCo
   }
 );
 
-export const updateBoard = createAsyncThunk<
-  BoardData,
-  Parameters<typeof BoardsService.updateBoard>,
-  AsyncThunkConfig
->('boards/update', async (params, { rejectWithValue }) => {
-  try {
-    const res = await BoardsService.updateBoard(...params);
+export const updateBoard = createAsyncThunk<BoardData, BoardServiceUpdateParams, AsyncThunkConfig>(
+  'boards/update',
+  async (params, { rejectWithValue, dispatch }) => {
+    try {
+      const res = await BoardsService.updateBoard(...params);
 
-    return res.data;
-  } catch (err) {
-    const error = err as AxiosError;
+      return res.data;
+    } catch (err) {
+      const error = err as AxiosError;
 
-    if (!error.response) {
-      throw err;
+      if (!error.response) {
+        throw err;
+      }
+
+      dispatch(getBoardsByUser());
+
+      return rejectWithValue(error.response.status);
     }
-
-    return rejectWithValue(error.response.status);
   }
-});
+);
 
 export const deleteBoard = createAsyncThunk<BoardData, string, AsyncThunkConfig>(
   'boards/delete',
-  async (boardId, { rejectWithValue }) => {
+  async (boardId, { rejectWithValue, dispatch }) => {
     try {
       const res = await BoardsService.deleteBoard(boardId);
 
@@ -82,6 +83,8 @@ export const deleteBoard = createAsyncThunk<BoardData, string, AsyncThunkConfig>
       if (!error.response) {
         throw err;
       }
+
+      dispatch(getBoardsByUser());
 
       return rejectWithValue(error.response.status);
     }
@@ -134,6 +137,14 @@ const boardListSlice = createSlice({
     setCurrentBoard: (state, action: PayloadAction<string>) => {
       state.currentBoardId = action.payload;
     },
+    updateLocalBoard: (state, { payload }: PayloadAction<BoardServiceUpdateParams>) => {
+      const [boardId, data] = payload;
+      const updateIndex = state.boards.findIndex((b) => b._id === boardId);
+      state.boards[updateIndex] = { ...state.boards[updateIndex], ...data };
+    },
+    deleteLocalBoard: (state, { payload }: PayloadAction<string>) => {
+      state.boards = state.boards.filter((b) => b._id !== payload);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getBoardsByUser.fulfilled, (state, { payload }) => {
@@ -149,15 +160,15 @@ const boardListSlice = createSlice({
       state.isAddBoardLoading = false;
     });
 
-    builder.addCase(updateBoard.fulfilled, (state, { payload }) => {
-      state.boards = state.boards.map((board) => (board._id === payload._id ? payload : board));
-      state.boardLoadingArr = state.boardLoadingArr.filter((id) => payload._id !== id);
-    });
+    // builder.addCase(updateBoard.fulfilled, (state, { payload }) => {
+    //   state.boards = state.boards.map((board) => (board._id === payload._id ? payload : board));
+    //   state.boardLoadingArr = state.boardLoadingArr.filter((id) => payload._id !== id);
+    // });
 
-    builder.addCase(deleteBoard.fulfilled, (state, { payload }) => {
-      state.boards = state.boards.filter((board) => board._id !== payload._id);
-      state.boardLoadingArr = state.boardLoadingArr.filter((id) => payload._id !== id);
-    });
+    // builder.addCase(deleteBoard.fulfilled, (state, { payload }) => {
+    //   state.boards = state.boards.filter((board) => board._id !== payload._id);
+    //   state.boardLoadingArr = state.boardLoadingArr.filter((id) => payload._id !== id);
+    // });
 
     builder.addCase(getAllUsers.pending, (state) => {
       state.usersLoading = true;
@@ -176,6 +187,7 @@ const boardListSlice = createSlice({
 });
 
 export default boardListSlice.reducer;
-export const { setBoardLoading, setCurrentBoard } = boardListSlice.actions;
+export const { setBoardLoading, setCurrentBoard, updateLocalBoard, deleteLocalBoard } =
+  boardListSlice.actions;
 
 export const boardListSelector = (state: { boardListStore: BoardsState }) => state.boardListStore;

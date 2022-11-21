@@ -1,4 +1,4 @@
-import { isAsyncThunkAction, isPending } from '@reduxjs/toolkit';
+import { isAsyncThunkAction } from '@reduxjs/toolkit';
 import { signIn, signUp } from './authSlice';
 import {
   createBoard,
