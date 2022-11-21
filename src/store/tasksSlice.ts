@@ -198,10 +198,7 @@ const tasksSlice = createSlice({
       state.tasks[columnId][order] = { ...state.currentTask, ...payload.data };
     },
     deleteLocalTask: (state) => {
-      console.log(state.currentTask);
       const { columnId, order } = state.currentTask;
-      console.log(columnId);
-      console.log(order);
       state.tasks[columnId].splice(order, 1);
     },
   },

@@ -160,16 +160,6 @@ const boardListSlice = createSlice({
       state.isAddBoardLoading = false;
     });
 
-    // builder.addCase(updateBoard.fulfilled, (state, { payload }) => {
-    //   state.boards = state.boards.map((board) => (board._id === payload._id ? payload : board));
-    //   state.boardLoadingArr = state.boardLoadingArr.filter((id) => payload._id !== id);
-    // });
-
-    // builder.addCase(deleteBoard.fulfilled, (state, { payload }) => {
-    //   state.boards = state.boards.filter((board) => board._id !== payload._id);
-    //   state.boardLoadingArr = state.boardLoadingArr.filter((id) => payload._id !== id);
-    // });
-
     builder.addCase(getAllUsers.pending, (state) => {
       state.usersLoading = true;
     });
