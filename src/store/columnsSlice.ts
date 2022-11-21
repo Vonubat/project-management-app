@@ -54,7 +54,7 @@ export const createColumn = createAsyncThunk<ColumnData, { title: string }, Asyn
 
 export const updateColumn = createAsyncThunk<ColumnData, ColumnParams, AsyncThunkConfig>(
   'columns/update',
-  async (data, { getState, rejectWithValue }) => {
+  async (data, { getState, rejectWithValue, dispatch }) => {
     const { currentBoardId } = getState().boardListStore;
     const { currentColumnId } = getState().columnsStore;
 
@@ -69,14 +69,17 @@ export const updateColumn = createAsyncThunk<ColumnData, ColumnParams, AsyncThun
         throw err;
       }
 
+      dispatch(getColumnsInBoards(currentBoardId));
+
       return rejectWithValue(error.response.status);
     }
   }
 );
 
+//TODO check if we can use currentColumnId
 export const deleteColumn = createAsyncThunk<ColumnData, string, AsyncThunkConfig>(
   'columns/delete',
-  async (columnId, { rejectWithValue, getState }) => {
+  async (columnId, { rejectWithValue, getState, dispatch }) => {
     const { currentBoardId } = getState().boardListStore;
     try {
       const res = await ColumnsService.deleteColumn(currentBoardId, columnId);
@@ -88,6 +91,8 @@ export const deleteColumn = createAsyncThunk<ColumnData, string, AsyncThunkConfi
       if (!error.response) {
         throw err;
       }
+
+      dispatch(getColumnsInBoards(currentBoardId));
 
       return rejectWithValue(error.response.status);
     }
@@ -149,6 +154,14 @@ const columnsSlice = createSlice({
       moveItem(state.columns, dragOrder, dropOrder);
       state.columns = state.columns.map((c, index) => ({ ...c, order: index }));
     },
+    updateLocalColumn: (state, { payload }: PayloadAction<ColumnParams>) => {
+      const updateIndex = state.columns.findIndex((c) => c._id === state.currentColumnId);
+      state.columns[updateIndex] = { ...state.columns[updateIndex], ...payload };
+    },
+    //TODO check can we use currentColumnId
+    deleteLocalColumn: (state, { payload }: PayloadAction<string>) => {
+      state.columns = state.columns.filter((c) => c._id !== payload);
+    },
   },
 
   extraReducers: (builder) => {
@@ -163,24 +176,17 @@ const columnsSlice = createSlice({
     builder.addCase(createColumn.fulfilled, (state, { payload }) => {
       state.columns.push(payload);
     });
-
-    builder.addCase(updateColumn.fulfilled, (state, { payload }) => {
-      state.columns = state.columns.map((column) =>
-        column._id === payload._id ? payload : column
-      );
-      state.columnLoadingArr = state.columnLoadingArr.filter((id) => payload._id !== id);
-    });
-
-    builder.addCase(deleteColumn.fulfilled, (state, { payload }) => {
-      state.columns = state.columns.filter((column) => column._id !== payload._id);
-      state.columnLoadingArr = state.columnLoadingArr.filter((id) => payload._id !== id);
-    });
   },
 });
 
 export default columnsSlice.reducer;
 
-export const { setCurrentColumnId, setColumnLoading, changeLocalColumnOrder } =
-  columnsSlice.actions;
+export const {
+  setCurrentColumnId,
+  setColumnLoading,
+  changeLocalColumnOrder,
+  updateLocalColumn,
+  deleteLocalColumn,
+} = columnsSlice.actions;
 
 export const columnsSelector = (state: { columnsStore: ColumnsState }) => state.columnsStore;

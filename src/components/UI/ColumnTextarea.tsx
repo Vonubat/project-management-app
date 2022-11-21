@@ -4,9 +4,10 @@ import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import React, { FC, useState, ChangeEvent } from 'react';
 import {
   deleteColumn,
-  setColumnLoading,
+  deleteLocalColumn,
   setCurrentColumnId,
   updateColumn,
+  updateLocalColumn,
 } from 'store/columnsSlice';
 import CustomIconBtn from './CustomIconBtn';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -54,14 +55,16 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId, order }) => {
     }
 
     dispatch(setCurrentColumnId(columnId));
-    dispatch(setColumnLoading(columnId));
+    //TODO find out can we remove order from here
+    dispatch(updateLocalColumn({ title: currentValue, order }));
     dispatch(updateColumn({ title: currentValue, order }));
 
     setPreviousValue(currentValue);
   };
 
   const submit = () => {
-    dispatch(setColumnLoading(columnId));
+    //TODO find out can we use currentColumnId
+    dispatch(deleteLocalColumn(columnId));
     dispatch(deleteColumn(columnId));
     closeConfirmModal();
   };
