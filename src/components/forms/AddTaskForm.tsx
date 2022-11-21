@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { useTranslation } from 'react-i18next';
 import { taskDescriptionInput, taskTitleInput } from 'constants/inputs';
@@ -13,24 +13,10 @@ import { TypeofModal } from 'constants/constants';
 import { columnsSelector } from 'store/columnsSlice';
 import { Add as AddIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
 import { TransitionGroup } from 'react-transition-group';
-import { Collapse, Paper, Chip, Grow } from '@mui/material';
+import { Collapse, Chip, Grow } from '@mui/material';
 import UserSearchBar from 'components/UserSearchBar';
 import { usersSelector } from 'store/usersSlice';
-
-const paperStyles = {
-  display: 'flex',
-  justifyContent: 'left',
-  flexWrap: 'wrap',
-  boxSizing: 'border-box',
-  height: 78,
-  p: 0.25,
-  mt: 2,
-  listStyle: 'none',
-  overflow: 'auto',
-  borderColor: 'white',
-  outline: '1px solid #e6e6e6',
-  ':hover': { outlineColor: 'black' },
-};
+import CustomPaper from 'components/UI/CustomPaper';
 
 const AddTaskForm: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
@@ -63,8 +49,8 @@ const AddTaskForm: FC = () => {
     dispatch(closeModalForm(TypeofModal.addTask));
   };
 
-  const [isSearchWin, setSearchWin] = React.useState(false);
-  const [checkedUsersId, setCheckedUsersId] = React.useState<string[]>([]);
+  const [isSearchWin, setSearchWin] = useState(false);
+  const [checkedUsersId, setCheckedUsersId] = useState<string[]>([]);
   const checkedUsers = users.filter(({ _id }) => checkedUsersId.includes(_id));
 
   function handleToggle(value: string) {
@@ -97,7 +83,7 @@ const AddTaskForm: FC = () => {
       <Collapse in={isSearchWin}>
         <UserSearchBar users={users} checkedUsersID={checkedUsersId} handleToggle={handleToggle} />
       </Collapse>
-      <Paper variant="outlined" className="alternative-scroll" sx={paperStyles}>
+      <CustomPaper>
         <Chip
           color="primary"
           sx={{ ':hover': { cursor: 'pointer' }, m: 0.25 }}
@@ -112,7 +98,7 @@ const AddTaskForm: FC = () => {
             </Grow>
           ))}
         </TransitionGroup>
-      </Paper>
+      </CustomPaper>
     </ModalWithForm>
   );
 };

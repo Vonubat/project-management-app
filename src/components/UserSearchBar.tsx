@@ -50,7 +50,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const checkListStyles = {
-  width: 394,
   height: 153,
   bgcolor: 'background.paper',
   overflow: 'auto',

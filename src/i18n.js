@@ -6,8 +6,8 @@ const resources = {
   en: {
     translation: {
       buttonText: {
-        ru: 'Russland',
-        en: 'England',
+        ru: 'Russian',
+        en: 'English',
         lang: 'Lang',
         signIn: 'Sign In',
         signUp: 'Sign Up',
@@ -120,8 +120,6 @@ const resources = {
         addTask: 'Add task',
         editTask: 'Edit task',
         delTask: 'Are you sure you want to delete the task?',
-      },
-      search: {
         search: 'Search…',
         back: 'Back',
         addUsers: 'Add users',
@@ -246,8 +244,6 @@ const resources = {
         addTask: 'Добавить задачу',
         editTask: 'Редактировать задачу',
         delTask: 'Вы действительно хотите удалить задачу?',
-      },
-      search: {
         search: 'Поиск…',
         back: 'Назад',
         addUsers: 'Добавить пользователей',
