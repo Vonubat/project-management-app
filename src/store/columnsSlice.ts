@@ -52,7 +52,7 @@ export const createColumn = createAsyncThunk<ColumnData, { title: string }, Asyn
   }
 );
 
-export const updateColumn = createAsyncThunk<ColumnData, { title: string }, AsyncThunkConfig>(
+export const updateColumn = createAsyncThunk<ColumnData, string, AsyncThunkConfig>(
   'columns/update',
   async (title, { getState, rejectWithValue, dispatch }) => {
     const { currentBoardId } = getState().boardListStore;
@@ -63,8 +63,8 @@ export const updateColumn = createAsyncThunk<ColumnData, { title: string }, Asyn
       if (!currentColumn) throw new Error('COLUMN ID IS NOT DEFINED'); // TODO HANDLE THIS CASE
 
       const res = await ColumnsService.updateColumn(currentBoardId, currentColumnId, {
-        ...currentColumn,
-        ...title,
+        title,
+        order: currentColumn.order,
       });
 
       return res.data;
@@ -160,13 +160,16 @@ const columnsSlice = createSlice({
       moveItem(state.columns, dragOrder, dropOrder);
       state.columns = state.columns.map((c, index) => ({ ...c, order: index }));
     },
-    updateLocalColumn: (state, { payload }: PayloadAction<{ title: string }>) => {
+    updateLocalColumn: (state, { payload }: PayloadAction<string>) => {
       const updateIndex = state.columns.findIndex((c) => c._id === state.currentColumnId);
-      state.columns[updateIndex] = { ...state.columns[updateIndex], ...payload };
+      state.columns[updateIndex] = { ...state.columns[updateIndex], title: payload };
     },
     //TODO check can we use currentColumnId
     deleteLocalColumn: (state, { payload }: PayloadAction<string>) => {
       state.columns = state.columns.filter((c) => c._id !== payload);
+    },
+    clearLocalColumns: (state) => {
+      state.columns = [];
     },
   },
 
@@ -193,6 +196,7 @@ export const {
   changeLocalColumnOrder,
   updateLocalColumn,
   deleteLocalColumn,
+  clearLocalColumns,
 } = columnsSlice.actions;
 
 export const columnsSelector = (state: { columnsStore: ColumnsState }) => state.columnsStore;

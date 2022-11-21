@@ -1,32 +1,14 @@
-import { createAsyncThunk, createSlice, Action, AnyAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import UsersService from 'services/usersService';
 import { SignUpOkResponseData, SignUpRequestData } from 'types/auth';
-import { AsyncThunkConfig, PendingAction, RejectedAction } from 'types/store';
+import { AsyncThunkConfig } from 'types/store';
 
 type UsersState = {
   name: string;
   login: string;
   userId: string;
-  error: null | string;
-  isLoading: boolean;
 };
-
-interface FulFilledAction extends Action {
-  payload: SignUpOkResponseData;
-}
-
-function isRejectedAction(action: AnyAction): action is RejectedAction {
-  return action.type.endsWith('rejected');
-}
-
-function isPendingAction(action: AnyAction): action is PendingAction {
-  return action.type.endsWith('pending');
-}
-
-function isFulfilledAction(action: AnyAction): action is FulFilledAction {
-  return action.type.endsWith('fulfilled');
-}
 
 export const getUser = createAsyncThunk<SignUpOkResponseData, void, AsyncThunkConfig>(
   'users/getUser',
@@ -100,8 +82,6 @@ const userSliceInitialState: UsersState = {
   name: '',
   login: '',
   userId: '',
-  error: null,
-  isLoading: false,
 };
 
 const usersSlice = createSlice({
@@ -118,25 +98,6 @@ const usersSlice = createSlice({
     builder.addCase(updateUser.fulfilled, (state, { payload: { name, login } }) => {
       state.name = name;
       state.login = login;
-    });
-
-    builder.addMatcher(isPendingAction, (state) => {
-      state.error = null;
-      state.isLoading = true;
-    });
-
-    builder.addMatcher(isRejectedAction, (state, action) => {
-      state.isLoading = false;
-      if (action.payload) {
-        state.error = `error${action.payload}`;
-      } else {
-        state.error = action.error.message;
-      }
-    });
-
-    builder.addMatcher(isFulfilledAction, (state) => {
-      state.error = null;
-      state.isLoading = false;
     });
   },
 });
