@@ -41,20 +41,25 @@ const notificationSlice = createSlice({
     builder.addMatcher(isFulfilled, (state, action) => {
       const [sliceName, actionName] = action.type.split('/');
 
-      if (actionName === ActionName.getAll || actionName === ActionName.getUser) {
+      if (
+        actionName === ActionName.getAll ||
+        actionName === ActionName.getUser ||
+        actionName === ActionName.changeOrder
+      ) {
         return;
       }
 
+      state.isOpen = true;
+      state.message = `responseSuccess.${getTranslationString(action)}`;
+
       if (sliceName === SliceName.auth || actionName == ActionName.delete) {
         state.severity === Severity.info;
+        return;
       }
 
       if (actionName === ActionName.create || actionName === ActionName.update) {
         state.severity = Severity.success;
       }
-
-      state.isOpen = true;
-      state.message = `responseSuccess.${getTranslationString(action)}`;
     });
   },
 });

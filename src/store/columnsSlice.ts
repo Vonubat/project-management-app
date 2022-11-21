@@ -4,7 +4,7 @@ import { Status } from 'constants/constants';
 import ColumnsService from 'services/columnsService';
 import { ColumnData, ColumnParams, DndColumnData } from 'types/columns';
 import { AsyncThunkConfig } from 'types/store';
-import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
+import { isFulfilledAction, isRejectedAction } from 'utils/actionTypePredicates';
 import { moveItem } from 'utils/moveItem';
 import { sortOrder } from 'utils/sortByOrder';
 
@@ -124,7 +124,6 @@ interface ColumnsState {
   columns: ColumnData[];
   columnLoadingArr: ColumnData['_id'][];
   status: Status;
-  error: string | null | undefined;
   currentColumnId: string;
 }
 
@@ -132,7 +131,6 @@ const initState: ColumnsState = {
   columns: [],
   columnLoadingArr: [],
   status: Status.idle,
-  error: null,
   currentColumnId: '',
 };
 
@@ -181,10 +179,6 @@ const columnsSlice = createSlice({
     builder.addCase(deleteColumn.fulfilled, (state, { payload }) => {
       state.columns = state.columns.filter((column) => column._id !== payload._id);
       state.columnLoadingArr = state.columnLoadingArr.filter((id) => payload._id !== id);
-    });
-
-    builder.addMatcher(isPendingAction, (state) => {
-      state.error = null;
     });
 
     builder.addMatcher(isRejectedAction, (state) => {

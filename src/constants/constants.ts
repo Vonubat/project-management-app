@@ -82,6 +82,7 @@ export enum ActionName {
   create = 'create',
   update = 'update',
   delete = 'delete',
+  changeOrder = 'changeOrder',
 }
 
 export enum SliceName {
