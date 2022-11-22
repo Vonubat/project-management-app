@@ -5,4 +5,5 @@ export enum Path {
   boards = '/boards',
   columns = '/boards/:boardId',
   user = '/user',
+  any = '*',
 }

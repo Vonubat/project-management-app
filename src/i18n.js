@@ -124,6 +124,12 @@ const resources = {
         back: 'Back',
         addUsers: 'Add users',
       },
+      pageNotFound: {
+        title: 'Page not found',
+        description:
+          'The page you are looking for does not exist. How you got here is a mystery. But you can click the button below to go back to the homepage',
+        btn: `Let's start again`,
+      },
     },
   },
   ru: {
@@ -162,14 +168,14 @@ const resources = {
         error401: 'Пользователь не существует или не верный пароль',
         error404: 'Элемент не существует',
         error403: 'Ваша сессия устарела',
-        error409: 'Пользователь с такм логином уже существует',
+        error409: 'Пользователь с таким логином уже существует',
         error500: 'Ошибка сервера',
         errorUnknown: 'Произошла неизвестная ошибка',
         'Network Error': 'Ошибка сети',
       },
       responseSuccess: {
         authSignIn: 'Добро пожаловать в приложение!',
-        authSignUp: 'Пользователь cоздан успешно',
+        authSignUp: 'Пользователь создан успешно',
         usersDelete: 'Пользователь удален',
         usersUpdate: 'Профиль успешно обновлен',
         boardsCreate: 'Доска успешно создана',
@@ -180,7 +186,7 @@ const resources = {
         columnsDelete: 'Колонка успешно удалена',
         tasksCreate: 'Задача успешно создана',
         tasksUpdate: 'Задача успешно отредактирована',
-        tasksDelete: 'Задача успено удалена',
+        tasksDelete: 'Задача успешно удалена',
       },
       validationError: {
         required: 'Это поле обязательно',
@@ -247,6 +253,12 @@ const resources = {
         search: 'Поиск…',
         back: 'Назад',
         addUsers: 'Добавить пользователей',
+      },
+      pageNotFound: {
+        title: 'Страница не найдена',
+        description:
+          'Страница, которую вы ищете, не существует. Как вы сюда попали - загадка. Но вы можете нажать кнопку ниже, чтобы вернуться на домашнюю страницу',
+        btn: `Давайте начнем сначала`,
       },
     },
   },
