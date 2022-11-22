@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
-import { EMPTY_TASK, Status } from 'constants/constants';
+import { EMPTY_TASK } from 'constants/constants';
 import TasksService from 'services/tasksService';
 import { ColumnData } from 'types/columns';
 import { AsyncThunkConfig, AsyncThunkWithMeta } from 'types/store';
@@ -11,7 +11,6 @@ import {
   UpdateLocalTaskParam,
   UpdateTaskParams,
 } from 'types/tasks';
-import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
 import { moveItem } from 'utils/moveItem';
 import { sortOrder } from 'utils/sortByOrder';
 
@@ -58,14 +57,13 @@ export const updateTask = createAsyncThunk<
   { taskId: string; data: UpdateTaskParams },
   AsyncThunkConfig
 >('tasks/update', async ({ taskId, data }, { getState, rejectWithValue, dispatch }) => {
-  const { currentBoardId } = getState().boardListStore;
-  const { currentColumnId: columnId } = getState().columnsStore;
-  const { userId } = getState().authStore;
-  const order = getState().tasksStore.tasks[columnId].find((t) => t._id === taskId)?.order;
-  const params = { ...data, userId, order: order || 1, columnId };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { _id, boardId, ...rest } = Object.values(getState().tasksStore.tasks)
+    .flat()
+    .find((t) => t._id === taskId)!;
 
   try {
-    const res = await TasksService.updateTask(currentBoardId, columnId, taskId, params);
+    const res = await TasksService.updateTask(boardId, rest.columnId, taskId, { ...rest, ...data });
 
     return res.data;
   } catch (err) {
@@ -75,7 +73,7 @@ export const updateTask = createAsyncThunk<
       throw err;
     }
 
-    dispatch(getAllTasks(currentBoardId));
+    dispatch(getAllTasks(boardId));
 
     return rejectWithValue(error.response.status);
   }
@@ -84,10 +82,10 @@ export const updateTask = createAsyncThunk<
 export const deleteTask = createAsyncThunk<TaskData, void, AsyncThunkConfig>(
   'tasks/delete',
   async (_, { getState, rejectWithValue, dispatch }) => {
-    const { currentBoardId } = getState().boardListStore;
-    const { columnId, _id } = getState().tasksStore.currentTask;
+    const { boardId, columnId, _id } = getState().tasksStore.currentTask;
+
     try {
-      const res = await TasksService.deleteTask(currentBoardId, columnId, _id);
+      const res = await TasksService.deleteTask(boardId, columnId, _id);
 
       return res.data;
     } catch (err) {
@@ -97,7 +95,7 @@ export const deleteTask = createAsyncThunk<TaskData, void, AsyncThunkConfig>(
         throw err;
       }
 
-      dispatch(getAllTasks(currentBoardId));
+      dispatch(getAllTasks(boardId));
 
       return rejectWithValue(error.response.status);
     }
@@ -134,14 +132,12 @@ export const changeTaskOrder = createAsyncThunk<void, string[], AsyncThunkConfig
 interface TasksState {
   tasks: { [index: TaskData['columnId']]: TaskData[] };
   tasksLoadingArr: ColumnData['_id'][];
-  status: Status;
   currentTask: TaskData;
 }
 
 const initState: TasksState = {
   tasks: {},
   tasksLoadingArr: [],
-  status: Status.idle,
   currentTask: EMPTY_TASK,
 };
 
@@ -161,10 +157,7 @@ const tasksSlice = createSlice({
       if (dragColumnId === dropColumnId) {
         moveItem(state.tasks[dragColumnId], dragOrder, dropOrder);
 
-        state.tasks[dragColumnId] = state.tasks[dragColumnId].map((c, index) => ({
-          ...c,
-          order: index,
-        }));
+        state.tasks[dragColumnId] = state.tasks[dragColumnId].map((c, order) => ({ ...c, order }));
         return;
       }
 
@@ -179,16 +172,16 @@ const tasksSlice = createSlice({
         }
 
         if (state.tasks[dragColumnId].length) {
-          state.tasks[dragColumnId] = state.tasks[dragColumnId]?.map((c, index) => ({
+          state.tasks[dragColumnId] = state.tasks[dragColumnId]?.map((c, order) => ({
             ...c,
-            order: index,
+            order,
           }));
         }
 
         if (state.tasks[dropColumnId].length) {
-          state.tasks[dropColumnId] = state.tasks[dropColumnId].map((c, index) => ({
+          state.tasks[dropColumnId] = state.tasks[dropColumnId].map((c, order) => ({
             ...c,
-            order: index,
+            order,
           }));
         }
       }
@@ -200,7 +193,7 @@ const tasksSlice = createSlice({
     deleteLocalTask: (state) => {
       const { columnId, order } = state.currentTask;
       state.tasks[columnId].splice(order, 1);
-      state.tasks[columnId] = state.tasks[columnId].map((t, index) => ({ ...t, order: index }));
+      state.tasks[columnId] = state.tasks[columnId].map((t, order) => ({ ...t, order }));
     },
     clearAllLocalTasks: (state) => {
       state.tasks = {};
@@ -215,22 +208,14 @@ const tasksSlice = createSlice({
     });
 
     builder.addCase(createTask.fulfilled, (state, { payload, meta }) => {
-      state.tasks[meta['0']].push(payload);
+      if (state.tasks[meta['0']]) {
+        state.tasks[meta['0']].push(payload);
+      } else {
+        state.tasks[meta['0']] = [payload];
+      }
       state.tasksLoadingArr = state.tasksLoadingArr.filter(
         (columnId) => payload.columnId !== columnId
       );
-    });
-
-    builder.addMatcher(isPendingAction, (state) => {
-      state.status = Status.pending;
-    });
-
-    builder.addMatcher(isRejectedAction, (state) => {
-      state.status = Status.failed;
-    });
-
-    builder.addMatcher(isFulfilledAction, (state) => {
-      state.status = Status.succeeded;
     });
   },
 });

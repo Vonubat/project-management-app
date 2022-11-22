@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
-import { Status } from 'constants/constants';
 import ColumnsService from 'services/columnsService';
 import { ColumnData, DndColumnData } from 'types/columns';
 import { AsyncThunkConfig } from 'types/store';
@@ -132,15 +131,11 @@ export const changeColumnOrder = createAsyncThunk<void, void, AsyncThunkConfig>(
 
 interface ColumnsState {
   columns: ColumnData[];
-  columnLoadingArr: ColumnData['_id'][];
-  status: Status;
   currentColumnId: string;
 }
 
 const initState: ColumnsState = {
   columns: [],
-  columnLoadingArr: [],
-  status: Status.idle,
   currentColumnId: '',
 };
 
@@ -151,14 +146,11 @@ const columnsSlice = createSlice({
     setCurrentColumnId: (state, action: PayloadAction<string>) => {
       state.currentColumnId = action.payload;
     },
-    setColumnLoading: (state, action: PayloadAction<string>) => {
-      state.columnLoadingArr.push(action.payload);
-    },
     changeLocalColumnOrder: (state, { payload }: PayloadAction<DndColumnData>) => {
       const { dragOrder, dropOrder } = payload;
 
       moveItem(state.columns, dragOrder, dropOrder);
-      state.columns = state.columns.map((c, index) => ({ ...c, order: index }));
+      state.columns = state.columns.map((c, order) => ({ ...c, order }));
     },
     updateLocalColumn: (state, { payload }: PayloadAction<string>) => {
       const updateIndex = state.columns.findIndex((c) => c._id === state.currentColumnId);
@@ -178,10 +170,6 @@ const columnsSlice = createSlice({
       state.columns = payload.sort(sortOrder);
     });
 
-    builder.addCase(createColumn.pending, (state) => {
-      state.status = Status.pending;
-    });
-
     builder.addCase(createColumn.fulfilled, (state, { payload }) => {
       state.columns.push(payload);
     });
@@ -192,7 +180,6 @@ export default columnsSlice.reducer;
 
 export const {
   setCurrentColumnId,
-  setColumnLoading,
   changeLocalColumnOrder,
   updateLocalColumn,
   deleteLocalColumn,

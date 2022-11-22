@@ -28,13 +28,6 @@ export enum LangType {
   en = 'en',
 }
 
-export enum Status {
-  idle = 'idle',
-  pending = 'pending',
-  succeeded = 'succeeded',
-  failed = 'failed',
-}
-
 // Colors
 export const GRAY_700: '#616161' = grey[700];
 
