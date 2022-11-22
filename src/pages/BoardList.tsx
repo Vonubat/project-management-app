@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, forwardRef } from 'react';
 import { Button, Box, Typography, useMediaQuery, CircularProgress } from '@mui/material';
 import styled from '@emotion/styled';
 import { useTranslation } from 'react-i18next';
@@ -11,12 +11,21 @@ import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { MediaQuery, TypeofModal } from 'constants/constants';
 import { getAllUsers } from 'store/usersSlice';
 
-const StyledBox = styled(Box)({
+import FlipMove from 'react-flip-move';
+import { BoardData } from 'types/boards';
+
+const StyledBox = styled(FlipMove)({
   display: 'flex',
   flexWrap: 'wrap',
   justifyContent: 'center',
   gap: 4,
 });
+
+const FunctionalArticle = forwardRef<HTMLDivElement, BoardData>((props, ref) => (
+  <div ref={ref}>
+    <BoardPreview boardData={props} />
+  </div>
+));
 
 export default function Boards() {
   const isLargeScreen = useMediaQuery(MediaQuery.minWidth380);
@@ -36,23 +45,25 @@ export default function Boards() {
 
   return (
     <Page>
-      <StyledBox sx={{ mx: isLargeScreen ? 4 : 1 }}>
-        {boards.map((board) => (
-          <BoardPreview key={board._id} boardData={board} />
-        ))}
-        <Button
-          sx={{ width: 310, height: 310 }}
-          variant="outlined"
-          onClick={openAddBoardModalForm}
-          disabled={isAddBoardLoading}
-        >
-          {isAddBoardLoading ? (
-            <CircularProgress color="inherit" size={100} />
-          ) : (
-            <Typography variant="h4">{t('add')}</Typography>
-          )}
-        </Button>
-      </StyledBox>
+      <Box sx={{ mx: isLargeScreen ? 4 : 1 }}>
+        <StyledBox>
+          {boards.map((board) => (
+            <FunctionalArticle key={board._id} {...board} />
+          ))}
+          <Button
+            sx={{ width: 310, height: 310 }}
+            variant="outlined"
+            onClick={openAddBoardModalForm}
+            disabled={isAddBoardLoading}
+          >
+            {isAddBoardLoading ? (
+              <CircularProgress color="inherit" size={100} />
+            ) : (
+              <Typography variant="h4">{t('add')}</Typography>
+            )}
+          </Button>
+        </StyledBox>
+      </Box>
       <EditBoardForm />
     </Page>
   );
