@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Slide, SlideProps, Snackbar } from '@mui/material';
+import { Alert, Button, IconButton, Slide, SlideProps, Snackbar } from '@mui/material';
 import { Severity } from 'constants/constants';
 import { useTranslation } from 'react-i18next';
+import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { notificationSelector, removeNotification } from 'store/notificationSlice';
 import { Notification } from 'types/notification';
@@ -50,6 +51,9 @@ const ToastBox = () => {
     >
       <Alert variant="filled" severity={notification ? notification.severity : Severity.info}>
         {notification && t(notification.message)}
+        <IconButton aria-label="close" color="inherit" sx={{ p: 0.5 }} onClick={handleClose}>
+          <CloseIcon />
+        </IconButton>
       </Alert>
     </Snackbar>
   );
