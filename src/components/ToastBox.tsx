@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, IconButton, Slide, SlideProps, Snackbar } from '@mui/material';
+import { Alert, IconButton, Slide, SlideProps, Snackbar } from '@mui/material';
 import { Severity } from 'constants/constants';
 import { useTranslation } from 'react-i18next';
 import CloseIcon from '@mui/icons-material/Close';
