@@ -4,14 +4,11 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { Path } from 'constants/routing';
-import { useAppSelector } from 'hooks/hooks';
-import { authSelector } from 'store/authSlice';
 import ErrorIcon from '@mui/icons-material/Error';
 import { DefaultColors } from 'constants/constants';
 
 const PageNotFound: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'pageNotFound' });
-  const { isAuth } = useAppSelector(authSelector);
 
   return (
     <Page
@@ -35,7 +32,7 @@ const PageNotFound: FC = () => {
         variant="contained"
         sx={{ width: 'fit-content', whiteSpace: 'nowrap' }}
         component={RouterLink}
-        to={isAuth ? Path.boards : Path.signUp}
+        to={Path.home}
       >
         {t('btn')}
       </Button>
