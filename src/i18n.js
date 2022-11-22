@@ -124,6 +124,12 @@ const resources = {
         back: 'Back',
         addUsers: 'Add users',
       },
+      pageNotFound: {
+        title: 'Page not found',
+        description:
+          'The page you are looking for does not exist. How you got here is a mystery. But you can click the button below to go back to the homepage',
+        btn: `Let's start again`,
+      },
     },
   },
   ru: {
@@ -247,6 +253,12 @@ const resources = {
         search: 'Поиск…',
         back: 'Назад',
         addUsers: 'Добавить пользователей',
+      },
+      pageNotFound: {
+        title: 'Страница не найдена',
+        description:
+          'Страница, которую вы ищете, не существует. Как вы сюда попали - загадка. Но вы можете нажать кнопку ниже, чтобы вернуться на главную страницу.',
+        btn: `Давайте начнем сначала`,
       },
     },
   },
