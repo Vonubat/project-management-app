@@ -131,13 +131,11 @@ export const changeColumnOrder = createAsyncThunk<void, void, AsyncThunkConfig>(
 
 interface ColumnsState {
   columns: ColumnData[];
-  columnLoadingArr: ColumnData['_id'][];
   currentColumnId: string;
 }
 
 const initState: ColumnsState = {
   columns: [],
-  columnLoadingArr: [],
   currentColumnId: '',
 };
 
@@ -147,9 +145,6 @@ const columnsSlice = createSlice({
   reducers: {
     setCurrentColumnId: (state, action: PayloadAction<string>) => {
       state.currentColumnId = action.payload;
-    },
-    setColumnLoading: (state, action: PayloadAction<string>) => {
-      state.columnLoadingArr.push(action.payload);
     },
     changeLocalColumnOrder: (state, { payload }: PayloadAction<DndColumnData>) => {
       const { dragOrder, dropOrder } = payload;
@@ -185,7 +180,6 @@ export default columnsSlice.reducer;
 
 export const {
   setCurrentColumnId,
-  setColumnLoading,
   changeLocalColumnOrder,
   updateLocalColumn,
   deleteLocalColumn,
