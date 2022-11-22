@@ -15,7 +15,8 @@ https://project-management-system-app.netlify.app/
 - [x] Add column functionality (add, edit, delete, loading).
 - [x] Add tasks functionality (add, edit, delete, loading).
 - [x] Refactor, fixes various parts of app.
-- [ ] Add functionality of tasks assigning to another users.
+- [x] Add PageNotFound (404 route).
+- [x] Add functionality of tasks assigning to another users.
 - [ ] Capture the feature video tutorials for welcome page.
 - [ ] Create templetes of columns/tasks for new users.
 
