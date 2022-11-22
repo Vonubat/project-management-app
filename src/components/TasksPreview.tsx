@@ -1,14 +1,9 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { Box, styled, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import ColumnsAddBtn from './UI/ColumnsAddBtn';
-import {
-  changeLocalTaskOrder,
-  changeTaskOrder,
-  getAllTasks,
-  tasksSelector,
-} from 'store/tasksSlice';
+import { changeLocalTaskOrder, changeTaskOrder, tasksSelector } from 'store/tasksSlice';
 import Task from './UI/Task';
 import { DropTaskItem } from 'types/tasks';
 import { openModalForm } from 'store/modalSlice';
@@ -57,10 +52,6 @@ const TasksPreview: FC<Props> = ({ columnId }) => {
       isOver: !!monitor.isOver(),
     }),
   });
-
-  useEffect(() => {
-    dispatch(getAllTasks(columnId));
-  }, [dispatch, columnId]);
 
   const openModal = () => {
     dispatch(setCurrentColumnId(columnId));

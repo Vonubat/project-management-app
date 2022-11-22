@@ -15,10 +15,26 @@ https://project-management-system-app.netlify.app/
 - [x] Add column functionality (add, edit, delete, loading).
 - [x] Add tasks functionality (add, edit, delete, loading).
 - [x] Refactor, fixes various parts of app.
-- [ ] Add functionality of tasks assigning to another users.
+- [x] Add PageNotFound (404 route).
+- [x] Add functionality of tasks assigning to another users.
 - [ ] Capture the feature video tutorials for welcome page.
 - [ ] Create templetes of columns/tasks for new users.
 
 ### Tasks list (AlexanderSUS)
+
+- [x] Create SignIn page layout
+- [x] Create SignUp page layout
+- [x] Implement authorization logic and authorization form validation
+- [x] Create private route functionality
+- [x] Add and configure i18next library
+- [x] Create universal modal window for usage with forms and create universal controlled input
+- [x] Create Profile page layout and implement editing profile functionality
+- [x] Update backend invalid requests handling, extend column entity for accepting 'description' field
+- [x] Create notification slice and add notification alerts (both for success on fulfilled and error on rejected requests)
+- [x] Install react-dnd library, implement drag and drop functionality for both tasks and columns
+- [x] Add single loader componet for all over app. Implement logic for showing loader depend on request type: show loading on GET requests, and
+      don't show on PUT, PATCH and DELETE.
+- [x] Fix and update snackbar apperance
+- [ ] Enhance error handling on backend and frontend side
 
 ### Tasks list (Anton-Shcherba)
