@@ -26,7 +26,7 @@ https://project-management-system-app.netlify.app/
 - [x] Implement authorization logic and authorization form validation
 - [x] Create private route functionality
 - [x] Add and configure i18next library
-- [x] Create universal modal window for usage with forms
+- [x] Create universal modal window for usage with forms and create universal controlled input
 - [x] Create Profile page layout and implement editing profile functionality
 - [x] Update backend invalid requests handling, extend column entity for accepting 'description' field
 - [x] Create notification slice and add notification alerts (both for success on fulfilled and error on rejected requests)
