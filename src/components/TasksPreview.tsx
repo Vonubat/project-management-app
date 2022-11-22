@@ -39,9 +39,10 @@ const TasksPreview: FC<Props> = ({ columnId }) => {
           changeLocalTaskOrder({
             dragOrder: item.order,
             dragColumnId: item.columnId,
-            dropOrder: tasks[columnId].length
-              ? tasks[columnId][tasks[columnId].length - 1].order + 1
-              : 0,
+            dropOrder:
+              tasks[columnId] && tasks[columnId].length
+                ? tasks[columnId][tasks[columnId].length - 1].order + 1
+                : 0,
             dropColumnId: columnId,
           })
         );
