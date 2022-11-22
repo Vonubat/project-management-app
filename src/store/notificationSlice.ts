@@ -1,19 +1,16 @@
 import { createSlice, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
 import { Severity } from 'constants/constants';
+import { Notification } from 'types/notification';
 import { getTranslationString } from 'utils/getTranslationString';
 import { isGetAction, isInfoAction, isNoNotificationAction, isSuccessAction } from './util';
 
 type NotificationState = {
-  message: string;
-  severity: Severity;
-  isOpen: boolean;
+  alertList: Array<Notification>;
   isLoading: boolean;
 };
 
 const notificationInitialState: NotificationState = {
-  message: '',
-  severity: Severity.info,
-  isOpen: false,
+  alertList: [],
   isLoading: false,
 };
 
@@ -21,8 +18,8 @@ const notificationSlice = createSlice({
   name: 'notification',
   initialState: notificationInitialState,
   reducers: {
-    closeToast: (state) => {
-      state.isOpen = false;
+    removeNotification: (state) => {
+      state.alertList = state.alertList.slice(1);
     },
   },
   extraReducers: (builder) => {
@@ -33,21 +30,26 @@ const notificationSlice = createSlice({
     });
 
     builder.addMatcher(isRejected, (state, action) => {
-      state.severity = Severity.error;
-      state.isOpen = true;
+      const severity = Severity.error;
 
       if (isGetAction(action)) {
         state.isLoading = false;
       }
 
       if (action.payload) {
-        state.message = `responseError.error${action.payload}`;
+        state.alertList.push({
+          message: `responseError.error${action.payload}`,
+          severity,
+        });
 
         return;
       }
 
       if (action.error.message) {
-        state.message = action.error.message;
+        state.alertList.push({
+          message: action.error.message,
+          severity,
+        });
       }
     });
 
@@ -60,16 +62,15 @@ const notificationSlice = createSlice({
         return;
       }
 
-      state.isOpen = true;
-      state.message = `responseSuccess.${getTranslationString(action)}`;
+      const message = `responseSuccess.${getTranslationString(action)}`;
 
       if (isInfoAction(action)) {
-        state.severity === Severity.info;
+        state.alertList.push({ message, severity: Severity.info });
         return;
       }
 
       if (isSuccessAction(action)) {
-        state.severity = Severity.success;
+        state.alertList.push({ message, severity: Severity.success });
         return;
       }
     });
@@ -81,4 +82,4 @@ export default notificationSlice.reducer;
 export const notificationSelector = (state: { notificationStore: NotificationState }) =>
   state.notificationStore;
 
-export const { closeToast } = notificationSlice.actions;
+export const { removeNotification } = notificationSlice.actions;
