@@ -8,13 +8,19 @@ import {
   getColumnsInBoards,
   updateColumn,
 } from './columnsSlice';
-import { changeTaskOrder, createTask, deleteTask, getAllTasks, updateTask } from './tasksSlice';
+import {
+  changeTaskOrder,
+  createTask,
+  deleteTask,
+  getTasksByBoardId,
+  updateTask,
+} from './tasksSlice';
 import { deleteUser, getUser, updateUser, getAllUsers } from './usersSlice';
 
 export const isGetAction = isAsyncThunkAction(
   getBoardsByUser,
   getColumnsInBoards,
-  getAllTasks,
+  getTasksByBoardId,
   getAllUsers,
   getUser,
   signIn,
@@ -24,7 +30,7 @@ export const isGetAction = isAsyncThunkAction(
 export const isNoNotificationAction = isAsyncThunkAction(
   getBoardsByUser,
   getColumnsInBoards,
-  getAllTasks,
+  getTasksByBoardId,
   getAllUsers,
   getUser,
   changeColumnOrder,
