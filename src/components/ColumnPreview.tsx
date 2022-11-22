@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, LinearProgress } from '@mui/material';
 import ColumnTextarea from './UI/ColumnTextarea';
 import TasksPreview from './TasksPreview';
@@ -44,9 +44,7 @@ const style = {
 const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId, order }) => {
   const { columnLoadingArr } = useAppSelector(columnsSelector);
   const { tasksLoadingArr } = useAppSelector(tasksSelector);
-  const isColumnLoading: boolean = columnLoadingArr.some((id) => id === columnId);
-  const isTasksLoading: boolean = tasksLoadingArr.some((id) => id === columnId);
-  const isLoading = isColumnLoading || isTasksLoading;
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   const [{ isDragging }, drag] = useDrag({
@@ -71,6 +69,12 @@ const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId, order })
       isOver: !!monitor.isOver(),
     }),
   });
+
+  useEffect(() => {
+    const isColumnLoading = columnLoadingArr.some((id) => id === columnId);
+    const isTasksLoading = tasksLoadingArr.some((id) => id === columnId);
+    setIsLoading(isColumnLoading || isTasksLoading);
+  }, [columnLoadingArr, tasksLoadingArr, columnId]);
 
   return (
     <Box

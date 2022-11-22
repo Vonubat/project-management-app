@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { unwrapResult } from '@reduxjs/toolkit';
 import Page from 'components/Page';
 import { Box, Typography, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +20,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { setCurrentBoard } from 'store/boardListSlice';
 import { getAllUsers } from 'store/usersSlice';
-import { clearAllLocalTasks } from 'store/tasksSlice';
+import { clearAllLocalTasks, getAllTasks } from 'store/tasksSlice';
 
 const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPoint' })<{
   isBreakPoint: boolean;
@@ -44,7 +45,11 @@ const Columns = () => {
   useEffect(() => {
     if (boardId) {
       dispatch(setCurrentBoard(boardId));
-      dispatch(getColumnsInBoards(boardId));
+      dispatch(getColumnsInBoards(boardId))
+        .then(unwrapResult)
+        .then((columnList) => {
+          columnList.forEach((c) => dispatch(getAllTasks(c._id)));
+        });
       dispatch(getAllUsers());
     }
   }, [dispatch, boardId]);
