@@ -9,6 +9,7 @@ import BoardList from 'pages/BoardList';
 import ProtectedRoute from 'components/ProtectedRoute';
 import EditProfile from 'pages/EditProfile';
 import Columns from 'pages/Columns';
+import PageNotFound from 'pages/PageNotFound';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path={Path.any} element={<PageNotFound />} />
       </Route>
     </Routes>
   );

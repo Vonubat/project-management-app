@@ -54,8 +54,10 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    dispatch(getUser());
-  }, [dispatch]);
+    if (!(login && name)) {
+      dispatch(getUser());
+    }
+  }, [dispatch, login, name]);
 
   return (
     <Page>
@@ -69,12 +71,16 @@ const EditProfile = () => {
           </Typography>
         </Box>
         <Box sx={{ my: 3 }}>
-          <Typography variant="h5" gutterBottom align="center">
-            {t('userName')} {name}
-          </Typography>
-          <Typography variant="h5" gutterBottom align="center">
-            {t('login')} {login}
-          </Typography>
+          {login && name && (
+            <>
+              <Typography variant="h5" gutterBottom align="center">
+                {t('userName')} {name}
+              </Typography>
+              <Typography variant="h5" gutterBottom align="center">
+                {t('login')} {login}
+              </Typography>
+            </>
+          )}
         </Box>
         <ButtonGroup variant="text" sx={{ ml: 'auto' }}>
           <Button

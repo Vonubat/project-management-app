@@ -14,12 +14,10 @@ import {
 import { moveItem } from 'utils/moveItem';
 import { sortOrder } from 'utils/sortByOrder';
 
-export const getAllTasks = createAsyncThunk<TaskData[], string, AsyncThunkConfig>(
-  'tasks/getAll',
-  async (columnId, { getState }) => {
-    const { currentBoardId } = getState().boardListStore;
-
-    const res = await TasksService.getAllTasks(currentBoardId, columnId);
+export const getTasksByBoardId = createAsyncThunk<TaskData[], string, AsyncThunkConfig>(
+  'tasks/getByBoardId',
+  async (boardId: string) => {
+    const res = await TasksService.getTaskSetByBoardId(boardId);
     return res.data;
   }
 );
@@ -73,7 +71,7 @@ export const updateTask = createAsyncThunk<
       throw err;
     }
 
-    dispatch(getAllTasks(boardId));
+    dispatch(getTasksByBoardId(boardId));
 
     return rejectWithValue(error.response.status);
   }
@@ -95,7 +93,7 @@ export const deleteTask = createAsyncThunk<TaskData, void, AsyncThunkConfig>(
         throw err;
       }
 
-      dispatch(getAllTasks(boardId));
+      dispatch(getTasksByBoardId(boardId));
 
       return rejectWithValue(error.response.status);
     }
@@ -122,7 +120,7 @@ export const changeTaskOrder = createAsyncThunk<void, string[], AsyncThunkConfig
         throw err;
       }
 
-      columnsId.forEach((id) => dispatch(getAllTasks(id)));
+      columnsId.forEach((id) => dispatch(getTasksByBoardId(id)));
 
       return rejectWithValue(error.response.status);
     }
@@ -165,6 +163,10 @@ const tasksSlice = createSlice({
         const [dragTask] = state.tasks[dragColumnId].splice(dragOrder, 1);
         dragTask.columnId = dropColumnId;
 
+        if (!state.tasks[dropColumnId]) {
+          state.tasks[dropColumnId] = [];
+        }
+
         if (!state.tasks[dropColumnId].length) {
           state.tasks[dropColumnId].push(dragTask);
         } else {
@@ -203,8 +205,15 @@ const tasksSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getAllTasks.fulfilled, (state, { payload, meta }) => {
-      state.tasks[meta.arg] = payload.sort(sortOrder);
+    builder.addCase(getTasksByBoardId.fulfilled, (state, { payload: taskList }) => {
+      const columnsIds = taskList.reduce((acc, task) => acc.add(task.columnId), new Set<string>());
+
+      columnsIds.forEach(
+        (columnId) =>
+          (state.tasks[columnId] = [
+            ...taskList.filter((t) => t.columnId === columnId).sort(sortOrder),
+          ])
+      );
     });
 
     builder.addCase(createTask.fulfilled, (state, { payload, meta }) => {

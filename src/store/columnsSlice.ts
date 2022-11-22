@@ -158,7 +158,9 @@ const columnsSlice = createSlice({
     },
     //TODO check can we use currentColumnId
     deleteLocalColumn: (state, { payload }: PayloadAction<string>) => {
-      state.columns = state.columns.filter((c) => c._id !== payload);
+      state.columns = state.columns
+        .filter((c) => c._id !== payload)
+        .map((c, order) => ({ ...c, order }));
     },
     clearLocalColumns: (state) => {
       state.columns = [];

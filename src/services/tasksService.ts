@@ -4,6 +4,7 @@ import { TaskData, TaskParamsCreate, TaskParamsUpdate, UpdateTaskSetData } from 
 import api from './api';
 
 export default class TasksService {
+  //TODO remove this method if no needed
   static getAllTasks(boardId: string, columnId: string): Promise<AxiosResponse<TaskData[]>> {
     return api.get(
       `${ApiRoutes.boards}/${boardId}${ApiRoutes.columns}/${columnId}${ApiRoutes.tasks}`
@@ -55,5 +56,9 @@ export default class TasksService {
 
   static updateTaskSet(data: UpdateTaskSetData): Promise<AxiosResponse<TaskData[]>> {
     return api.patch(ApiRoutes.tasksSet, data);
+  }
+
+  static getTaskSetByBoardId(boardId: string): Promise<AxiosResponse<TaskData[]>> {
+    return api.get(`${ApiRoutes.tasksSet}/${boardId}`);
   }
 }
