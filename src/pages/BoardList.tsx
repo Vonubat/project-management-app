@@ -11,8 +11,9 @@ import { getAllUsers } from 'store/usersSlice';
 import FlipMove from 'react-flip-move';
 import { BoardData } from 'types/boards';
 import SearchBar from 'components/SearchBar';
+import { CustomFlipMove } from 'types/utilTypes';
 
-const StyledBox = styled(FlipMove)({
+const StyledBox: CustomFlipMove = styled(FlipMove)({
   display: 'flex',
   flexWrap: 'wrap',
   justifyContent: 'center',
