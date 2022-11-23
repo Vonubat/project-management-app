@@ -1,5 +1,6 @@
 import React, { useEffect, forwardRef, useState } from 'react';
-import { Box, Paper, useMediaQuery, Zoom } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { Box, Paper, useMediaQuery, Zoom, Collapse, Typography } from '@mui/material';
 import styled from '@emotion/styled';
 import Page from 'components/Page';
 import BoardPreview from 'components/BoardPreview';
@@ -26,6 +27,7 @@ const FunctionalArticle = forwardRef<HTMLDivElement, BoardData>((props, ref) => 
 ));
 
 export default function Boards() {
+  const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const isLargeScreen = useMediaQuery(MediaQuery.minWidth380);
   const isLaptop = useMediaQuery(MediaQuery.laptop);
   const { boards } = useAppSelector(boardListSelector);
@@ -52,6 +54,9 @@ export default function Boards() {
             />
           </Paper>
         </Zoom>
+        <Collapse in={filteredBoards.length === 0 && boards.length > 1}>
+          <Typography align="center">{t('notFound')}</Typography>
+        </Collapse>
         <StyledBox>
           {filteredBoards.map((board) => (
             <FunctionalArticle key={board._id} {...board} />
