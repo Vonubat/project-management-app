@@ -1,16 +1,26 @@
 import React, { FC, ReactNode } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Button, useMediaQuery } from '@mui/material';
+import { Button, useMediaQuery, LinearProgress } from '@mui/material';
 import { MediaQuery } from 'constants/constants';
+import styled from '@emotion/styled';
 
 type Props = {
   to: string;
   startIcon: ReactNode;
   buttonText: string;
   onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void;
+  disabled?: boolean;
 };
 
-const HeaderNavButton: FC<Props> = ({ to, startIcon, buttonText, onClick }) => {
+const StyledLinearProgress = styled(LinearProgress)({
+  borderRadius: '4px',
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+  zIndex: 'tooltip',
+});
+
+const HeaderNavButton: FC<Props> = ({ to, startIcon, buttonText, onClick, disabled }) => {
   const isLargeScreen = useMediaQuery(MediaQuery.minWidth715);
 
   return (
@@ -21,8 +31,11 @@ const HeaderNavButton: FC<Props> = ({ to, startIcon, buttonText, onClick }) => {
       component={RouterLink}
       to={to}
       onClick={onClick ? onClick : undefined}
+      disabled={disabled}
+      style={{ position: 'relative' }}
     >
       {isLargeScreen ? buttonText : startIcon}
+      {disabled && <StyledLinearProgress color="inherit" />}
     </Button>
   );
 };
