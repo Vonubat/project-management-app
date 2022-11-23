@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Box, Typography, Paper, useMediaQuery, IconButton, Zoom } from '@mui/material';
+import { Button, Box, Typography, Paper, IconButton, Zoom } from '@mui/material';
 import { Edit, Delete, AdminPanelSettings, Logout } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import ConfirmModal from './ConfirmModal';
@@ -9,9 +9,10 @@ import { deleteBoard, deleteLocalBoard, updateBoard } from 'store/boardListSlice
 import { Path } from 'constants/routing';
 import { BoardData } from 'types/boards';
 import { openModalForm, setBoardParams } from 'store/modalSlice';
-import { MediaQuery, TypeofModal } from 'constants/constants';
+import { TypeofModal } from 'constants/constants';
 import { authSelector } from 'store/authSlice';
 import { usersSelector } from 'store/usersSlice';
+import isTouchEnabled from 'utils/isTouchEnabled';
 
 type Props = {
   boardData: BoardData;
@@ -29,7 +30,7 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<ModalTypeEnum>(0);
   const [boardRef, boardHovered] = useMouseHover<HTMLDivElement>();
-  const isLaptopScreen = useMediaQuery(MediaQuery.laptop);
+  const isTouchScreenDevice: boolean = isTouchEnabled();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { userId } = useAppSelector(authSelector);
@@ -105,7 +106,7 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
             <Typography variant="h6" noWrap sx={{ width: 200 }}>
               {title}
             </Typography>
-            <Zoom in={!isLaptopScreen || boardHovered}>
+            <Zoom in={isTouchScreenDevice || boardHovered}>
               <Box>
                 <IconButton
                   size="small"
