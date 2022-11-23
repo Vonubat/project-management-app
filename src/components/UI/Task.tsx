@@ -75,7 +75,7 @@ const Task: FC<Props> = ({ taskData }) => {
             dropColumnId: columnId,
           })
         );
-        dispatch(changeTaskOrder([item.columnId, columnId]));
+        dispatch(changeTaskOrder());
       }
     },
     collect: (monitor) => ({
@@ -88,6 +88,7 @@ const Task: FC<Props> = ({ taskData }) => {
     dispatch(setCurrentTask(taskData));
     dispatch(deleteLocalTask());
     dispatch(deleteTask());
+    dispatch(changeTaskOrder());
     closeConfirmModal(e);
   };
 
@@ -124,7 +125,7 @@ const Task: FC<Props> = ({ taskData }) => {
       onClick={openEditTaskModal}
     >
       <Typography variant="h6" noWrap>
-        {title}
+        {title} {order}
       </Typography>
 
       {(isHovering || isTouchScreenDevice) && (

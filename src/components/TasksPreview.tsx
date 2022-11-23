@@ -46,7 +46,7 @@ const TasksPreview: FC<Props> = ({ columnId }) => {
             dropColumnId: columnId,
           })
         );
-        dispatch(changeTaskOrder([item.columnId, columnId]));
+        dispatch(changeTaskOrder());
       }
     },
     collect: (monitor) => ({

@@ -108,10 +108,9 @@ export const changeColumnOrder = createAsyncThunk<void, void, AsyncThunkConfig>(
   'columns/changeOrder',
   async (_, { getState, rejectWithValue, dispatch }) => {
     const boardId = getState().boardListStore.currentBoardId;
-    const columnSetData = getState().columnsStore.columns.map((c) => ({
-      _id: c._id,
-      order: c.order,
-    }));
+    const columnSetData = getState().columnsStore.columns.map(({ _id, order }) => ({ _id, order }));
+
+    if (!columnSetData.length) return;
 
     try {
       await ColumnsService.updateColumnsSet(columnSetData);
