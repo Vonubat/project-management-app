@@ -42,6 +42,7 @@ export enum DefaultColors {
 
 // MediaQuery storage
 export enum MediaQuery {
+  laptop = '(min-width:1024px)',
   minWidth750 = '(min-width:750px)',
   minWidth715 = '(min-width:715px)',
   minWidth500 = '(min-width:500px)',

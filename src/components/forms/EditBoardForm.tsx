@@ -91,17 +91,24 @@ const EditBoardForm: FC = () => {
         <ControlledFormInput control={formControl} inputOptions={descriptionInput} />
       </Collapse>
       <Collapse in={isSearchWin}>
-        <UserSearchBar users={users} checkedUsersID={checkedUsersID} handleToggle={handleToggle} />
+        <UserSearchBar
+          userId={userId}
+          users={users}
+          checkedUsersID={checkedUsersID}
+          handleToggle={handleToggle}
+        />
       </Collapse>
       <CustomPaper>
-        <Chip
-          color="primary"
-          sx={{ ':hover': { cursor: 'pointer' }, m: 0.25 }}
-          label={isSearchWin ? t('back') : t('addUsers')}
-          icon={isSearchWin ? <ChevronLeftIcon /> : <AddIcon />}
-          onClick={() => setSearchWin((prev) => !prev)}
-        />
         <TransitionGroup>
+          <Grow in>
+            <Chip
+              color="primary"
+              sx={{ ':hover': { cursor: 'pointer' }, m: 0.25 }}
+              label={isSearchWin ? t('back') : t('addUsers')}
+              icon={isSearchWin ? <ChevronLeftIcon /> : <AddIcon />}
+              onClick={() => setSearchWin((prev) => !prev)}
+            />
+          </Grow>
           {checkedUsers.map(({ login, _id }) => (
             <Grow key={_id}>
               <Chip label={login} onDelete={() => handleToggle(_id)} sx={{ m: 0.25 }} />

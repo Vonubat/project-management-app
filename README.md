@@ -38,3 +38,11 @@ https://project-management-system-app.netlify.app/
 - [ ] Enhance error handling on backend and frontend side
 
 ### Tasks list (Anton-Shcherba)
+
+- [x] Create Header
+- [x] Create confirmation modal window
+- [x] Create BoardList page
+- [x] Create board layout and functionality (add, edit, delete, loading)
+- [x] Create search layout for adding users
+- [x] Implementation of animation on the BoardList page
+- [x] Implementation search for a task by task name 

@@ -15,6 +15,7 @@ import { TransitionGroup } from 'react-transition-group';
 import { Collapse, Chip, Grow } from '@mui/material';
 import UserSearchBar from 'components/UserSearchBar';
 import { usersSelector } from 'store/usersSlice';
+import { authSelector } from 'store/authSlice';
 import CustomPaper from 'components/UI/CustomPaper';
 
 const EditTaskForm: FC = () => {
@@ -24,6 +25,7 @@ const EditTaskForm: FC = () => {
   } = useAppSelector(tasksSelector);
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.editTask}`;
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
+  const { userId } = useAppSelector(authSelector);
   const { users } = useAppSelector(usersSelector);
   const dispatch = useAppDispatch();
 
@@ -89,7 +91,12 @@ const EditTaskForm: FC = () => {
         <ControlledFormInput control={formControl} inputOptions={taskDescriptionInput} />
       </Collapse>
       <Collapse in={isSearchWin}>
-        <UserSearchBar users={users} checkedUsersID={checkedUsersId} handleToggle={handleToggle} />
+        <UserSearchBar
+          userId={userId}
+          users={users}
+          checkedUsersID={checkedUsersId}
+          handleToggle={handleToggle}
+        />
       </Collapse>
       <CustomPaper>
         <Chip

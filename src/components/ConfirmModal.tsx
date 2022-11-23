@@ -8,7 +8,7 @@ interface IConfirmModalProps {
   isOpen: boolean;
   title: string;
   onClose: VoidFunction | ((e: SyntheticEvent) => void);
-  onSubmit: VoidFunction | ((e: SyntheticEvent) => void);
+  onSubmit?: VoidFunction | ((e: SyntheticEvent) => void);
 }
 
 const ConfirmModal: FC<IConfirmModalProps> = ({ isOpen, title, onClose, onSubmit }) => {
@@ -21,9 +21,16 @@ const ConfirmModal: FC<IConfirmModalProps> = ({ isOpen, title, onClose, onSubmit
       </DialogContent>
       <DialogActions sx={{ p: 2, pt: 0 }}>
         <Button onClick={onClose}>{t('no')}</Button>
-        <Button onClick={onSubmit} autoFocus color={DefaultColors.error} endIcon={<WarningIcon />}>
-          {t('yes')}
-        </Button>
+        {onSubmit && (
+          <Button
+            onClick={onSubmit}
+            autoFocus
+            color={DefaultColors.error}
+            endIcon={<WarningIcon />}
+          >
+            {t('yes')}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

@@ -1,27 +1,35 @@
-import React, { useEffect } from 'react';
-import { Button, Box, Typography, useMediaQuery, CircularProgress } from '@mui/material';
+import React, { useEffect, forwardRef, useState } from 'react';
+import { Box, Paper, useMediaQuery, Zoom } from '@mui/material';
 import styled from '@emotion/styled';
-import { useTranslation } from 'react-i18next';
 import Page from 'components/Page';
 import BoardPreview from 'components/BoardPreview';
 import EditBoardForm from 'components/forms/EditBoardForm';
 import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
-import { clearBoardParams, openModalForm } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { MediaQuery, TypeofModal } from 'constants/constants';
+import { MediaQuery } from 'constants/constants';
 import { getAllUsers } from 'store/usersSlice';
+import FlipMove from 'react-flip-move';
+import { BoardData } from 'types/boards';
+import SearchBar from 'components/SearchBar';
 
-const StyledBox = styled(Box)({
+const StyledBox = styled(FlipMove)({
   display: 'flex',
   flexWrap: 'wrap',
   justifyContent: 'center',
-  gap: 4,
+  gap: 16,
 });
+
+const FunctionalArticle = forwardRef<HTMLDivElement, BoardData>((props, ref) => (
+  <div ref={ref}>
+    <BoardPreview boardData={props} />
+  </div>
+));
 
 export default function Boards() {
   const isLargeScreen = useMediaQuery(MediaQuery.minWidth380);
-  const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
-  const { boards, isAddBoardLoading } = useAppSelector(boardListSelector);
+  const isLaptop = useMediaQuery(MediaQuery.laptop);
+  const { boards } = useAppSelector(boardListSelector);
+  const [searchValue, setSearchValue] = useState('');
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -29,30 +37,27 @@ export default function Boards() {
     dispatch(getAllUsers());
   }, [dispatch]);
 
-  function openAddBoardModalForm() {
-    dispatch(clearBoardParams());
-    dispatch(openModalForm(TypeofModal.board));
-  }
+  const filteredBoards = boards.filter(({ title }) =>
+    title.toLowerCase().includes(searchValue.toLowerCase())
+  );
 
   return (
     <Page>
-      <StyledBox sx={{ mx: isLargeScreen ? 4 : 1 }}>
-        {boards.map((board) => (
-          <BoardPreview key={board._id} boardData={board} />
-        ))}
-        <Button
-          sx={{ width: 310, height: 310 }}
-          variant="outlined"
-          onClick={openAddBoardModalForm}
-          disabled={isAddBoardLoading}
-        >
-          {isAddBoardLoading ? (
-            <CircularProgress color="inherit" size={100} />
-          ) : (
-            <Typography variant="h4">{t('add')}</Typography>
-          )}
-        </Button>
-      </StyledBox>
+      <Box sx={{ mx: isLargeScreen ? 4 : 1 }}>
+        <Zoom in={boards.length > 1}>
+          <Paper sx={{ maxWidth: isLaptop ? 600 : 280, mx: 'auto', mb: 2, mt: -8 }}>
+            <SearchBar
+              value={searchValue}
+              onChange={(event) => setSearchValue(event.target.value)}
+            />
+          </Paper>
+        </Zoom>
+        <StyledBox>
+          {filteredBoards.map((board) => (
+            <FunctionalArticle key={board._id} {...board} />
+          ))}
+        </StyledBox>
+      </Box>
       <EditBoardForm />
     </Page>
   );
