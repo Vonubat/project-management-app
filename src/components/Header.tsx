@@ -16,6 +16,9 @@ import { AppBar, Box, Toolbar, useScrollTrigger } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import HeaderNavButton from './HeaderNavButton';
 import LanguageBox from './LanguageBox';
+import { clearBoardParams, openModalForm } from 'store/modalSlice';
+import { boardListSelector } from 'store/boardListSlice';
+import { TypeofModal } from 'constants/constants';
 
 const wrapperStyles = { display: { md: 'flex', gap: '20px' } };
 
@@ -25,11 +28,17 @@ export default function Header() {
   const navigate = useNavigate();
   const trigger = useScrollTrigger({ disableHysteresis: true });
   const { t } = useTranslation('translation', { keyPrefix: 'buttonText' });
+  const { isAddBoardLoading } = useAppSelector(boardListSelector);
 
   const logOutUser = () => {
     dispatch(logOut());
     navigate(Path.home);
   };
+
+  function openAddBoardModalForm() {
+    dispatch(clearBoardParams());
+    dispatch(openModalForm(TypeofModal.board));
+  }
 
   return (
     <AppBar color={trigger ? 'default' : 'primary'} position="sticky">
@@ -42,6 +51,8 @@ export default function Header() {
               startIcon={<DashboardCustomize />}
               to={Path.boards}
               buttonText={t('newBoard')}
+              onClick={openAddBoardModalForm}
+              disabled={isAddBoardLoading}
             />
           </Box>
         ) : null}
