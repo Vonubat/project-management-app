@@ -4,23 +4,10 @@ import { BoardData } from 'types/boards';
 type ModalState = {
   [key: `isOpen_${string}`]: boolean;
   [key: `isSubmitDisabled_${string}`]: boolean;
-  isSubmitted: boolean;
-  isDeclined: boolean;
-  isConfirmOpen: boolean;
-  isConfirmSubmitted: boolean;
-  isConfirmDeclined: boolean;
-  confirmTitle: string;
   boardData?: BoardData;
 };
 
-const modalInitialState: ModalState = {
-  isSubmitted: false,
-  isDeclined: false,
-  isConfirmOpen: false,
-  isConfirmSubmitted: false,
-  isConfirmDeclined: false,
-  confirmTitle: '',
-};
+const modalInitialState: ModalState = {};
 
 const modalSlice = createSlice({
   name: 'modal',
@@ -34,25 +21,6 @@ const modalSlice = createSlice({
     },
     setIsSubmitDisabled: (state, action: PayloadAction<{ uniqueId: string; flag: boolean }>) => {
       state[`isSubmitDisabled_${action.payload.uniqueId}`] = action.payload.flag;
-    },
-    openConfirmWindow: (state, action) => {
-      state.isConfirmOpen = true;
-      state.confirmTitle = action.payload;
-    },
-    submitConfirmWindow: (state) => {
-      state.isConfirmOpen = false;
-      state.confirmTitle = modalInitialState.confirmTitle;
-      state.isConfirmSubmitted = true;
-    },
-    declineConfirmWindow: (state) => {
-      state.isConfirmOpen = false;
-      state.confirmTitle = modalInitialState.confirmTitle;
-      state.isConfirmDeclined = true;
-    },
-    resetConfirmWindow: (state) => {
-      state.isConfirmOpen = false;
-      state.isConfirmDeclined = false;
-      state.confirmTitle = modalInitialState.confirmTitle;
     },
     setBoardParams: (state, action: PayloadAction<BoardData>) => {
       state.boardData = action.payload;

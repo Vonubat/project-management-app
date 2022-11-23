@@ -100,16 +100,15 @@ export const deleteTask = createAsyncThunk<TaskData, void, AsyncThunkConfig>(
   }
 );
 
-export const changeTaskOrder = createAsyncThunk<void, string[], AsyncThunkConfig>(
+export const changeTaskOrder = createAsyncThunk<void, void, AsyncThunkConfig>(
   'tasks/changeOrder',
-  async (columnsId, { getState, rejectWithValue, dispatch }) => {
+  async (_, { getState, rejectWithValue, dispatch }) => {
+    const { currentBoardId } = getState().boardListStore;
     const tasks = Object.values(getState().tasksStore.tasks).flat();
 
-    const data = tasks.map((t) => ({
-      _id: t._id,
-      order: t.order,
-      columnId: t.columnId,
-    }));
+    const data = tasks.map(({ _id, order, columnId }) => ({ _id, order, columnId }));
+
+    if (!data.length) return;
 
     try {
       await TasksService.updateTaskSet(data);
@@ -120,7 +119,7 @@ export const changeTaskOrder = createAsyncThunk<void, string[], AsyncThunkConfig
         throw err;
       }
 
-      columnsId.forEach((id) => dispatch(getTasksByBoardId(id)));
+      dispatch(getTasksByBoardId(currentBoardId));
 
       return rejectWithValue(error.response.status);
     }
@@ -193,8 +192,8 @@ const tasksSlice = createSlice({
       state.tasks[columnId][order] = { ...state.currentTask, ...payload.data };
     },
     deleteLocalTask: (state) => {
-      const { columnId, order } = state.currentTask;
-      state.tasks[columnId].splice(order, 1);
+      const { columnId, order: currentTaskOrder } = state.currentTask;
+      state.tasks[columnId].splice(currentTaskOrder, 1);
       state.tasks[columnId] = state.tasks[columnId].map((t, order) => ({ ...t, order }));
     },
     clearAllLocalTasks: (state) => {

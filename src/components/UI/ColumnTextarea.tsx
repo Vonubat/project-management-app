@@ -3,6 +3,7 @@ import { DefaultColors, GRAY_700 } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import React, { FC, useState, ChangeEvent } from 'react';
 import {
+  changeColumnOrder,
   deleteColumn,
   deleteLocalColumn,
   setCurrentColumnId,
@@ -64,6 +65,7 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
     //TODO find out can we use currentColumnId
     dispatch(deleteLocalColumn(columnId));
     dispatch(deleteColumn(columnId));
+    dispatch(changeColumnOrder());
     dispatch(clearLocalTaskByColumnId(columnId));
     closeConfirmModal();
   };
