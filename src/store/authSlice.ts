@@ -10,7 +10,7 @@ import {
   SignUpRequestData,
 } from 'types/auth';
 import { AsyncThunkConfig } from 'types/store';
-import { isFulfilledAction, isPendingAction, isRejectedAction } from 'utils/actionTypePredicates';
+import { isRejectedAction } from 'utils/actionTypePredicates';
 import { getAuthSliceInitialState } from 'utils/getAuthSliceInitialState';
 import { parseJwt } from 'utils/parseJwt';
 
