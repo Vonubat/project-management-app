@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import React, { FC, useEffect, useState, useCallback } from 'react';
+import { useAppDispatch, useAppSelector, useUsersForCurrentBoard } from 'hooks/hooks';
 import { useTranslation } from 'react-i18next';
 import { taskDescriptionInput, taskTitleInput } from 'constants/inputs';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
@@ -15,9 +15,9 @@ import { Add as AddIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-mater
 import { TransitionGroup } from 'react-transition-group';
 import { Collapse, Chip, Grow } from '@mui/material';
 import UserSearchBar from 'components/UserSearchBar';
-import { usersSelector } from 'store/usersSlice';
 import { authSelector } from 'store/authSlice';
 import CustomPaper from 'components/UI/CustomPaper';
+import { UserData } from 'types/users';
 
 const AddTaskForm: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
@@ -25,7 +25,7 @@ const AddTaskForm: FC = () => {
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
   const { currentColumnId: columnId } = useAppSelector(columnsSelector);
   const { userId } = useAppSelector(authSelector);
-  const { users } = useAppSelector(usersSelector);
+  const users: UserData[] = useUsersForCurrentBoard();
   const dispatch = useAppDispatch();
 
   const {
@@ -66,11 +66,16 @@ const AddTaskForm: FC = () => {
     dispatch(setIsSubmitDisabled({ uniqueId: TypeofModal.addTask, flag: !isValid }));
   }, [isValid, dispatch]);
 
-  useEffect(() => {
+  const resetForm: () => void = useCallback((): void => {
     if (isOpen) {
       reset({ title: '', description: '' });
     }
   }, [isOpen, reset]);
+
+  useEffect(() => {
+    setSearchWin(false);
+    resetForm();
+  }, [resetForm]);
 
   return (
     <ModalWithForm

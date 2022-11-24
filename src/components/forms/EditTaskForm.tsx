@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useCallback, useState } from 'react';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector, useUsersForCurrentBoard } from 'hooks/hooks';
 import { useTranslation } from 'react-i18next';
 import { taskDescriptionInput, taskTitleInput } from 'constants/inputs';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
@@ -14,9 +14,9 @@ import { Add as AddIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-mater
 import { TransitionGroup } from 'react-transition-group';
 import { Collapse, Chip, Grow } from '@mui/material';
 import UserSearchBar from 'components/UserSearchBar';
-import { usersSelector } from 'store/usersSlice';
 import { authSelector } from 'store/authSlice';
 import CustomPaper from 'components/UI/CustomPaper';
+import { UserData } from 'types/users';
 
 const EditTaskForm: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
@@ -26,7 +26,7 @@ const EditTaskForm: FC = () => {
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.editTask}`;
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
   const { userId } = useAppSelector(authSelector);
-  const { users } = useAppSelector(usersSelector);
+  const users: UserData[] = useUsersForCurrentBoard();
   const dispatch = useAppDispatch();
 
   const {
@@ -69,16 +69,16 @@ const EditTaskForm: FC = () => {
   }, [isValid, dispatch]);
 
   const resetForm: () => void = useCallback((): void => {
-    reset({ title, description });
-  }, [reset, title, description]);
+    if (isOpen) {
+      reset({ title, description });
+    }
+  }, [reset, title, description, isOpen]);
 
   useEffect(() => {
     setCheckedUsersId(assignedUsers || []);
     setSearchWin(false);
-    if (isOpen) {
-      resetForm();
-    }
-  }, [isOpen, resetForm, assignedUsers]);
+    resetForm();
+  }, [resetForm, assignedUsers]);
 
   return (
     <ModalWithForm
