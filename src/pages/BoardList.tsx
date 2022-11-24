@@ -1,5 +1,5 @@
 import React, { forwardRef, useState } from 'react';
-import { Box, Paper, useMediaQuery, Zoom } from '@mui/material';
+import { Box, Collapse, Paper, Typography, useMediaQuery, Zoom } from '@mui/material';
 import styled from '@emotion/styled';
 import Page from 'components/Page';
 import BoardPreview from 'components/BoardPreview';
@@ -11,6 +11,7 @@ import FlipMove from 'react-flip-move';
 import { BoardData } from 'types/boards';
 import SearchBar from 'components/SearchBar';
 import { CustomFlipMove } from 'types/utilTypes';
+import { useTranslation } from 'react-i18next';
 
 const StyledBox: CustomFlipMove = styled(FlipMove)({
   display: 'flex',
@@ -26,6 +27,7 @@ const FunctionalArticle = forwardRef<HTMLDivElement, BoardData>((props, ref) => 
 ));
 
 export default function Boards() {
+  const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const isLargeScreen = useMediaQuery(MediaQuery.minWidth380);
   const isLaptop = useMediaQuery(MediaQuery.laptop);
   const { boards } = useAppSelector(boardListSelector);
@@ -48,6 +50,9 @@ export default function Boards() {
             />
           </Paper>
         </Zoom>
+        <Collapse in={filteredBoards.length === 0 && boards.length > 1}>
+          <Typography align="center">{t('notFound')}</Typography>
+        </Collapse>
         <StyledBox>
           {filteredBoards.map((board) => (
             <FunctionalArticle key={board._id} {...board} />
