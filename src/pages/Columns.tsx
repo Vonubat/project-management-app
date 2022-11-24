@@ -2,10 +2,14 @@ import React, { useEffect } from 'react';
 import Page from 'components/Page';
 import { Box, Typography, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector, useImperativeDisableScroll } from 'hooks/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useColumnsInitialData,
+  useImperativeDisableScroll,
+} from 'hooks/hooks';
 import { MediaQuery, TypeofModal } from 'constants/constants';
-import { clearLocalColumns, columnsSelector, getColumnsInBoards } from 'store/columnsSlice';
-import { useParams } from 'react-router-dom';
+import { clearLocalColumns, columnsSelector } from 'store/columnsSlice';
 import { ColumnData } from 'types/columns';
 import ColumnPreview from 'components/ColumnPreview';
 import ColumnsAddBtn from 'components/UI/ColumnsAddBtn';
@@ -17,9 +21,7 @@ import ColumnsBackBtn from 'components/UI/ColumnsBackBtn';
 import styled from '@emotion/styled';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { setCurrentBoard } from 'store/boardListSlice';
-import { getAllUsers } from 'store/usersSlice';
-import { clearAllLocalTasks, getTasksByBoardId } from 'store/tasksSlice';
+import { clearAllLocalTasks } from 'store/tasksSlice';
 
 const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPoint' })<{
   isBreakPoint: boolean;
@@ -37,18 +39,11 @@ const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPo
 const Columns = () => {
   const isBreakPoint = useMediaQuery(MediaQuery.minWidth750);
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
-  const { boardId } = useParams();
   const { columns } = useAppSelector(columnsSelector);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (boardId) {
-      dispatch(setCurrentBoard(boardId));
-      dispatch(getColumnsInBoards(boardId));
-      dispatch(getTasksByBoardId(boardId));
-      dispatch(getAllUsers());
-    }
-  }, [dispatch, boardId]);
+  useImperativeDisableScroll();
+  useColumnsInitialData();
 
   useEffect(() => {
     return () => {
@@ -56,8 +51,6 @@ const Columns = () => {
       dispatch(clearLocalColumns());
     };
   }, [dispatch]);
-
-  useImperativeDisableScroll();
 
   return (
     <Page sx={{ my: '0rem' }}>

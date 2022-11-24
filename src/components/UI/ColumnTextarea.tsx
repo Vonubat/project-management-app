@@ -1,7 +1,7 @@
 import { Badge, Box, TextareaAutosize } from '@mui/material';
 import { DefaultColors, GRAY_700 } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import React, { FC, useState, ChangeEvent } from 'react';
+import React, { FC, useState, ChangeEvent, useEffect } from 'react';
 import {
   changeColumnOrder,
   deleteColumn,
@@ -77,6 +77,10 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
   const closeConfirmModal = () => {
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    setCurrentValue(value);
+  }, [value]);
 
   return (
     <Box

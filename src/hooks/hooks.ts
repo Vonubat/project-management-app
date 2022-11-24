@@ -1,5 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { getBoardsByUser, setCurrentBoard } from 'store/boardListSlice';
+import { getColumnsInBoards } from 'store/columnsSlice';
+import { getTasksByBoardId } from 'store/tasksSlice';
+import { usersSelector, getAllUsers } from 'store/usersSlice';
 import type { RootState, AppDispatch } from '../store/store';
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
@@ -44,4 +49,33 @@ export const useMouseHover = <T extends HTMLElement>(): THook<T> => {
   }, [ref]);
 
   return [ref, hovered];
+};
+
+export const useColumnsInitialData = (): void => {
+  const { boardId } = useParams();
+  const { users } = useAppSelector(usersSelector);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (boardId) {
+      dispatch(setCurrentBoard(boardId));
+      dispatch(getColumnsInBoards(boardId));
+      dispatch(getTasksByBoardId(boardId));
+      if (!users.length) {
+        dispatch(getAllUsers());
+      }
+    }
+  }, [dispatch, boardId, users.length]);
+};
+
+export const useBoardListInitialData = (): void => {
+  const { users } = useAppSelector(usersSelector);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getBoardsByUser());
+    if (!users.length) {
+      dispatch(getAllUsers());
+    }
+  }, [dispatch, users.length]);
 };

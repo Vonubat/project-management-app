@@ -1,13 +1,12 @@
-import React, { useEffect, forwardRef, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { Box, Paper, useMediaQuery, Zoom } from '@mui/material';
 import styled from '@emotion/styled';
 import Page from 'components/Page';
 import BoardPreview from 'components/BoardPreview';
 import EditBoardForm from 'components/forms/EditBoardForm';
-import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { boardListSelector } from 'store/boardListSlice';
+import { useAppSelector, useBoardListInitialData } from 'hooks/hooks';
 import { MediaQuery } from 'constants/constants';
-import { getAllUsers } from 'store/usersSlice';
 import FlipMove from 'react-flip-move';
 import { BoardData } from 'types/boards';
 import SearchBar from 'components/SearchBar';
@@ -31,12 +30,8 @@ export default function Boards() {
   const isLaptop = useMediaQuery(MediaQuery.laptop);
   const { boards } = useAppSelector(boardListSelector);
   const [searchValue, setSearchValue] = useState('');
-  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(getBoardsByUser());
-    dispatch(getAllUsers());
-  }, [dispatch]);
+  useBoardListInitialData();
 
   const filteredBoards = boards.filter(({ title }) =>
     title.toLowerCase().includes(searchValue.toLowerCase())
