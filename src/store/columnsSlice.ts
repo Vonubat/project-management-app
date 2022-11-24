@@ -131,11 +131,13 @@ export const changeColumnOrder = createAsyncThunk<void, void, AsyncThunkConfig>(
 interface ColumnsState {
   columns: ColumnData[];
   currentColumnId: string;
+  columnsTitleActive: { [index: ColumnData['_id']]: boolean };
 }
 
 const initState: ColumnsState = {
   columns: [],
   currentColumnId: '',
+  columnsTitleActive: {},
 };
 
 const columnsSlice = createSlice({
@@ -164,6 +166,19 @@ const columnsSlice = createSlice({
     clearLocalColumns: (state) => {
       state.columns = [];
     },
+    openColumnTitle: (state, { payload }: PayloadAction<ColumnData['_id']>) => {
+      state.columnsTitleActive[payload] = true;
+    },
+    closeColumnTitle: (state, { payload }: PayloadAction<ColumnData['_id']>) => {
+      state.columnsTitleActive[payload] = false;
+    },
+    resetColumnTitles: (state, { payload }: PayloadAction<ColumnData['_id']>) => {
+      for (const columnTitle in state.columnsTitleActive) {
+        if (columnTitle !== payload) {
+          state.columnsTitleActive[columnTitle] = false;
+        }
+      }
+    },
   },
 
   extraReducers: (builder) => {
@@ -185,6 +200,9 @@ export const {
   updateLocalColumn,
   deleteLocalColumn,
   clearLocalColumns,
+  openColumnTitle,
+  closeColumnTitle,
+  resetColumnTitles,
 } = columnsSlice.actions;
 
 export const columnsSelector = (state: { columnsStore: ColumnsState }) => state.columnsStore;
