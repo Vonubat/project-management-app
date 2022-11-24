@@ -91,7 +91,7 @@ export enum DndType {
 export enum SocketAction {
   add = 'add',
   delete = 'delete',
-  edig = 'edit',
+  update = 'update',
 }
 
 export const EMPTY_TASK = {

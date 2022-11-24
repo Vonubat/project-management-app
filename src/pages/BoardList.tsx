@@ -6,7 +6,7 @@ import BoardPreview from 'components/BoardPreview';
 import EditBoardForm from 'components/forms/EditBoardForm';
 import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { MediaQuery } from 'constants/constants';
+import { MediaQuery, SocketAction } from 'constants/constants';
 import { getAllUsers } from 'store/usersSlice';
 import FlipMove from 'react-flip-move';
 import { BoardData } from 'types/boards';
@@ -39,8 +39,8 @@ export default function Boards() {
   const socket = useSocket();
 
   const startListeners = () => {
-    socket.on('boards', ({ users, initUser }: BoardsContentSocketPayload) => {
-      if (initUser !== userId && users.includes(userId)) {
+    socket.on('boards', ({ users, initUser, action }: BoardsContentSocketPayload) => {
+      if (initUser !== userId && (users.includes(userId) || action === SocketAction.update)) {
         dispatch(getBoardsByUser());
       }
     });
