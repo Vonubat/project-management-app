@@ -32,9 +32,11 @@ https://project-management-system-app.netlify.app/
 - [x] Update backend invalid requests handling, extend column entity for accepting 'description' field
 - [x] Create notification slice and add notification alerts (both for success on fulfilled and error on rejected requests)
 - [x] Install react-dnd library, implement drag and drop functionality for both tasks and columns
-- [x] Add single loader componet for all over app. Implement logic for showing loader depend on request type: show loading on GET requests, and
+- [x] Add single loader component for all over app. Implement logic for showing loader depend on request type: show loading on GET requests, and
       don't show on PUT, PATCH and DELETE.
-- [x] Fix and update snackbar apperance
+- [x] Fix and update snackbar appearance
+- [x] Implement websocket connection
+- [ ] Add notifications on socket events
 - [ ] Enhance error handling on backend and frontend side
 
 ### Tasks list (Anton-Shcherba)
