@@ -12,6 +12,9 @@ import FlipMove from 'react-flip-move';
 import { BoardData } from 'types/boards';
 import SearchBar from 'components/SearchBar';
 import { CustomFlipMove } from 'types/utilTypes';
+import { useSocket } from 'hooks/useSocket';
+import { authSelector } from 'store/authSlice';
+import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
 
 const StyledBox: CustomFlipMove = styled(FlipMove)({
   display: 'flex',
@@ -30,8 +33,30 @@ export default function Boards() {
   const isLargeScreen = useMediaQuery(MediaQuery.minWidth380);
   const isLaptop = useMediaQuery(MediaQuery.laptop);
   const { boards } = useAppSelector(boardListSelector);
+  const { userId } = useAppSelector(authSelector);
   const [searchValue, setSearchValue] = useState('');
   const dispatch = useAppDispatch();
+  const socket = useSocket();
+
+  const startListeners = () => {
+    socket.on('boards', ({ users, initUser }: BoardsContentSocketPayload) => {
+      if (initUser !== userId && users.includes(userId)) {
+        dispatch(getBoardsByUser());
+      }
+    });
+
+    socket.on('users', ({ ids }: UsersSocketPayload) => {
+      if (ids[0] !== userId) {
+        dispatch(getAllUsers());
+      }
+    });
+  };
+
+  useEffect(() => {
+    socket.connect();
+    startListeners();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     dispatch(getBoardsByUser());
