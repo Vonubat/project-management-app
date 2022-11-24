@@ -1,7 +1,7 @@
 import { Badge, Box, TextareaAutosize } from '@mui/material';
 import { DefaultColors, GRAY_700 } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import React, { FC, useState, ChangeEvent, useEffect } from 'react';
+import React, { FC, useState, ChangeEvent, useEffect, useCallback, useRef } from 'react';
 import {
   changeColumnOrder,
   deleteColumn,
@@ -32,6 +32,7 @@ const ColumnTitle: FC<TextareaProps> = ({ value, columnId }) => {
   const [previousValue, setPreviousValue] = useState(value);
   const { tasks } = useAppSelector(tasksSelector);
   const numberOfTasks: number = tasks[columnId]?.length || 0;
+  const textArea = useRef<HTMLTextAreaElement>(null);
   const dispatch = useAppDispatch();
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -42,25 +43,40 @@ const ColumnTitle: FC<TextareaProps> = ({ value, columnId }) => {
     setFocus(true);
   };
 
-  const handleTitleSubmit = (e) => {
-    setFocus(false);
-    console.log(e);
+  const handleSubmitTitle = useCallback(
+    (cancel: boolean) => {
+      setFocus(false);
+      textArea.current?.blur();
 
-    if (currentValue.trim() === previousValue) {
-      setCurrentValue(currentValue.trim());
-      return;
-    }
-    if (currentValue.trim() === '') {
-      setCurrentValue(previousValue);
-      return;
-    }
+      if (currentValue.trim() === previousValue) {
+        setCurrentValue(currentValue.trim());
+        return;
+      }
+      if (currentValue.trim() === '' || cancel) {
+        setCurrentValue(previousValue);
+        return;
+      }
 
-    dispatch(setCurrentColumnId(columnId));
-    dispatch(updateLocalColumn(currentValue));
-    dispatch(updateColumn(currentValue));
+      dispatch(setCurrentColumnId(columnId));
+      dispatch(updateLocalColumn(currentValue));
+      dispatch(updateColumn(currentValue));
 
-    setPreviousValue(currentValue);
-  };
+      setPreviousValue(currentValue);
+    },
+    [columnId, currentValue, dispatch, previousValue]
+  );
+
+  const handleKeydown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Esc' || e.key === 'Escape') {
+        handleSubmitTitle(true);
+      }
+      if (e.key === 'Enter') {
+        handleSubmitTitle(false);
+      }
+    },
+    [handleSubmitTitle]
+  );
 
   const submit = () => {
     //TODO find out can we use currentColumnId
@@ -82,6 +98,10 @@ const ColumnTitle: FC<TextareaProps> = ({ value, columnId }) => {
   useEffect(() => {
     setCurrentValue(value);
   }, [value]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', (e) => handleKeydown(e), { once: true });
+  }, [handleKeydown]);
 
   return (
     <Box
@@ -112,7 +132,8 @@ const ColumnTitle: FC<TextareaProps> = ({ value, columnId }) => {
         value={currentValue}
         onChange={handleChange}
         onFocus={handleFocus}
-        onClick={(e) => handleTitleSubmit(e)}
+        onBlur={(e) => e.preventDefault()}
+        ref={textArea}
       />
 
       <Box
@@ -144,14 +165,14 @@ const ColumnTitle: FC<TextareaProps> = ({ value, columnId }) => {
             <CustomIconBtn
               size="small"
               color={DefaultColors.success}
-              cb={(e) => handleTitleSubmit(e)}
+              cb={() => handleSubmitTitle(false)}
             >
               <CheckCircleIcon />
             </CustomIconBtn>
             <CustomIconBtn
               size="small"
               color={DefaultColors.error}
-              cb={(e) => handleTitleSubmit(e)}
+              cb={() => handleSubmitTitle(true)}
             >
               <CancelIcon />
             </CustomIconBtn>
