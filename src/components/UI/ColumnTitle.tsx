@@ -46,8 +46,6 @@ const ColumnTitle: FC<TextareaProps> = ({ value, columnId }) => {
 
   const handleFocus = () => {
     textArea.current?.focus();
-    setCurrentValue(previousValue + ' ');
-
     dispatch(openColumnTitle(columnId));
     dispatch(resetColumnTitles(columnId));
   };
@@ -116,7 +114,7 @@ const ColumnTitle: FC<TextareaProps> = ({ value, columnId }) => {
 
   useEffect(() => {
     window.addEventListener('keydown', (e) => handleKeydown(e), { once: true });
-  }, [handleKeydown]);
+  }, [hasFocus, handleKeydown]);
 
   return (
     <Box
