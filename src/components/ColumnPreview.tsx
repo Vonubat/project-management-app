@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, LinearProgress } from '@mui/material';
-import ColumnTextarea from './UI/ColumnTextarea';
+import ColumnTextarea from './UI/ColumnTitle';
 import TasksPreview from './TasksPreview';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { changeColumnOrder, changeLocalColumnOrder } from 'store/columnsSlice';

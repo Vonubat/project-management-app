@@ -24,7 +24,7 @@ type TextareaProps = {
   value: string;
 };
 
-const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
+const ColumnTitle: FC<TextareaProps> = ({ value, columnId }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [hasFocus, setFocus] = useState(false);
@@ -42,14 +42,15 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
     setFocus(true);
   };
 
-  const handleBlur = (cancel: boolean) => {
+  const handleTitleSubmit = (e) => {
     setFocus(false);
+    console.log(e);
 
     if (currentValue.trim() === previousValue) {
       setCurrentValue(currentValue.trim());
       return;
     }
-    if (currentValue.trim() === '' || cancel) {
+    if (currentValue.trim() === '') {
       setCurrentValue(previousValue);
       return;
     }
@@ -111,7 +112,7 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
         value={currentValue}
         onChange={handleChange}
         onFocus={handleFocus}
-        onBlur={(e) => e.preventDefault()}
+        onClick={(e) => handleTitleSubmit(e)}
       />
 
       <Box
@@ -140,10 +141,18 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
               display: 'flex',
             }}
           >
-            <CustomIconBtn size="small" color={DefaultColors.success} cb={() => handleBlur(false)}>
+            <CustomIconBtn
+              size="small"
+              color={DefaultColors.success}
+              cb={(e) => handleTitleSubmit(e)}
+            >
               <CheckCircleIcon />
             </CustomIconBtn>
-            <CustomIconBtn size="small" color={DefaultColors.error} cb={() => handleBlur(true)}>
+            <CustomIconBtn
+              size="small"
+              color={DefaultColors.error}
+              cb={(e) => handleTitleSubmit(e)}
+            >
               <CancelIcon />
             </CustomIconBtn>
           </Box>
@@ -160,4 +169,4 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
   );
 };
 
-export default ColumnTextarea;
+export default ColumnTitle;
