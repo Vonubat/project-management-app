@@ -56,37 +56,42 @@ const Columns = () => {
   const startListeners = () => {
     if (boardId) {
       socket.on('columns', ({ users, initUser, ids, action }: BoardsContentSocketPayload) => {
-        if (initUser !== userId && users.includes(userId)) {
-          if (action === SocketAction.delete) {
-            dispatch(deleteLocalColumn(ids[0]));
-            return;
-          }
+        if (initUser === userId || !users.includes(userId)) return;
 
-          dispatch(getColumnsInBoards(boardId));
+        if (action === SocketAction.delete) {
+          dispatch(deleteLocalColumn(ids[0]));
+          return;
         }
+
+        dispatch(getColumnsInBoards(boardId));
       });
 
       socket.on('boards', ({ action, ids }: BoardsContentSocketPayload) => {
+        console.log(action);
         if (action === SocketAction.delete && ids[0] === boardId) {
           navigate(Path.boards);
         }
       });
 
       socket.on('tasks', ({ users, initUser, ids, action }: BoardsContentSocketPayload) => {
-        if (initUser !== userId && users.includes(userId)) {
-          if (action === SocketAction.delete) {
-            dispatch(deleteLocalTaskById(ids[0]));
-            return;
-          }
+        if (initUser === userId || !users.includes(userId)) return;
 
-          dispatch(getColumnsInBoards(boardId));
-          dispatch(getTasksByBoardId(boardId));
+        if (action === SocketAction.delete) {
+          dispatch(deleteLocalTaskById(ids[0]));
+          return;
         }
+
+        dispatch(getColumnsInBoards(boardId));
+        dispatch(getTasksByBoardId(boardId));
       });
 
-      socket.on('users', ({ ids }: UsersSocketPayload) => {
+      socket.on('users', ({ ids, action }: UsersSocketPayload) => {
         if (ids[0] !== userId) {
           dispatch(getAllUsers());
+        }
+
+        if (action === SocketAction.delete) {
+          dispatch(getTasksByBoardId(boardId));
         }
       });
     }
