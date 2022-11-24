@@ -46,14 +46,16 @@ const ColumnTitle: FC<TextareaProps> = ({ value, columnId }) => {
 
   const handleFocus = () => {
     textArea.current?.focus();
+    setCurrentValue(previousValue + ' ');
+
     dispatch(openColumnTitle(columnId));
     dispatch(resetColumnTitles(columnId));
   };
 
   const handleSubmitTitle = useCallback(
     (cancel: boolean) => {
-      dispatch(closeColumnTitle(columnId));
       textArea.current?.blur();
+      dispatch(closeColumnTitle(columnId));
 
       if (currentValue.trim() === previousValue) {
         setCurrentValue(currentValue.trim());
@@ -106,11 +108,11 @@ const ColumnTitle: FC<TextareaProps> = ({ value, columnId }) => {
     setCurrentValue(value);
   }, [value]);
 
-  // useEffect(() => {
-  //   if (hasFocus === false) {
-  //     handleSubmitTitle(true);
-  //   }
-  // }, [hasFocus, handleSubmitTitle]);
+  useEffect(() => {
+    if (hasFocus === false) {
+      handleSubmitTitle(true);
+    }
+  }, [hasFocus, handleSubmitTitle]);
 
   useEffect(() => {
     window.addEventListener('keydown', (e) => handleKeydown(e), { once: true });
