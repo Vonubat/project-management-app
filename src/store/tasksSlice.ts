@@ -155,35 +155,26 @@ const tasksSlice = createSlice({
         moveItem(state.tasks[dragColumnId], dragOrder, dropOrder);
 
         state.tasks[dragColumnId] = state.tasks[dragColumnId].map((c, order) => ({ ...c, order }));
-        return;
-      }
-
-      if (dragColumnId !== dropColumnId) {
+      } else {
         const [dragTask] = state.tasks[dragColumnId].splice(dragOrder, 1);
-        dragTask.columnId = dropColumnId;
-
-        if (!state.tasks[dropColumnId]) {
-          state.tasks[dropColumnId] = [];
-        }
-
-        if (!state.tasks[dropColumnId].length) {
-          state.tasks[dropColumnId].push(dragTask);
-        } else {
-          state.tasks[dropColumnId].splice(dropOrder, 0, dragTask);
-        }
 
         if (state.tasks[dragColumnId].length) {
-          state.tasks[dragColumnId] = state.tasks[dragColumnId]?.map((c, order) => ({
+          state.tasks[dragColumnId] = state.tasks[dragColumnId].map((c, order) => ({
             ...c,
             order,
           }));
+        } else {
+          delete state.tasks[dragColumnId];
         }
 
-        if (state.tasks[dropColumnId].length) {
+        if (state.tasks[dropColumnId]) {
+          state.tasks[dropColumnId].splice(dropOrder, 0, { ...dragTask, columnId: dropColumnId });
           state.tasks[dropColumnId] = state.tasks[dropColumnId].map((c, order) => ({
             ...c,
             order,
           }));
+        } else {
+          state.tasks[dropColumnId] = [{ ...dragTask, columnId: dropColumnId, order: 0 }];
         }
       }
     },
