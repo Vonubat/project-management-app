@@ -92,6 +92,7 @@ const resources = {
         search: 'Search…',
         back: 'Back',
         addUsers: 'Add users',
+        notFound: 'Not found',
       },
       modalForm: {
         submit: 'Submit',
@@ -224,6 +225,7 @@ const resources = {
         search: 'Поиск…',
         back: 'Назад',
         addUsers: 'Добавить пользователей',
+        notFound: 'Ничего не найдено',
       },
       modalForm: {
         submit: 'Подтвердить',
