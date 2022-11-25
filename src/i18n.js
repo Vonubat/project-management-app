@@ -283,7 +283,7 @@ const resources = {
       },
       socketEvent: {
         someone: 'Кто-то',
-        deleteBoard: 'удалли доску',
+        deleteBoard: 'удалил доску',
         deleteColumn: 'удалил колонку',
         deleteTask: 'удалил задачу',
         deleteAccount: 'удалил аккаунт',
