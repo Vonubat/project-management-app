@@ -1,18 +1,18 @@
-import React, { useEffect, forwardRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Box, Paper, useMediaQuery, Zoom, Collapse, Typography } from '@mui/material';
+import React, { forwardRef, useEffect, useState } from 'react';
+import { Box, Collapse, Paper, Typography, useMediaQuery, Zoom } from '@mui/material';
 import styled from '@emotion/styled';
 import Page from 'components/Page';
 import BoardPreview from 'components/BoardPreview';
 import EditBoardForm from 'components/forms/EditBoardForm';
+import { useAppSelector, useBoardListInitialData, useAppDispatch } from 'hooks/hooks';
 import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { MediaQuery, SocketAction } from 'constants/constants';
 import { getAllUsers } from 'store/usersSlice';
 import FlipMove from 'react-flip-move';
 import { BoardData } from 'types/boards';
 import SearchBar from 'components/SearchBar';
 import { CustomFlipMove } from 'types/utilTypes';
+import { useTranslation } from 'react-i18next';
 import { useSocket } from 'hooks/useSocket';
 import { authSelector } from 'store/authSlice';
 import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
@@ -60,10 +60,7 @@ export default function Boards() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    dispatch(getBoardsByUser());
-    dispatch(getAllUsers());
-  }, [dispatch]);
+  useBoardListInitialData();
 
   const filteredBoards = boards.filter(({ title }) =>
     title.toLowerCase().includes(searchValue.toLowerCase())

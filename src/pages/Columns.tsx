@@ -2,7 +2,12 @@ import React, { useEffect } from 'react';
 import Page from 'components/Page';
 import { Box, Typography, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector, useImperativeDisableScroll } from 'hooks/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useColumnsInitialData,
+  useImperativeDisableScroll,
+} from 'hooks/hooks';
 import { MediaQuery, SocketAction, TypeofModal } from 'constants/constants';
 import {
   clearLocalColumns,
@@ -22,7 +27,6 @@ import ColumnsBackBtn from 'components/UI/ColumnsBackBtn';
 import styled from '@emotion/styled';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { setCurrentBoard } from 'store/boardListSlice';
 import { getAllUsers } from 'store/usersSlice';
 import { clearAllLocalTasks, deleteLocalTaskById, getTasksByBoardId } from 'store/tasksSlice';
 import { useSocket } from 'hooks/useSocket';
@@ -46,9 +50,9 @@ const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPo
 const Columns = () => {
   const isBreakPoint = useMediaQuery(MediaQuery.minWidth750);
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
-  const { boardId } = useParams();
   const { columns } = useAppSelector(columnsSelector);
   const { userId } = useAppSelector(authSelector);
+  const { boardId } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const socket = useSocket();
@@ -103,14 +107,8 @@ const Columns = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (boardId) {
-      dispatch(setCurrentBoard(boardId));
-      dispatch(getColumnsInBoards(boardId));
-      dispatch(getTasksByBoardId(boardId));
-      dispatch(getAllUsers());
-    }
-  }, [dispatch, boardId]);
+  useImperativeDisableScroll();
+  useColumnsInitialData();
 
   useEffect(() => {
     return () => {
@@ -118,8 +116,6 @@ const Columns = () => {
       dispatch(clearLocalColumns());
     };
   }, [dispatch]);
-
-  useImperativeDisableScroll();
 
   return (
     <Page sx={{ my: '0rem' }}>

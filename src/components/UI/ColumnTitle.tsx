@@ -1,11 +1,15 @@
 import { Badge, Box, TextareaAutosize } from '@mui/material';
 import { DefaultColors, GRAY_700 } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import React, { FC, useState, ChangeEvent, useEffect } from 'react';
+import React, { FC, useState, ChangeEvent, useEffect, useCallback, useRef, RefObject } from 'react';
 import {
   changeColumnOrder,
+  closeColumnTitle,
+  columnsSelector,
   deleteColumn,
   deleteLocalColumn,
+  openColumnTitle,
+  resetColumnTitles,
   setCurrentColumnId,
   updateColumn,
   updateLocalColumn,
@@ -17,21 +21,23 @@ import { useTranslation } from 'react-i18next';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { clearLocalTaskByColumnId, tasksSelector } from 'store/tasksSlice';
+import { ColumnData } from 'types/columns';
 
 type TextareaProps = {
   children?: React.ReactNode;
-  columnId: string;
+  columnId: ColumnData['_id'];
   value: string;
 };
 
-const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
+const ColumnTitle: FC<TextareaProps> = ({ value, columnId }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [hasFocus, setFocus] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const { [columnId]: hasFocus = false } = useAppSelector(columnsSelector).columnsTitleActive;
   const [currentValue, setCurrentValue] = useState(value);
   const [previousValue, setPreviousValue] = useState(value);
   const { tasks } = useAppSelector(tasksSelector);
   const numberOfTasks: number = tasks[columnId]?.length || 0;
+  const textArea: RefObject<HTMLTextAreaElement> = useRef<HTMLTextAreaElement>(null);
   const dispatch = useAppDispatch();
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -39,27 +45,45 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
   };
 
   const handleFocus = () => {
-    setFocus(true);
+    textArea.current?.focus();
+    dispatch(openColumnTitle(columnId));
+    dispatch(resetColumnTitles(columnId));
   };
 
-  const handleBlur = (cancel: boolean) => {
-    setFocus(false);
+  const handleSubmitTitle = useCallback(
+    (cancel: boolean) => {
+      textArea.current?.blur();
+      dispatch(closeColumnTitle(columnId));
 
-    if (currentValue.trim() === previousValue) {
-      setCurrentValue(currentValue.trim());
-      return;
-    }
-    if (currentValue.trim() === '' || cancel) {
-      setCurrentValue(previousValue);
-      return;
-    }
+      if (currentValue.trim() === previousValue) {
+        setCurrentValue(currentValue.trim());
+        return;
+      }
+      if (currentValue.trim() === '' || cancel) {
+        setCurrentValue(previousValue);
+        return;
+      }
 
-    dispatch(setCurrentColumnId(columnId));
-    dispatch(updateLocalColumn(currentValue));
-    dispatch(updateColumn(currentValue));
+      dispatch(setCurrentColumnId(columnId));
+      dispatch(updateLocalColumn(currentValue));
+      dispatch(updateColumn(currentValue));
 
-    setPreviousValue(currentValue);
-  };
+      setPreviousValue(currentValue);
+    },
+    [columnId, currentValue, dispatch, previousValue]
+  );
+
+  const handleKeydown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Esc' || e.key === 'Escape') {
+        handleSubmitTitle(true);
+      }
+      if (e.key === 'Enter') {
+        handleSubmitTitle(false);
+      }
+    },
+    [handleSubmitTitle]
+  );
 
   const submit = () => {
     //TODO find out can we use currentColumnId
@@ -81,6 +105,16 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
   useEffect(() => {
     setCurrentValue(value);
   }, [value]);
+
+  useEffect(() => {
+    if (hasFocus === false) {
+      handleSubmitTitle(true);
+    }
+  }, [hasFocus, handleSubmitTitle]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', (e) => handleKeydown(e), { once: true });
+  }, [hasFocus, handleKeydown]);
 
   return (
     <Box
@@ -112,6 +146,8 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={(e) => e.preventDefault()}
+        ref={textArea}
+        className="column-title"
       />
 
       <Box
@@ -140,10 +176,18 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
               display: 'flex',
             }}
           >
-            <CustomIconBtn size="small" color={DefaultColors.success} cb={() => handleBlur(false)}>
+            <CustomIconBtn
+              size="small"
+              color={DefaultColors.success}
+              cb={() => handleSubmitTitle(false)}
+            >
               <CheckCircleIcon />
             </CustomIconBtn>
-            <CustomIconBtn size="small" color={DefaultColors.error} cb={() => handleBlur(true)}>
+            <CustomIconBtn
+              size="small"
+              color={DefaultColors.error}
+              cb={() => handleSubmitTitle(true)}
+            >
               <CancelIcon />
             </CustomIconBtn>
           </Box>
@@ -160,4 +204,4 @@ const ColumnTextarea: FC<TextareaProps> = ({ value, columnId }) => {
   );
 };
 
-export default ColumnTextarea;
+export default ColumnTitle;
