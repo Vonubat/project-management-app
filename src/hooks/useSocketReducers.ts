@@ -7,29 +7,25 @@ import { getBoardsByUser } from 'store/boardListSlice';
 import { deleteLocalColumn, getColumnsInBoards } from 'store/columnsSlice';
 import { showNotification } from 'store/notificationSlice';
 import { deleteLocalTaskById, getTasksByBoardId } from 'store/tasksSlice';
-import { getAllUsers } from 'store/usersSlice';
+import { getAllUsers, usersSelector } from 'store/usersSlice';
 import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
-import { UserData } from 'types/users';
 import { useAppDispatch, useAppSelector } from './hooks';
 
 type BoardsEventReducerParam = {
   action: SocketAction;
   payload: Omit<BoardsContentSocketPayload, 'action'>;
-  users: UserData[];
   boardId?: string;
 };
 
 type ColumnsEventReducerParams = {
   action: SocketAction;
   payload: Omit<BoardsContentSocketPayload, 'action'>;
-  users: UserData[];
   boardId: string;
 };
 
 type TasksEventReducerParams = {
   action: SocketAction;
   payload: Omit<BoardsContentSocketPayload, 'action'>;
-  users: UserData[];
   boardId: string;
 };
 
@@ -41,11 +37,12 @@ type UsersEventReducerParams = {
 
 const useSocketReducers = () => {
   const { userId } = useAppSelector(authSelector);
+  const { users } = useAppSelector(usersSelector);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation('translation', { keyPrefix: 'socketEvent' });
 
-  const boardsEventReducer = ({ action, payload, users, boardId }: BoardsEventReducerParam) => {
+  const boardsEventReducer = ({ action, payload, boardId }: BoardsEventReducerParam) => {
     const { users: usersIds, initUser } = payload;
 
     if (initUser === userId || !usersIds.includes(userId)) return;
@@ -70,7 +67,7 @@ const useSocketReducers = () => {
     dispatch(getBoardsByUser());
   };
 
-  const tasksEventReducer = ({ action, payload, users, boardId }: TasksEventReducerParams) => {
+  const tasksEventReducer = ({ action, payload, boardId }: TasksEventReducerParams) => {
     const { users: usersIds, initUser, ids } = payload;
 
     if (initUser === userId || !usersIds.includes(userId) || !boardId) return;
@@ -97,7 +94,7 @@ const useSocketReducers = () => {
     }
   };
 
-  const columnsEventReducer = ({ action, payload, users, boardId }: ColumnsEventReducerParams) => {
+  const columnsEventReducer = ({ action, payload, boardId }: ColumnsEventReducerParams) => {
     const { users: usersIds, initUser, ids } = payload;
 
     if (initUser === userId || !usersIds.includes(userId) || !boardId) return;

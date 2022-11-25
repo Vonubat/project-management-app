@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Page from 'components/Page';
 import { Box, Typography, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -47,6 +47,7 @@ const Columns = () => {
   const { columns } = useAppSelector(columnsSelector);
   const { users } = useAppSelector(usersSelector);
   const { boardId } = useParams();
+  const [isUsersLoaded, setIsUserLoaded] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const socket = useSocket();
   const { boardsEventReducer, tasksEventReducer, usersEventReducer, columnsEventReducer } =
@@ -55,15 +56,15 @@ const Columns = () => {
   const startListeners = () => {
     if (boardId) {
       socket.on('columns', ({ action, ...payload }: BoardsContentSocketPayload) => {
-        columnsEventReducer({ action, payload, users, boardId });
+        columnsEventReducer({ action, payload, boardId });
       });
 
       socket.on('boards', ({ action, ...payload }: BoardsContentSocketPayload) => {
-        boardsEventReducer({ action, payload, users, boardId });
+        boardsEventReducer({ action, payload, boardId });
       });
 
       socket.on('tasks', ({ action, ...payload }: BoardsContentSocketPayload) => {
-        tasksEventReducer({ action, payload, users, boardId });
+        tasksEventReducer({ action, payload, boardId });
       });
 
       socket.on('users', ({ action, ...payload }: UsersSocketPayload) => {
@@ -73,10 +74,12 @@ const Columns = () => {
   };
 
   useEffect(() => {
-    socket.connect();
-    startListeners();
+    if (isUsersLoaded) {
+      socket.connect();
+      startListeners();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isUsersLoaded]);
 
   useImperativeDisableScroll();
   useColumnsInitialData();
@@ -87,6 +90,14 @@ const Columns = () => {
       dispatch(clearLocalColumns());
     };
   }, [dispatch]);
+
+  useImperativeDisableScroll();
+
+  useEffect(() => {
+    if (users.length) {
+      setIsUserLoaded(true);
+    }
+  }, [users]);
 
   return (
     <Page sx={{ my: '0rem' }}>

@@ -39,10 +39,11 @@ export default function Boards() {
   const [searchValue, setSearchValue] = useState('');
   const socket = useSocket();
   const { boardsEventReducer, usersEventReducer } = useSocketReducers();
+  const [isUsersLoaded, setIsUserLoaded] = useState<boolean>(false);
 
   const startListeners = () => {
     socket.on('boards', ({ action, ...payload }: BoardsContentSocketPayload) => {
-      boardsEventReducer({ action, payload, users });
+      boardsEventReducer({ action, payload });
     });
 
     socket.on('users', ({ action, ...payload }: UsersSocketPayload) => {
@@ -51,12 +52,20 @@ export default function Boards() {
   };
 
   useEffect(() => {
-    socket.connect();
-    startListeners();
+    if (isUsersLoaded) {
+      socket.connect();
+      startListeners();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isUsersLoaded]);
 
   useBoardListInitialData();
+
+  useEffect(() => {
+    if (users.length) {
+      setIsUserLoaded(true);
+    }
+  }, [users]);
 
   const filteredBoards = boards.filter(({ title }) =>
     title.toLowerCase().includes(searchValue.toLowerCase())

@@ -1,7 +1,6 @@
 import { grey } from '@mui/material/colors';
 
-export const BASE_URL = 'http://localhost:4000';
-// export const BASE_URL = 'https://pms-app.adaptable.app'; // back-end url
+export const BASE_URL = 'https://pms-app.adaptable.app'; // back-end url
 
 // Write here your api endpoints
 export enum ApiRoutes {
