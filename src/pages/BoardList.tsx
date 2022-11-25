@@ -7,13 +7,15 @@ import EditBoardForm from 'components/forms/EditBoardForm';
 import { useAppSelector, useBoardListInitialData } from 'hooks/hooks';
 import { boardListSelector } from 'store/boardListSlice';
 import { MediaQuery } from 'constants/constants';
+import { usersSelector } from 'store/usersSlice';
 import FlipMove from 'react-flip-move';
 import { BoardData } from 'types/boards';
 import SearchBar from 'components/SearchBar';
 import { CustomFlipMove } from 'types/utilTypes';
 import { useTranslation } from 'react-i18next';
 import { useSocket } from 'hooks/useSocket';
-import useSocketReducer from 'hooks/useSocketReducer';
+import useSocketReducers from 'hooks/useSocketReducers';
+import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
 
 const StyledBox: CustomFlipMove = styled(FlipMove)({
   display: 'flex',
@@ -33,16 +35,17 @@ export default function Boards() {
   const isLargeScreen = useMediaQuery(MediaQuery.minWidth380);
   const isLaptop = useMediaQuery(MediaQuery.laptop);
   const { boards } = useAppSelector(boardListSelector);
+  const { users } = useAppSelector(usersSelector);
   const [searchValue, setSearchValue] = useState('');
   const socket = useSocket();
-  const { boardsEventReducer, usersEventReducer } = useSocketReducer();
+  const { boardsEventReducer, usersEventReducer } = useSocketReducers();
 
   const startListeners = () => {
-    socket.on('boards', ({ action, ...payload }) => {
-      boardsEventReducer({ action, payload });
+    socket.on('boards', ({ action, ...payload }: BoardsContentSocketPayload) => {
+      boardsEventReducer({ action, payload, users });
     });
 
-    socket.on('users', ({ action, ...payload }) => {
+    socket.on('users', ({ action, ...payload }: UsersSocketPayload) => {
       usersEventReducer({ action, payload });
     });
   };

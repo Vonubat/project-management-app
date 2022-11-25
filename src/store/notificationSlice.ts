@@ -9,6 +9,11 @@ type NotificationState = {
   isLoading: boolean;
 };
 
+type ShowNotificationPayload = {
+  message: string;
+  severity?: Severity;
+};
+
 const notificationInitialState: NotificationState = {
   alertList: [],
   isLoading: false,
@@ -21,10 +26,7 @@ const notificationSlice = createSlice({
     removeNotification: (state) => {
       state.alertList = state.alertList.slice(1);
     },
-    showNotification: (
-      state,
-      { payload }: PayloadAction<{ message: string; severity?: Severity }>
-    ) => {
+    showNotification: (state, { payload }: PayloadAction<ShowNotificationPayload>) => {
       const { message, severity = Severity.info } = payload;
       state.alertList.push({ message, severity });
     },
