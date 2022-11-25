@@ -38,7 +38,7 @@ https://project-management-system-app.netlify.app/
       don't show on PUT, PATCH and DELETE.
 - [x] Fix and update snackbar appearance
 - [x] Implement websocket connection
-- [ ] Add notifications on socket events
+- [x] Add notifications appearance on socket events
 - [ ] Enhance error handling on backend and frontend side
 
 ### Tasks list (Anton-Shcherba)

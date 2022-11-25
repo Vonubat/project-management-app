@@ -1,4 +1,4 @@
-import { createSlice, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
+import { createSlice, isFulfilled, isPending, isRejected, PayloadAction } from '@reduxjs/toolkit';
 import { Severity } from 'constants/constants';
 import { Notification } from 'types/notification';
 import { getTranslationString } from 'utils/getTranslationString';
@@ -7,6 +7,11 @@ import { isGetAction, isInfoAction, isNoNotificationAction, isSuccessAction } fr
 type NotificationState = {
   alertList: Array<Notification>;
   isLoading: boolean;
+};
+
+type ShowNotificationPayload = {
+  message: string;
+  severity?: Severity;
 };
 
 const notificationInitialState: NotificationState = {
@@ -20,6 +25,10 @@ const notificationSlice = createSlice({
   reducers: {
     removeNotification: (state) => {
       state.alertList = state.alertList.slice(1);
+    },
+    showNotification: (state, { payload }: PayloadAction<ShowNotificationPayload>) => {
+      const { message, severity = Severity.info } = payload;
+      state.alertList.push({ message, severity });
     },
   },
   extraReducers: (builder) => {
@@ -82,4 +91,4 @@ export default notificationSlice.reducer;
 export const notificationSelector = (state: { notificationStore: NotificationState }) =>
   state.notificationStore;
 
-export const { removeNotification } = notificationSlice.actions;
+export const { removeNotification, showNotification } = notificationSlice.actions;
