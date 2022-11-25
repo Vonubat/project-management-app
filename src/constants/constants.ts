@@ -88,6 +88,12 @@ export enum DndType {
   column = 'column',
 }
 
+export enum SocketAction {
+  add = 'add',
+  delete = 'delete',
+  update = 'update',
+}
+
 export const EMPTY_TASK = {
   _id: '',
   boardId: '',

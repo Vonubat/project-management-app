@@ -88,7 +88,9 @@ const Task: FC<Props> = ({ taskData }) => {
     dispatch(setCurrentTask(taskData));
     dispatch(deleteLocalTask());
     dispatch(deleteTask());
+    // TODO find solution to not emit event
     dispatch(changeTaskOrder());
+    //
     closeConfirmModal(e);
   };
 
@@ -125,7 +127,7 @@ const Task: FC<Props> = ({ taskData }) => {
       onClick={openEditTaskModal}
     >
       <Typography variant="h6" noWrap>
-        {title} {order}
+        {title}
       </Typography>
 
       {(isHovering || isTouchScreenDevice) && (
