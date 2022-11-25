@@ -91,8 +91,6 @@ const Columns = () => {
     };
   }, [dispatch]);
 
-  useImperativeDisableScroll();
-
   useEffect(() => {
     if (users.length) {
       setIsUserLoaded(true);
