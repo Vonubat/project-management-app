@@ -1,5 +1,6 @@
 import { SocketAction } from 'constants/constants';
 import { Path } from 'constants/routing';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { authSelector } from 'store/authSlice';
 import { getBoardsByUser } from 'store/boardListSlice';
@@ -42,24 +43,25 @@ const useSocketReducers = () => {
   const { userId } = useAppSelector(authSelector);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation('translation', { keyPrefix: 'socketEvent' });
 
   const boardsEventReducer = ({ action, payload, users, boardId }: BoardsEventReducerParam) => {
     const { users: usersIds, initUser } = payload;
 
     if (initUser === userId || !usersIds.includes(userId)) return;
 
-    const initUserName = users.find((u) => u._id === initUser)?.name || 'Someone';
+    const initUserName = users.find((u) => u._id === initUser)?.name || t('someone');
 
     switch (action) {
       case SocketAction.add:
-        dispatch(showNotification({ message: `${initUserName} just create a new board` }));
+        dispatch(showNotification({ message: `${initUserName} ${t('createBoard')}` }));
         break;
       case SocketAction.delete:
         boardId && navigate(Path.boards);
-        dispatch(showNotification({ message: `${initUserName} just delete a board` }));
+        dispatch(showNotification({ message: `${initUserName} ${t('deleteBoard')}` }));
         break;
       case SocketAction.update:
-        dispatch(showNotification({ message: `${initUserName} just updated a board` }));
+        dispatch(showNotification({ message: `${initUserName} ${t('updateBoard')}` }));
         break;
       default:
         break;
@@ -73,20 +75,20 @@ const useSocketReducers = () => {
 
     if (initUser === userId || !usersIds.includes(userId) || !boardId) return;
 
-    const initUserName = users.find((u) => u._id === initUser)?.name || 'Someone';
+    const initUserName = users.find((u) => u._id === initUser)?.name || t('someone');
 
     switch (action) {
       case SocketAction.add:
-        dispatch(showNotification({ message: `${initUserName} just add a new task` }));
+        dispatch(showNotification({ message: `${initUserName} ${t('createTask')}` }));
         dispatch(getColumnsInBoards(boardId));
         dispatch(getTasksByBoardId(boardId));
         break;
       case SocketAction.delete:
-        dispatch(showNotification({ message: `${initUserName} just delete a task` }));
+        dispatch(showNotification({ message: `${initUserName} ${t('deleteTask')}` }));
         dispatch(deleteLocalTaskById(ids[0]));
         break;
       case SocketAction.update:
-        dispatch(showNotification({ message: `${initUserName} just updated a task` }));
+        dispatch(showNotification({ message: `${initUserName} ${t('updateTask')}` }));
         dispatch(getColumnsInBoards(boardId));
         dispatch(getTasksByBoardId(boardId));
         break;
@@ -100,19 +102,19 @@ const useSocketReducers = () => {
 
     if (initUser === userId || !usersIds.includes(userId) || !boardId) return;
 
-    const initUserName = users.find((u) => u._id === initUser)?.name || 'Someone';
+    const initUserName = users.find((u) => u._id === initUser)?.name || t('someone');
 
     switch (action) {
       case SocketAction.add:
-        dispatch(showNotification({ message: `${initUserName} just add a new column` }));
+        dispatch(showNotification({ message: `${initUserName} ${t('createColumn')}` }));
         dispatch(getColumnsInBoards(boardId));
         break;
       case SocketAction.delete:
-        dispatch(showNotification({ message: `${initUserName} just delete a column` }));
+        dispatch(showNotification({ message: `${initUserName} ${t('deleteColumn')}` }));
         dispatch(deleteLocalColumn(ids[0]));
         break;
       case SocketAction.update:
-        dispatch(showNotification({ message: `${initUserName} just updated new column` }));
+        dispatch(showNotification({ message: `${initUserName} ${t('updateColumn')}` }));
         dispatch(getColumnsInBoards(boardId));
         break;
       default:
@@ -131,14 +133,14 @@ const useSocketReducers = () => {
 
     switch (action) {
       case SocketAction.add:
-        dispatch(showNotification({ message: 'New user just joined the app' }));
+        dispatch(showNotification({ message: `${t('someone')} ${t('createAccount')}` }));
         break;
       case SocketAction.update:
-        dispatch(showNotification({ message: 'Some user just edit profile' }));
+        dispatch(showNotification({ message: `${t('someone')} ${t('updateAccount')}` }));
         break;
       case SocketAction.delete:
         boardId && dispatch(getTasksByBoardId(boardId));
-        dispatch(showNotification({ message: 'Some user just deleted profile' }));
+        dispatch(showNotification({ message: `${t('someone')} ${t('deleteAccount')}` }));
         break;
       default:
         break;
