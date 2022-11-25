@@ -187,6 +187,24 @@ const tasksSlice = createSlice({
       state.tasks[columnId].splice(currentTaskOrder, 1);
       state.tasks[columnId] = state.tasks[columnId].map((t, order) => ({ ...t, order }));
     },
+    deleteLocalTaskById: (state, { payload: taskId }: PayloadAction<string>) => {
+      const task = Object.values(state.tasks)
+        .flat()
+        .find((t) => t._id === taskId);
+
+      if (task) {
+        state.tasks[task.columnId].splice(task.order, 1);
+
+        if (state.tasks[task.columnId].length) {
+          state.tasks[task.columnId] = state.tasks[task.columnId].map((t, order) => ({
+            ...t,
+            order,
+          }));
+        } else {
+          delete state.tasks[task.columnId];
+        }
+      }
+    },
     clearAllLocalTasks: (state) => {
       state.tasks = {};
     },
@@ -196,6 +214,7 @@ const tasksSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getTasksByBoardId.fulfilled, (state, { payload: taskList }) => {
+      state.tasks = {};
       const columnsIds = taskList.reduce((acc, task) => acc.add(task.columnId), new Set<string>());
 
       columnsIds.forEach(
@@ -229,6 +248,7 @@ export const {
   deleteLocalTask,
   clearAllLocalTasks,
   clearLocalTaskByColumnId,
+  deleteLocalTaskById,
 } = tasksSlice.actions;
 
 export const tasksSelector = (state: { tasksStore: TasksState }) => state.tasksStore;
