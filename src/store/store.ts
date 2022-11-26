@@ -1,11 +1,12 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
+
 import authSliceReducer from './authSlice';
 import boardListSliceReducer from './boardListSlice';
-import usersSliceReducer from './usersSlice';
-import modalSliceReducer from './modalSlice';
 import columnsReducer from './columnsSlice';
-import tasksReducer from './tasksSlice';
+import modalSliceReducer from './modalSlice';
 import notificationSliceReducer from './notificationSlice';
+import tasksReducer from './tasksSlice';
+import usersSliceReducer from './usersSlice';
 
 export const store = configureStore({
   reducer: {

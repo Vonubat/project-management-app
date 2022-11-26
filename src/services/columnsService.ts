@@ -3,9 +3,10 @@ import { ApiRoutes } from 'constants/constants';
 import {
   ColumnData,
   ColumnParams,
-  ColumnsSetUpdateParams,
   ColumnsSetCreateParams,
+  ColumnsSetUpdateParams,
 } from 'types/columns';
+
 import api from './api';
 
 export default class ColumnsService {

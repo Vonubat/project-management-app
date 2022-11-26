@@ -66,6 +66,8 @@ export enum Severity {
 
 export enum StatusCode {
   unauthorized = 403,
+  badRequest = 400,
+  notFound = 404,
 }
 
 export enum ActionName {

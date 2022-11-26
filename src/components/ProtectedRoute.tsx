@@ -1,8 +1,8 @@
 import React, { FC, ReactElement } from 'react';
-import { useAppSelector } from 'hooks/hooks';
 import { Navigate } from 'react-router-dom';
-import { authSelector } from 'store/authSlice';
 import { Path } from 'constants/routing';
+import { useAppSelector } from 'hooks/typedHooks';
+import { authSelector } from 'store/authSlice';
 
 type Props = {
   children: ReactElement;

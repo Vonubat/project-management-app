@@ -1,22 +1,23 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { useTranslation } from 'react-i18next';
-import ControlledFormInput from 'components/ControlledFormInput';
-import ModalWithForm from 'components/ModalWithForm';
-import UserSearchBar from 'components/UserSearchBar';
-import { titleInput, descriptionInput } from 'constants/inputs';
-import { TypeofModal } from 'constants/constants';
-import { FormControl } from 'types/formInput';
-import { EditBoardFormFields } from 'types/boards';
-import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
-import { authSelector } from 'store/authSlice';
-import { updateBoard, createBoard, updateLocalBoard } from 'store/boardListSlice';
+import { TransitionGroup } from 'react-transition-group';
 import { Add as AddIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
 import { Chip, Collapse, Grow } from '@mui/material';
-import { TransitionGroup } from 'react-transition-group';
+import { TypeofModal } from 'constants/constants';
+import { descriptionInput, titleInput } from 'constants/inputs';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
+import { authSelector } from 'store/authSlice';
+import { createBoard, updateBoard, updateLocalBoard } from 'store/boardListSlice';
+import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
 import { usersSelector } from 'store/usersSlice';
+import { EditBoardFormFields } from 'types/boards';
+import { FormControl } from 'types/formInput';
+
+import ControlledFormInput from 'components/ControlledFormInput';
+import ModalWithForm from 'components/ModalWithForm';
 import CustomPaper from 'components/UI/CustomPaper';
+import UserSearchBar from 'components/UserSearchBar';
 
 const EditBoardForm: FC = () => {
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.board}`;

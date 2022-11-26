@@ -1,11 +1,12 @@
-import { Button, Typography } from '@mui/material';
-import Page from 'components/Page';
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
-import { Path } from 'constants/routing';
 import ErrorIcon from '@mui/icons-material/Error';
+import { Button, Typography } from '@mui/material';
 import { DefaultColors } from 'constants/constants';
+import { Path } from 'constants/routing';
+
+import Page from 'components/Page';
 
 const PageNotFound: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'pageNotFound' });

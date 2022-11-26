@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router-dom';
-import Grid from '@mui/material/Grid';
 import { useTranslation } from 'react-i18next';
+import { Link as RouterLink } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
 
 type Props = {
   buttonText: string;

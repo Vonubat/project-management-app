@@ -1,7 +1,7 @@
-import { SocketAction } from 'constants/constants';
-import { Path } from 'constants/routing';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { SocketAction } from 'constants/constants';
+import { Path } from 'constants/routing';
 import { authSelector } from 'store/authSlice';
 import { getBoardsByUser } from 'store/boardListSlice';
 import { deleteLocalColumn, getColumnsInBoards } from 'store/columnsSlice';
@@ -9,7 +9,8 @@ import { showNotification } from 'store/notificationSlice';
 import { deleteLocalTaskById, getTasksByBoardId } from 'store/tasksSlice';
 import { getAllUsers, usersSelector } from 'store/usersSlice';
 import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
-import { useAppDispatch, useAppSelector } from './hooks';
+
+import { useAppDispatch, useAppSelector } from './typedHooks';
 
 type BoardsEventReducerParam = {
   action: SocketAction;

@@ -1,5 +1,5 @@
-import { BASE_URL } from 'constants/constants';
 import { useEffect, useRef } from 'react';
+import { BASE_URL } from 'constants/constants';
 import io, { ManagerOptions, Socket, SocketOptions } from 'socket.io-client';
 
 export const useSocket = (

@@ -1,11 +1,12 @@
 import { AxiosResponse } from 'axios';
 import { ApiRoutes } from 'constants/constants';
 import {
-  SignUpOkResponseData,
-  SignUpRequestData,
   SignInOkResponseData,
   SignInRequestData,
+  SignUpOkResponseData,
+  SignUpRequestData,
 } from 'types/auth';
+
 import api from './api';
 
 export class AuthService {

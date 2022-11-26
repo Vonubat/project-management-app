@@ -1,13 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
+import { ConnectableElement, useDrag, useDrop } from 'react-dnd';
 import { Box, LinearProgress } from '@mui/material';
-import ColumnTextarea from './UI/ColumnTitle';
-import TasksPreview from './TasksPreview';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { DndType } from 'constants/constants';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { changeColumnOrder, changeLocalColumnOrder } from 'store/columnsSlice';
 import { tasksSelector } from 'store/tasksSlice';
-import { ConnectableElement, useDrag, useDrop } from 'react-dnd';
 import { DropColumnItem } from 'types/columns';
-import { DndType } from 'constants/constants';
+
+import ColumnTextarea from './UI/ColumnTitle';
+import TasksPreview from './TasksPreview';
 
 type ColumnPreviewProps = {
   columnTitle: string;

@@ -1,7 +1,8 @@
-import { styled, useMediaQuery, Button, Typography } from '@mui/material';
-import GitHubIcon from '@mui/icons-material/GitHub';
 import React, { FC } from 'react';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import { Button, styled, Typography, useMediaQuery } from '@mui/material';
 import { GRAY_700, MediaQuery } from 'constants/constants';
+
 import RSLogo from './UI/RSLogo';
 
 const styledFooter = (breakPoint: boolean) =>

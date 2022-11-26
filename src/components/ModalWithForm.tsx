@@ -1,4 +1,6 @@
 import React, { FC, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {
   Box,
   Button,
@@ -10,11 +12,9 @@ import {
   Theme,
   Typography,
 } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import { closeModalForm, modalSelector } from 'store/modalSlice';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { DefaultColors } from 'constants/constants';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
+import { closeModalForm, modalSelector } from 'store/modalSlice';
 
 type Props = {
   uniqueId: string;

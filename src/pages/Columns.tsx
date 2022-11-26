@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import Page from 'components/Page';
-import { Box, Typography, useMediaQuery } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import {
-  useAppDispatch,
-  useAppSelector,
-  useColumnsInitialData,
-  useImperativeDisableScroll,
-} from 'hooks/hooks';
-import { MediaQuery, TypeofModal } from 'constants/constants';
-import { clearLocalColumns, columnsSelector } from 'store/columnsSlice';
-import { useParams } from 'react-router-dom';
-import { ColumnData } from 'types/columns';
-import ColumnPreview from 'components/ColumnPreview';
-import ColumnsAddBtn from 'components/UI/ColumnsAddBtn';
-import AddColumnForm from 'components/forms/AddColumnForm';
-import { openModalForm } from 'store/modalSlice';
-import AddTaskForm from 'components/forms/AddTaskForm';
-import EditTaskForm from 'components/forms/EditTaskForm';
-import ColumnsBackBtn from 'components/UI/ColumnsBackBtn';
-import styled from '@emotion/styled';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { clearAllLocalTasks } from 'store/tasksSlice';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import styled from '@emotion/styled';
+import { Box, Typography, useMediaQuery } from '@mui/material';
+import { MediaQuery, TypeofModal } from 'constants/constants';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
+import { useColumnsInitialData } from 'hooks/useColumnsInitialData';
+import { useImperativeDisableScroll } from 'hooks/useImperativeDisableScroll';
 import { useSocket } from 'hooks/useSocket';
-import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
 import useSocketReducers from 'hooks/useSocketReducers';
+import { clearLocalColumns, columnsSelector } from 'store/columnsSlice';
+import { openModalForm } from 'store/modalSlice';
+import { clearAllLocalTasks } from 'store/tasksSlice';
 import { usersSelector } from 'store/usersSlice';
+import { ColumnData } from 'types/columns';
+import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
+
+import ColumnPreview from 'components/ColumnPreview';
+import AddColumnForm from 'components/forms/AddColumnForm';
+import AddTaskForm from 'components/forms/AddTaskForm';
+import EditTaskForm from 'components/forms/EditTaskForm';
+import Page from 'components/Page';
+import ColumnsAddBtn from 'components/UI/ColumnsAddBtn';
+import ColumnsBackBtn from 'components/UI/ColumnsBackBtn';
 
 const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPoint' })<{
   isBreakPoint: boolean;

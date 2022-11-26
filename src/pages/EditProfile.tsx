@@ -1,17 +1,18 @@
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
+import PersonIcon from '@mui/icons-material/Person';
 import { Avatar, Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { Container } from '@mui/system';
-import Page from 'components/Page';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
-import React, { useEffect, useState } from 'react';
-import { deleteUser, getUser, usersSelector } from 'store/usersSlice';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import PersonIcon from '@mui/icons-material/Person';
-import { useTranslation } from 'react-i18next';
-import ConfirmModal from 'components/ConfirmModal';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { authSelector, logOut } from 'store/authSlice';
-import EditProfileForm from 'components/forms/EditProfileForm';
 import { openModalForm } from 'store/modalSlice';
+import { deleteUser, getUser, usersSelector } from 'store/usersSlice';
+
+import ConfirmModal from 'components/ConfirmModal';
+import EditProfileForm from 'components/forms/EditProfileForm';
+import Page from 'components/Page';
 
 const boxStyles = {
   display: 'flex',

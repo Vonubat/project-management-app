@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { Container, Divider, Grid, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
+import { Container, Divider, Grid, Typography } from '@mui/material';
+import Link from '@mui/material/Link';
 import { Path } from 'constants/routing';
 
 type Props = {

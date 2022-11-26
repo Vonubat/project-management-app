@@ -1,24 +1,26 @@
 import React, { FC, SyntheticEvent, useState } from 'react';
+import { ConnectableElement, useDrag, useDrop } from 'react-dnd';
+import { useTranslation } from 'react-i18next';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, Typography } from '@mui/material';
 import { DefaultColors, DndType, GRAY_700, TypeofModal } from 'constants/constants';
-import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from 'hooks/hooks';
+import { useAppDispatch } from 'hooks/typedHooks';
+import { setCurrentColumnId } from 'store/columnsSlice';
+import { openModalForm } from 'store/modalSlice';
 import {
   changeLocalTaskOrder,
   changeTaskOrder,
-  deleteTask,
   deleteLocalTask,
+  deleteTask,
   setCurrentTask,
 } from 'store/tasksSlice';
-import ConfirmModal from 'components/ConfirmModal';
-import CustomIconBtn from './CustomIconBtn';
-import { theme } from 'components/Page';
-import { setCurrentColumnId } from 'store/columnsSlice';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { openModalForm } from 'store/modalSlice';
-import isTouchEnabled from 'utils/isTouchEnabled';
-import { ConnectableElement, useDrag, useDrop } from 'react-dnd';
 import { DropTaskItem, TaskData } from 'types/tasks';
+import isTouchEnabled from 'utils/isTouchEnabled';
+
+import ConfirmModal from 'components/ConfirmModal';
+import { theme } from 'components/Page';
+
+import CustomIconBtn from './CustomIconBtn';
 
 const taskStyles = {
   display: 'flex',

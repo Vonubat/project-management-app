@@ -1,7 +1,8 @@
-import { useAppSelector } from 'hooks/hooks';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { useAppSelector } from 'hooks/typedHooks';
 import { notificationSelector } from 'store/notificationSlice';
+
 import Footer from './Footer';
 import Header from './Header';
 import Loader from './Loader';

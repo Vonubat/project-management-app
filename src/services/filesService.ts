@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { ApiRoutes } from 'constants/constants';
 import { FileData } from 'types/file';
+
 import api from './api';
 
 export default class FilesService {

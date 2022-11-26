@@ -1,10 +1,10 @@
-import { Button } from '@mui/material';
-import { GRAY_700 } from 'constants/constants';
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
-import { Path } from 'constants/routing';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { Button } from '@mui/material';
+import { GRAY_700 } from 'constants/constants';
+import { Path } from 'constants/routing';
 
 const ColumnsBackBtn: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
