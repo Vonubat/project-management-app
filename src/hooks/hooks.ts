@@ -94,6 +94,9 @@ export const useBoardListInitialData = (): void => {
 
   useEffect(() => {
     dispatch(getBoardsByUser());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (!users.length) {
       dispatch(getAllUsers());
     }
