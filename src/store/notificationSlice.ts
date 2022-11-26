@@ -2,6 +2,7 @@ import { createSlice, isFulfilled, isPending, isRejected, PayloadAction } from '
 import { Severity } from 'constants/constants';
 import { Notification } from 'types/notification';
 import { getTranslationString } from 'utils/getTranslationString';
+
 import { isGetAction, isInfoAction, isNoNotificationAction, isSuccessAction } from './util';
 
 type NotificationState = {

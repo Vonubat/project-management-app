@@ -1,18 +1,19 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useTranslation } from 'react-i18next';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Box from '@mui/material/Box';
+import { signUpInputsList } from 'constants/inputs';
+import { Path } from 'constants/routing';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { authSelector, signUp } from 'store/authSlice';
-import AuthPage from 'components/AuthPage';
-import { Path } from 'constants/routing';
-import CreatedUserWindow from 'components/CreatedUserWindow';
 import { SignUpFormFields } from 'types/auth';
-import { signUpInputsList } from 'constants/inputs';
-import AuthSubmitButtonAndLink from 'components/AuthSubmitButtonAndLink';
 import { FormControl } from 'types/formInput';
+
+import AuthPage from 'components/AuthPage';
+import AuthSubmitButtonAndLink from 'components/AuthSubmitButtonAndLink';
 import ControlledFormInput from 'components/ControlledFormInput';
+import CreatedUserWindow from 'components/CreatedUserWindow';
 
 export default function SignUp() {
   const dispatch = useAppDispatch();

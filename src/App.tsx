@@ -1,15 +1,16 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import Layout from 'components/Layout';
-import Home from 'pages/Home';
-import SignIn from 'pages/SignIn';
-import SignUp from 'pages/SignUp';
+import { Route, Routes } from 'react-router-dom';
 import { Path } from 'constants/routing';
 import BoardList from 'pages/BoardList';
-import ProtectedRoute from 'components/ProtectedRoute';
-import EditProfile from 'pages/EditProfile';
 import Columns from 'pages/Columns';
+import EditProfile from 'pages/EditProfile';
+import Home from 'pages/Home';
 import PageNotFound from 'pages/PageNotFound';
+import SignIn from 'pages/SignIn';
+import SignUp from 'pages/SignUp';
+
+import Layout from 'components/Layout';
+import ProtectedRoute from 'components/ProtectedRoute';
 
 function App() {
   return (

@@ -1,3 +1,9 @@
+import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link as RouterLink } from 'react-router-dom';
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import Diversity1Icon from '@mui/icons-material/Diversity1';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import {
   Avatar,
   Box,
@@ -9,22 +15,18 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import Page from 'components/Page';
-import Diversity1Icon from '@mui/icons-material/Diversity1';
-import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
-import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import { MediaQuery } from 'constants/constants';
 import { Path } from 'constants/routing';
 import { useAppSelector } from 'hooks/typedHooks';
-import React, { FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Link as RouterLink } from 'react-router-dom';
 import { authSelector } from 'store/authSlice';
-import Logo1 from '../assets/logo_1.png';
-import Logo2 from '../assets/logo_2.svg';
-import VonubatAvatar from '../assets/avatars/vonubat.jpg';
+
+import Page from 'components/Page';
+
 import AlexanderSUSAvatar from '../assets/avatars/alexandersus.png';
 import AntonShcherbaAvatar from '../assets/avatars/anton-shcherba.png';
-import { MediaQuery } from 'constants/constants';
+import VonubatAvatar from '../assets/avatars/vonubat.jpg';
+import Logo1 from '../assets/logo_1.png';
+import Logo2 from '../assets/logo_2.svg';
 
 type Props = {
   children?: React.ReactNode;

@@ -1,5 +1,6 @@
 import { TOKEN } from 'constants/constants';
 import { LocalStorageUserData } from 'types/utilTypes';
+
 import { parseJwt } from './parseJwt';
 
 export const getUserDataFromLocalStorage = (): LocalStorageUserData => {

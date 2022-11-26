@@ -1,7 +1,11 @@
+import React, { ChangeEvent, FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Badge, Box, TextareaAutosize } from '@mui/material';
 import { DefaultColors, GRAY_700 } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
-import React, { FC, useState, ChangeEvent, useEffect, useCallback, useRef, RefObject } from 'react';
 import {
   changeColumnOrder,
   closeColumnTitle,
@@ -14,14 +18,12 @@ import {
   updateColumn,
   updateLocalColumn,
 } from 'store/columnsSlice';
-import CustomIconBtn from './CustomIconBtn';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ConfirmModal from 'components/ConfirmModal';
-import { useTranslation } from 'react-i18next';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
 import { clearLocalTaskByColumnId, tasksSelector } from 'store/tasksSlice';
 import { ColumnData } from 'types/columns';
+
+import ConfirmModal from 'components/ConfirmModal';
+
+import CustomIconBtn from './CustomIconBtn';
 
 type TextareaProps = {
   children?: React.ReactNode;

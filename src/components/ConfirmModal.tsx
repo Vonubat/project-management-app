@@ -1,8 +1,8 @@
 import React, { FC, SyntheticEvent } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { DefaultColors } from 'constants/constants';
 import WarningIcon from '@mui/icons-material/Warning';
+import { Button, Dialog, DialogActions, DialogContent, Typography } from '@mui/material';
+import { DefaultColors } from 'constants/constants';
 
 interface IConfirmModalProps {
   isOpen: boolean;

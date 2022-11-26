@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, MouseEvent } from 'react';
+import React, { FC, MouseEvent, ReactNode } from 'react';
 import { Button, useMediaQuery } from '@mui/material';
 import { MediaQuery } from 'constants/constants';
 

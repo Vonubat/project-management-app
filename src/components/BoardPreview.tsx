@@ -1,19 +1,20 @@
 import React, { FC, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Box, Typography, Paper, IconButton, Zoom } from '@mui/material';
-import { Edit, Delete, AdminPanelSettings, Logout } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
-import ConfirmModal from './ConfirmModal';
+import { useNavigate } from 'react-router-dom';
+import { AdminPanelSettings, Delete, Edit, Logout } from '@mui/icons-material';
+import { Box, Button, IconButton, Paper, Typography, Zoom } from '@mui/material';
+import { TypeofModal } from 'constants/constants';
+import { Path } from 'constants/routing';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { useMouseHover } from 'hooks/useMouseHover';
-import { deleteBoard, deleteLocalBoard, updateBoard } from 'store/boardListSlice';
-import { Path } from 'constants/routing';
-import { BoardData } from 'types/boards';
-import { openModalForm, setBoardParams } from 'store/modalSlice';
-import { TypeofModal } from 'constants/constants';
 import { authSelector } from 'store/authSlice';
+import { deleteBoard, deleteLocalBoard, updateBoard } from 'store/boardListSlice';
+import { openModalForm, setBoardParams } from 'store/modalSlice';
 import { usersSelector } from 'store/usersSlice';
+import { BoardData } from 'types/boards';
 import isTouchEnabled from 'utils/isTouchEnabled';
+
+import ConfirmModal from './ConfirmModal';
 
 type Props = {
   boardData: BoardData;

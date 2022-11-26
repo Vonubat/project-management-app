@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { getBoardsByUser } from 'store/boardListSlice';
 import { getAllUsers, usersSelector } from 'store/usersSlice';
+
 import { useAppDispatch, useAppSelector } from './typedHooks';
 
 export const useBoardListInitialData = (): void => {

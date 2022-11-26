@@ -1,10 +1,11 @@
 import { Action } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { AppDispatch, RootState } from 'store/store';
+
 import { SignInOkResponseData, SignUpOkResponseData } from './auth';
-import { TaskData } from './tasks';
-import { ColumnData } from './columns';
 import { BoardData } from './boards';
+import { ColumnData } from './columns';
+import { TaskData } from './tasks';
 
 export interface RejectedAction extends Action {
   error: Error | AxiosError;

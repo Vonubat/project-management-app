@@ -1,24 +1,25 @@
-import { Path } from 'constants/routing';
-import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { authSelector, logOut } from 'store/authSlice';
 import {
+  Dashboard,
+  DashboardCustomize,
+  ExitToApp,
   Home,
   Key,
-  ExitToApp,
-  Dashboard,
-  PersonAdd,
   ManageAccounts,
-  DashboardCustomize,
+  PersonAdd,
 } from '@mui/icons-material';
 import { AppBar, Box, Toolbar, useScrollTrigger } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import { TypeofModal } from 'constants/constants';
+import { Path } from 'constants/routing';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
+import { authSelector, logOut } from 'store/authSlice';
+import { boardListSelector } from 'store/boardListSlice';
+import { clearBoardParams, openModalForm } from 'store/modalSlice';
+
 import HeaderNavButton from './HeaderNavButton';
 import LanguageBox from './LanguageBox';
-import { clearBoardParams, openModalForm } from 'store/modalSlice';
-import { boardListSelector } from 'store/boardListSlice';
-import { TypeofModal } from 'constants/constants';
 
 const wrapperStyles = { display: { md: 'flex', gap: '20px' } };
 

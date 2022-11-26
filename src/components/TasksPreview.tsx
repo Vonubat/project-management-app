@@ -1,15 +1,16 @@
 import React, { FC } from 'react';
-import { Box, styled, Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
-import ColumnsAddBtn from './UI/ColumnsAddBtn';
-import { changeLocalTaskOrder, changeTaskOrder, tasksSelector } from 'store/tasksSlice';
-import Task from './UI/Task';
-import { DropTaskItem } from 'types/tasks';
-import { openModalForm } from 'store/modalSlice';
-import { DndType, TypeofModal } from 'constants/constants';
-import { setCurrentColumnId } from 'store/columnsSlice';
 import { useDrop } from 'react-dnd';
+import { useTranslation } from 'react-i18next';
+import { Box, styled, Typography } from '@mui/material';
+import { DndType, TypeofModal } from 'constants/constants';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
+import { setCurrentColumnId } from 'store/columnsSlice';
+import { openModalForm } from 'store/modalSlice';
+import { changeLocalTaskOrder, changeTaskOrder, tasksSelector } from 'store/tasksSlice';
+import { DropTaskItem } from 'types/tasks';
+
+import ColumnsAddBtn from './UI/ColumnsAddBtn';
+import Task from './UI/Task';
 
 type Props = {
   children?: React.ReactNode;

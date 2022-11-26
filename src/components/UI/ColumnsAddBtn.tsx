@@ -1,7 +1,7 @@
+import React, { FC } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { Button, SxProps, Theme } from '@mui/material';
 import { GRAY_700 } from 'constants/constants';
-import React, { FC } from 'react';
 
 type BtnProps = {
   children?: React.ReactNode;

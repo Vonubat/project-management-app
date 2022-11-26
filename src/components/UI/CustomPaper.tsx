@@ -1,5 +1,5 @@
-import { Paper } from '@mui/material';
 import React, { FC } from 'react';
+import { Paper } from '@mui/material';
 
 type Props = {
   children?: React.ReactNode;

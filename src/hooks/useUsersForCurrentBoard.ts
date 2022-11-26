@@ -4,6 +4,7 @@ import BoardsService from 'services/boardsService';
 import { usersSelector } from 'store/usersSlice';
 import { BoardData } from 'types/boards';
 import { UserData } from 'types/users';
+
 import { useAppSelector } from './typedHooks';
 
 export const useUsersForCurrentBoard = (): UserData[] => {

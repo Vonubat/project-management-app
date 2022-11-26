@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { ApiRoutes } from 'constants/constants';
 import { BoardData, BoardParams } from 'types/boards';
+
 import api from './api';
 
 export default class BoardsService {

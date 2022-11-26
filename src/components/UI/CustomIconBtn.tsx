@@ -1,5 +1,5 @@
-import { IconButton } from '@mui/material';
 import React, { FC, SyntheticEvent } from 'react';
+import { IconButton } from '@mui/material';
 import { DefaultColors } from 'constants/constants';
 import { appendAnimate } from 'utils/animations';
 

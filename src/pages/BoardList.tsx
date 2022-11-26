@@ -1,22 +1,23 @@
 import React, { forwardRef, useEffect, useState } from 'react';
-import { Box, Collapse, Paper, Typography, useMediaQuery, Zoom } from '@mui/material';
+import FlipMove from 'react-flip-move';
+import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
-import Page from 'components/Page';
-import BoardPreview from 'components/BoardPreview';
-import EditBoardForm from 'components/forms/EditBoardForm';
+import { Box, Collapse, Paper, Typography, useMediaQuery, Zoom } from '@mui/material';
+import { MediaQuery } from 'constants/constants';
 import { useAppSelector } from 'hooks/typedHooks';
 import { useBoardListInitialData } from 'hooks/useBoardListInitialData';
-import { boardListSelector } from 'store/boardListSlice';
-import { MediaQuery } from 'constants/constants';
-import { usersSelector } from 'store/usersSlice';
-import FlipMove from 'react-flip-move';
-import { BoardData } from 'types/boards';
-import SearchBar from 'components/SearchBar';
-import { CustomFlipMove } from 'types/utilTypes';
-import { useTranslation } from 'react-i18next';
 import { useSocket } from 'hooks/useSocket';
 import useSocketReducers from 'hooks/useSocketReducers';
+import { boardListSelector } from 'store/boardListSlice';
+import { usersSelector } from 'store/usersSlice';
+import { BoardData } from 'types/boards';
 import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
+import { CustomFlipMove } from 'types/utilTypes';
+
+import BoardPreview from 'components/BoardPreview';
+import EditBoardForm from 'components/forms/EditBoardForm';
+import Page from 'components/Page';
+import SearchBar from 'components/SearchBar';
 
 const StyledBox: CustomFlipMove = styled(FlipMove)({
   display: 'flex',

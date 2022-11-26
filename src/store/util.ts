@@ -1,4 +1,5 @@
 import { isAsyncThunkAction } from '@reduxjs/toolkit';
+
 import { signIn, signUp } from './authSlice';
 import { createBoard, deleteBoard, getBoardsByUser, updateBoard } from './boardListSlice';
 import {
@@ -15,7 +16,7 @@ import {
   getTasksByBoardId,
   updateTask,
 } from './tasksSlice';
-import { deleteUser, getUser, updateUser, getAllUsers } from './usersSlice';
+import { deleteUser, getAllUsers, getUser, updateUser } from './usersSlice';
 
 export const isGetAction = isAsyncThunkAction(
   getBoardsByUser,

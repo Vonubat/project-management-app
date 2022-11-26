@@ -6,6 +6,7 @@ import { setCurrentBoard } from 'store/boardListSlice';
 import { getColumnsInBoards } from 'store/columnsSlice';
 import { getTasksByBoardId } from 'store/tasksSlice';
 import { getAllUsers, usersSelector } from 'store/usersSlice';
+
 import { useAppDispatch, useAppSelector } from './typedHooks';
 
 export const useColumnsInitialData = (): void => {

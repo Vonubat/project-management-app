@@ -1,16 +1,17 @@
 import React, { FC, useState } from 'react';
-import { SignUpOkResponseData as UserData } from 'types/auth';
-import SearchBar from 'components/SearchBar';
 import {
+  Checkbox,
+  Divider,
   List,
   ListItem,
   ListItemButton,
-  ListItemText,
-  Checkbox,
-  Divider,
-  Paper,
   ListItemIcon,
+  ListItemText,
+  Paper,
 } from '@mui/material';
+import { SignUpOkResponseData as UserData } from 'types/auth';
+
+import SearchBar from 'components/SearchBar';
 
 const checkListStyles = {
   height: 153,

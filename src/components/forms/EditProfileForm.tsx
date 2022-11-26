@@ -1,14 +1,15 @@
 import React, { FC, useEffect } from 'react';
-import { updateUser, usersSelector } from 'store/usersSlice';
-import ControlledFormInput from 'components/ControlledFormInput';
 import { useForm } from 'react-hook-form';
-import { SignUpFormFields } from 'types/auth';
+import { useTranslation } from 'react-i18next';
 import { loginInput, nameInput, passwordInput } from 'constants/inputs';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
-import { useTranslation } from 'react-i18next';
-import ModalWithForm from 'components/ModalWithForm';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
+import { updateUser, usersSelector } from 'store/usersSlice';
+import { SignUpFormFields } from 'types/auth';
 import { FormControl } from 'types/formInput';
+
+import ControlledFormInput from 'components/ControlledFormInput';
+import ModalWithForm from 'components/ModalWithForm';
 
 type Props = {
   login: string;

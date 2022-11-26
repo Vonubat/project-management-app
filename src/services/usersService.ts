@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { ApiRoutes } from 'constants/constants';
-import { UserData, UpdateUserData } from 'types/users';
+import { UpdateUserData, UserData } from 'types/users';
+
 import api from './api';
 
 export default class UsersService {

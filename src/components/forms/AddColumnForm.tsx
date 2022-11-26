@@ -1,15 +1,16 @@
 import React, { FC, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
-import { useTranslation } from 'react-i18next';
-import { createColumn } from 'store/columnsSlice';
-import { columnTitleInput } from 'constants/inputs';
-import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
 import { useForm } from 'react-hook-form';
-import { AddColumnFields } from 'types/columns';
-import ModalWithForm from 'components/ModalWithForm';
-import ControlledFormInput from 'components/ControlledFormInput';
-import { FormControl } from 'types/formInput';
+import { useTranslation } from 'react-i18next';
 import { TypeofModal } from 'constants/constants';
+import { columnTitleInput } from 'constants/inputs';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
+import { createColumn } from 'store/columnsSlice';
+import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
+import { AddColumnFields } from 'types/columns';
+import { FormControl } from 'types/formInput';
+
+import ControlledFormInput from 'components/ControlledFormInput';
+import ModalWithForm from 'components/ModalWithForm';
 
 const AddColumnForm: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });

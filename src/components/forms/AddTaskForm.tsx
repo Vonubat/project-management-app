@@ -1,24 +1,25 @@
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { TransitionGroup } from 'react-transition-group';
+import { Add as AddIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
+import { Chip, Collapse, Grow } from '@mui/material';
+import { TypeofModal } from 'constants/constants';
+import { taskDescriptionInput, taskTitleInput } from 'constants/inputs';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { useUsersForCurrentBoard } from 'hooks/useUsersForCurrentBoard';
-import { useTranslation } from 'react-i18next';
-import { taskDescriptionInput, taskTitleInput } from 'constants/inputs';
-import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
-import { useForm } from 'react-hook-form';
-import ModalWithForm from 'components/ModalWithForm';
-import ControlledFormInput from 'components/ControlledFormInput';
-import { FormControl } from 'types/formInput';
-import { createTask, setTasksLoading } from 'store/tasksSlice';
-import { TaskFields } from 'types/tasks';
-import { TypeofModal } from 'constants/constants';
-import { columnsSelector } from 'store/columnsSlice';
-import { Add as AddIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
-import { TransitionGroup } from 'react-transition-group';
-import { Collapse, Chip, Grow } from '@mui/material';
-import UserSearchBar from 'components/UserSearchBar';
 import { authSelector } from 'store/authSlice';
-import CustomPaper from 'components/UI/CustomPaper';
+import { columnsSelector } from 'store/columnsSlice';
+import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
+import { createTask, setTasksLoading } from 'store/tasksSlice';
+import { FormControl } from 'types/formInput';
+import { TaskFields } from 'types/tasks';
 import { UserData } from 'types/users';
+
+import ControlledFormInput from 'components/ControlledFormInput';
+import ModalWithForm from 'components/ModalWithForm';
+import CustomPaper from 'components/UI/CustomPaper';
+import UserSearchBar from 'components/UserSearchBar';
 
 const AddTaskForm: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });

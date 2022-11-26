@@ -1,18 +1,19 @@
 import React, { useEffect } from 'react';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Box from '@mui/material/Box';
+import { signInInputsList } from 'constants/inputs';
+import { Path } from 'constants/routing';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { authSelector, signIn } from 'store/authSlice';
-import { useNavigate } from 'react-router-dom';
-import { Path } from 'constants/routing';
-import AuthPage from 'components/AuthPage';
 import { SignInFormFields } from 'types/auth';
-import { signInInputsList } from 'constants/inputs';
+import { FormControl } from 'types/formInput';
+
+import AuthPage from 'components/AuthPage';
 import AuthSubmitButtonAndLink from 'components/AuthSubmitButtonAndLink';
 import ControlledFormInput from 'components/ControlledFormInput';
-import { FormControl } from 'types/formInput';
 
 const SignIn = () => {
   const navigate = useNavigate();

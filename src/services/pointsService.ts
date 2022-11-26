@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 import { ApiRoutes } from 'constants/constants';
 import { ColumnData } from 'types/columns';
 import { PointsData, PointsParams, PointsSetParams, PointUpdateParams } from 'types/points';
+
 import api from './api';
 
 export default class PointsService {

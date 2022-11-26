@@ -1,4 +1,5 @@
 import BoardsService from 'services/boardsService';
+
 import { UserData } from './users';
 
 export type BoardData = BoardParams & {

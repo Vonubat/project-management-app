@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Language } from '@mui/icons-material';
 import { Menu, MenuItem } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import { LangType, LANG_TYPE } from 'constants/constants';
-import HeaderLangButton from './HeaderLangButton';
+import { LANG_TYPE, LangType } from 'constants/constants';
 import getLangType from 'utils/getLangType';
+
+import HeaderLangButton from './HeaderLangButton';
 
 const LanguageBox = () => {
   const [langMenuAnchor, setLangMenuAnchor] = useState<null | HTMLElement>(null);
