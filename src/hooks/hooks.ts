@@ -1,6 +1,8 @@
+import { StatusCode } from 'constants/constants';
+import { Path } from 'constants/routing';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import BoardsService from 'services/boardsService';
 import { getBoardsByUser, setCurrentBoard } from 'store/boardListSlice';
 import { getColumnsInBoards } from 'store/columnsSlice';
@@ -57,18 +59,33 @@ export const useMouseHover = <T extends HTMLElement>(): THook<T> => {
 export const useColumnsInitialData = (): void => {
   const { boardId } = useParams();
   const { users } = useAppSelector(usersSelector);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const getColumns = useCallback(
+    async (boardId: string) => {
+      try {
+        await dispatch(getColumnsInBoards(boardId)).unwrap();
+      } catch (rejectedValue) {
+        if (rejectedValue === StatusCode.badRequest || rejectedValue === StatusCode.notFound) {
+          navigate(Path.boards);
+        }
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [boardId, dispatch]
+  );
 
   useEffect(() => {
     if (boardId) {
       dispatch(setCurrentBoard(boardId));
-      dispatch(getColumnsInBoards(boardId));
+      getColumns(boardId);
       dispatch(getTasksByBoardId(boardId));
       if (!users.length) {
         dispatch(getAllUsers());
       }
     }
-  }, [dispatch, boardId, users.length]);
+  }, [dispatch, boardId, users.length, getColumns]);
 };
 
 export const useBoardListInitialData = (): void => {
