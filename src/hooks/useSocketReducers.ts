@@ -9,7 +9,7 @@ import { showNotification } from 'store/notificationSlice';
 import { deleteLocalTaskById, getTasksByBoardId } from 'store/tasksSlice';
 import { getAllUsers, usersSelector } from 'store/usersSlice';
 import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
-import { useAppDispatch, useAppSelector } from './hooks';
+import { useAppDispatch, useAppSelector } from './typedHooks';
 
 type BoardsEventReducerParam = {
   action: SocketAction;

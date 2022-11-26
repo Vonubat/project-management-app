@@ -4,7 +4,7 @@ import ControlledFormInput from 'components/ControlledFormInput';
 import { useForm } from 'react-hook-form';
 import { SignUpFormFields } from 'types/auth';
 import { loginInput, nameInput, passwordInput } from 'constants/inputs';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { useTranslation } from 'react-i18next';
 import ModalWithForm from 'components/ModalWithForm';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';

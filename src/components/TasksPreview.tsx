@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Box, styled, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import ColumnsAddBtn from './UI/ColumnsAddBtn';
 import { changeLocalTaskOrder, changeTaskOrder, tasksSelector } from 'store/tasksSlice';
 import Task from './UI/Task';

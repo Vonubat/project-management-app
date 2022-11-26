@@ -4,7 +4,8 @@ import { Button, Box, Typography, Paper, IconButton, Zoom } from '@mui/material'
 import { Edit, Delete, AdminPanelSettings, Logout } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import ConfirmModal from './ConfirmModal';
-import { useAppDispatch, useAppSelector, useMouseHover } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
+import { useMouseHover } from 'hooks/useMouseHover';
 import { deleteBoard, deleteLocalBoard, updateBoard } from 'store/boardListSlice';
 import { Path } from 'constants/routing';
 import { BoardData } from 'types/boards';

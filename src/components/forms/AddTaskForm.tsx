@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState, useCallback } from 'react';
-import { useAppDispatch, useAppSelector, useUsersForCurrentBoard } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
+import { useUsersForCurrentBoard } from 'hooks/useUsersForCurrentBoard';
 import { useTranslation } from 'react-i18next';
 import { taskDescriptionInput, taskTitleInput } from 'constants/inputs';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';

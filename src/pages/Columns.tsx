@@ -2,12 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Page from 'components/Page';
 import { Box, Typography, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import {
-  useAppDispatch,
-  useAppSelector,
-  useColumnsInitialData,
-  useImperativeDisableScroll,
-} from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
+import { useColumnsInitialData } from 'hooks/useColumnsInitialData';
+import { useImperativeDisableScroll } from 'hooks/useImperativeDisableScroll';
 import { MediaQuery, TypeofModal } from 'constants/constants';
 import { clearLocalColumns, columnsSelector } from 'store/columnsSlice';
 import { useParams } from 'react-router-dom';

@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { useTranslation } from 'react-i18next';
 import { createColumn } from 'store/columnsSlice';
 import { columnTitleInput } from 'constants/inputs';

@@ -2,7 +2,7 @@ import React, { FC, SyntheticEvent, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { DefaultColors, DndType, GRAY_700, TypeofModal } from 'constants/constants';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from 'hooks/hooks';
+import { useAppDispatch } from 'hooks/typedHooks';
 import {
   changeLocalTaskOrder,
   changeTaskOrder,

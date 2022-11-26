@@ -14,7 +14,7 @@ import Diversity1Icon from '@mui/icons-material/Diversity1';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import { Path } from 'constants/routing';
-import { useAppSelector } from 'hooks/hooks';
+import { useAppSelector } from 'hooks/typedHooks';
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';

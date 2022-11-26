@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { authSelector, signUp } from 'store/authSlice';
 import AuthPage from 'components/AuthPage';
 import { Path } from 'constants/routing';

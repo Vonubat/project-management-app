@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { closeModalForm, modalSelector } from 'store/modalSlice';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { DefaultColors } from 'constants/constants';

@@ -1,4 +1,4 @@
-import { useAppSelector } from 'hooks/hooks';
+import { useAppSelector } from 'hooks/typedHooks';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { notificationSelector } from 'store/notificationSlice';

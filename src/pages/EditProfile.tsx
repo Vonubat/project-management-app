@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import Page from 'components/Page';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import React, { useEffect, useState } from 'react';
 import { deleteUser, getUser, usersSelector } from 'store/usersSlice';
 import EditIcon from '@mui/icons-material/Edit';

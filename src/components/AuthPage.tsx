@@ -3,7 +3,7 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Page from 'components/Page';
-import { useAppDispatch } from 'hooks/hooks';
+import { useAppDispatch } from 'hooks/typedHooks';
 import { clearAuthPageData } from 'store/authSlice';
 import { Typography } from '@mui/material';
 

@@ -1,5 +1,5 @@
 import { Path } from 'constants/routing';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authSelector, logOut } from 'store/authSlice';

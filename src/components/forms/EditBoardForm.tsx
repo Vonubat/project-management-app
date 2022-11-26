@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { useTranslation } from 'react-i18next';
 import ControlledFormInput from 'components/ControlledFormInput';
 import ModalWithForm from 'components/ModalWithForm';

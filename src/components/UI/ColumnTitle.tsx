@@ -1,6 +1,6 @@
 import { Badge, Box, TextareaAutosize } from '@mui/material';
 import { DefaultColors, GRAY_700 } from 'constants/constants';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import React, { FC, useState, ChangeEvent, useEffect, useCallback, useRef, RefObject } from 'react';
 import {
   changeColumnOrder,

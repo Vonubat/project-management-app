@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { authSelector, signIn } from 'store/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { Path } from 'constants/routing';

@@ -3,7 +3,7 @@ import { Alert, IconButton, Slide, SlideProps, Snackbar } from '@mui/material';
 import { Severity } from 'constants/constants';
 import { useTranslation } from 'react-i18next';
 import CloseIcon from '@mui/icons-material/Close';
-import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { notificationSelector, removeNotification } from 'store/notificationSlice';
 import { Notification } from 'types/notification';
 

@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from 'react';
-import { useAppSelector } from 'hooks/hooks';
+import { useAppSelector } from 'hooks/typedHooks';
 import { Navigate } from 'react-router-dom';
 import { authSelector } from 'store/authSlice';
 import { Path } from 'constants/routing';
