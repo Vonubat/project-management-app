@@ -66,7 +66,7 @@ const EditColumnTitleBox: FC<Props> = ({ closeEditBox, title, columnId }) => {
     <EditLabelBox ref={boxRef}>
       <TextField
         inputRef={inputRef}
-        inputProps={{ maxLength: '40', minLength: '1' }}
+        inputProps={{ maxLength: '40' }}
         defaultValue={title}
         hiddenLabel
         multiline
