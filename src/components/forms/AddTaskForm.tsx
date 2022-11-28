@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { TransitionGroup } from 'react-transition-group';
@@ -7,14 +7,14 @@ import { Chip, Collapse, Grow } from '@mui/material';
 import { TypeofModal } from 'constants/constants';
 import { taskDescriptionInput, taskTitleInput } from 'constants/inputs';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
-import { useUsersForCurrentBoard } from 'hooks/useUsersForCurrentBoard';
-import { authSelector } from 'store/authSlice';
+import { boardListSelector } from 'store/boardListSlice';
 import { columnsSelector } from 'store/columnsSlice';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
 import { createTask, setTasksLoading } from 'store/tasksSlice';
+import { usersSelector } from 'store/usersSlice';
 import { FormControl } from 'types/formInput';
 import { TaskFields } from 'types/tasks';
-import { UserData } from 'types/users';
+import { UserWithCheck } from 'types/users';
 
 import ControlledFormInput from 'components/ControlledFormInput';
 import ModalWithForm from 'components/ModalWithForm';
@@ -26,9 +26,11 @@ const AddTaskForm: FC = () => {
   const isOpenKey: `isOpen_${string}` = `isOpen_${TypeofModal.addTask}`;
   const { [isOpenKey]: isOpen = false } = useAppSelector(modalSelector);
   const { currentColumnId: columnId } = useAppSelector(columnsSelector);
-  const { userId } = useAppSelector(authSelector);
-  const users: UserData[] = useUsersForCurrentBoard();
+  const { users } = useAppSelector(usersSelector);
+  const { currentBoardId, boards } = useAppSelector(boardListSelector);
   const dispatch = useAppDispatch();
+  const [boardUsers, setBoardUsers] = useState<UserWithCheck[]>([]);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const {
     control,
@@ -47,37 +49,48 @@ const AddTaskForm: FC = () => {
     dispatch(
       createTask({
         ...data,
-        users: checkedUsersId,
+        users: boardUsers.filter((u) => u.checked).map((u) => u._id),
       })
     );
     dispatch(closeModalForm(TypeofModal.addTask));
   };
 
-  const [isSearchWin, setSearchWin] = useState(false);
-  const [checkedUsersId, setCheckedUsersId] = useState<string[]>([]);
-  const checkedUsers = users.filter(({ _id }) => checkedUsersId.includes(_id));
-
-  function handleToggle(value: string) {
-    const curInd = checkedUsersId.indexOf(value);
-    const newChecked = [...checkedUsersId];
-    curInd === -1 ? newChecked.push(value) : newChecked.splice(curInd, 1);
-    setCheckedUsersId(newChecked);
+  function handleToggle(checkedId: string) {
+    setBoardUsers(
+      boardUsers.map((user) => ({
+        ...user,
+        checked: user._id === checkedId ? !user.checked : user.checked,
+      }))
+    );
   }
 
   useEffect(() => {
     dispatch(setIsSubmitDisabled({ uniqueId: TypeofModal.addTask, flag: !isValid }));
   }, [isValid, dispatch]);
 
-  const resetForm: () => void = useCallback((): void => {
+  useEffect(() => {
     if (isOpen) {
       reset({ title: '', description: '' });
-    }
-  }, [isOpen, reset]);
 
-  useEffect(() => {
-    setSearchWin(false);
-    resetForm();
-  }, [resetForm]);
+      const currentBoard = boards.find((b) => b._id === currentBoardId);
+
+      if (currentBoard) {
+        const preBoardUsers = [...currentBoard.users, currentBoard.owner].reduce(
+          (userList, boardParticipantId) => {
+            const foundUser = users.find((u) => u._id === boardParticipantId);
+            foundUser && userList.push({ ...foundUser, checked: false });
+
+            return userList;
+          },
+          [] as UserWithCheck[]
+        );
+
+        setBoardUsers(preBoardUsers);
+      }
+    }
+
+    return () => setIsSearchOpen(false);
+  }, [isOpen, users, boards, currentBoardId, reset]);
 
   return (
     <ModalWithForm
@@ -85,15 +98,15 @@ const AddTaskForm: FC = () => {
       uniqueId={TypeofModal.addTask}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Collapse in={!isSearchWin}>
+      <Collapse in={!isSearchOpen}>
         <ControlledFormInput control={formControl} inputOptions={taskTitleInput} />
         <ControlledFormInput control={formControl} inputOptions={taskDescriptionInput} />
       </Collapse>
-      <Collapse in={isSearchWin}>
+      <Collapse in={isSearchOpen}>
         <UserSearchBar
-          userId={userId}
-          users={users}
-          checkedUsersID={checkedUsersId}
+          userId={null}
+          users={boardUsers}
+          checkedUsersID={boardUsers.filter((u) => u.checked).map((u) => u._id)}
           handleToggle={handleToggle}
         />
       </Collapse>
@@ -101,16 +114,18 @@ const AddTaskForm: FC = () => {
         <Chip
           color="primary"
           sx={{ ':hover': { cursor: 'pointer' }, m: 0.25 }}
-          label={isSearchWin ? t('back') : t('addUsers')}
-          icon={isSearchWin ? <ChevronLeftIcon /> : <AddIcon />}
-          onClick={() => setSearchWin((prev) => !prev)}
+          label={isSearchOpen ? t('back') : t('addUsers')}
+          icon={isSearchOpen ? <ChevronLeftIcon /> : <AddIcon />}
+          onClick={() => setIsSearchOpen((prev) => !prev)}
         />
         <TransitionGroup>
-          {checkedUsers.map(({ login, _id }) => (
-            <Grow key={_id}>
-              <Chip label={login} onDelete={() => handleToggle(_id)} sx={{ m: 0.25 }} />
-            </Grow>
-          ))}
+          {boardUsers
+            .filter((u) => u.checked)
+            .map(({ login, _id }) => (
+              <Grow key={_id}>
+                <Chip label={login} onDelete={() => handleToggle(_id)} sx={{ m: 0.25 }} />
+              </Grow>
+            ))}
         </TransitionGroup>
       </CustomPaper>
     </ModalWithForm>

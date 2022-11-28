@@ -9,3 +9,5 @@ export type UserData = {
   name: string;
   login: string;
 };
+
+export type UserWithCheck = UserData & { checked: boolean };
