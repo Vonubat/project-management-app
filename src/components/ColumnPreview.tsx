@@ -7,7 +7,7 @@ import { changeColumnOrder, changeLocalColumnOrder } from 'store/columnsSlice';
 import { tasksSelector } from 'store/tasksSlice';
 import { DropColumnItem } from 'types/columns';
 
-import ColumnTextarea from './UI/ColumnTitle';
+import ColumnHeader from './UI/ColumnHeader';
 import TasksPreview from './TasksPreview';
 
 type ColumnPreviewProps = {
@@ -84,7 +84,7 @@ const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId, order })
       }}
       ref={(node: ConnectableElement) => drag(drop(node))}
     >
-      <ColumnTextarea value={columnTitle} columnId={columnId} />
+      <ColumnHeader title={columnTitle} columnId={columnId} />
       <TasksPreview columnId={columnId} />
       {isLoading && <LinearProgress sx={{ width: 1 }} />}
     </Box>
