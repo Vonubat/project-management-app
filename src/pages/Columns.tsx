@@ -1,20 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Box, Typography, useMediaQuery } from '@mui/material';
 import { MediaQuery, TypeofModal } from 'constants/constants';
+import { StatusCode } from 'constants/constants';
+import { Path } from 'constants/routing';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
-import { useColumnsInitialData } from 'hooks/useColumnsInitialData';
 import { useImperativeDisableScroll } from 'hooks/useImperativeDisableScroll';
 import { useSocket } from 'hooks/useSocket';
 import useSocketReducers from 'hooks/useSocketReducers';
+import { boardListSelector, getBoardsByUser, setCurrentBoard } from 'store/boardListSlice';
 import { clearLocalColumns, columnsSelector } from 'store/columnsSlice';
+import { getColumnsInBoards } from 'store/columnsSlice';
 import { openModalForm } from 'store/modalSlice';
 import { clearAllLocalTasks } from 'store/tasksSlice';
-import { usersSelector } from 'store/usersSlice';
+import { getTasksByBoardId } from 'store/tasksSlice';
+import { getAllUsers, usersSelector } from 'store/usersSlice';
 import { ColumnData } from 'types/columns';
 import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
 
@@ -44,9 +48,10 @@ const Columns = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const { columns } = useAppSelector(columnsSelector);
   const { users } = useAppSelector(usersSelector);
+  const { boards } = useAppSelector(boardListSelector);
   const { boardId } = useParams();
-  const [isUsersLoaded, setIsUserLoaded] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const socket = useSocket();
   const { boardsEventReducer, tasksEventReducer, usersEventReducer, columnsEventReducer } =
     useSocketReducers();
@@ -71,16 +76,38 @@ const Columns = () => {
     }
   };
 
-  useEffect(() => {
-    if (isUsersLoaded) {
-      socket.connect();
-      startListeners();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isUsersLoaded]);
+  const getColumns = useCallback(
+    async (boardId: string) => {
+      try {
+        await dispatch(getColumnsInBoards(boardId)).unwrap();
+      } catch (rejectedValue) {
+        if (rejectedValue === StatusCode.badRequest || rejectedValue === StatusCode.notFound) {
+          navigate(Path.boards);
+        }
+      }
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   useImperativeDisableScroll();
-  useColumnsInitialData();
+
+  useEffect(() => {
+    if (boardId) {
+      getColumns(boardId);
+      dispatch(setCurrentBoard(boardId));
+      dispatch(getTasksByBoardId(boardId));
+      !users.length && dispatch(getAllUsers());
+      !boards.length && dispatch(getBoardsByUser());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, boardId, getColumns]);
+
+  useEffect(() => {
+    if (!!users.length && !!boards.length) {
+      socket.connect();
+      startListeners();
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [!!users.length, !!boards.length]);
 
   useEffect(() => {
     return () => {
@@ -88,12 +115,6 @@ const Columns = () => {
       dispatch(clearLocalColumns());
     };
   }, [dispatch]);
-
-  useEffect(() => {
-    if (users.length) {
-      setIsUserLoaded(true);
-    }
-  }, [users]);
 
   return (
     <Page sx={{ my: '0rem' }}>
