@@ -64,7 +64,7 @@ export const nameInput: InputOptions = {
 
 export const loginInput: InputOptions = {
   name: 'login',
-  label: 'buttonText.signIn',
+  label: 'authPage.login',
   type: 'text',
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
