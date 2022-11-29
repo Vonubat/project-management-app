@@ -138,7 +138,7 @@ export const taskDescriptionInput: InputOptions = {
   name: 'description',
   label: 'tasks.description',
   type: 'text',
-  rows: 7,
+  rows: 5,
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
     maxLength: VALIDATION_RULE_MAX_LENGTH_400,
