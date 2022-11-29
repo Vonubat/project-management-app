@@ -1,7 +1,7 @@
 import React, { FC, SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import WarningIcon from '@mui/icons-material/Warning';
-import { Button, Dialog, DialogActions, DialogContent, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 import { DefaultColors } from 'constants/constants';
 
 interface IConfirmModalProps {
@@ -15,10 +15,8 @@ const ConfirmModal: FC<IConfirmModalProps> = ({ isOpen, title, onClose, onSubmit
   const { t } = useTranslation('translation', { keyPrefix: 'confirmModal' });
 
   return (
-    <Dialog open={isOpen} onClose={onClose}>
-      <DialogContent sx={{ p: 2 }}>
-        <Typography variant="h6">{title}</Typography>
-      </DialogContent>
+    <Dialog open={isOpen} onClose={onClose} fullWidth maxWidth="xs">
+      <DialogTitle sx={{ textAlign: 'center' }}>{title}</DialogTitle>
       <DialogActions sx={{ p: 2, pt: 0 }}>
         <Button onClick={onClose}>{t('no')}</Button>
         {onSubmit && (
