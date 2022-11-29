@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+
 import { LangType } from './constants/constants';
 
 const resources = {
@@ -109,6 +110,7 @@ const resources = {
         editProfile: 'Edit profile',
         deleteProfile: 'Delete account',
         modalTitle: 'Change profile',
+        confirmModalTitle: 'Are you sure you want to delete your account?',
       },
       columns: {
         back: 'Back to boards',
@@ -257,6 +259,7 @@ const resources = {
         editProfile: 'Изменить профиль',
         deleteProfile: 'Удалить аккаунт',
         modalTitle: 'Изменить профиль',
+        confirmModalTitle: 'Вы действительно хотите удалить аккаунт?',
       },
       columns: {
         back: 'Назад к доскам',
