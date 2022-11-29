@@ -16,7 +16,6 @@ const EditLabelBox = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  width: '90%',
 });
 
 const EditColumnTitleBox: FC<Props> = ({ closeEditBox, title, columnId }) => {
@@ -63,7 +62,7 @@ const EditColumnTitleBox: FC<Props> = ({ closeEditBox, title, columnId }) => {
   }, [handleKeydown, handleClickOutSide]);
 
   return (
-    <EditLabelBox ref={boxRef}>
+    <EditLabelBox ref={boxRef} sx={{ mx: 1 }}>
       <TextField
         inputRef={inputRef}
         inputProps={{ maxLength: '40' }}
@@ -74,7 +73,7 @@ const EditColumnTitleBox: FC<Props> = ({ closeEditBox, title, columnId }) => {
         fullWidth
         size="small"
       />
-      <Box sx={{ ml: 'auto' }}>
+      <Box sx={{ ml: 'auto', my: 0.25 }}>
         <IconButton aria-label="submit" onClick={submitChange}>
           <CheckIcon />
         </IconButton>
