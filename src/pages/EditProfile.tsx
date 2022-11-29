@@ -55,9 +55,7 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    if (!(login && name)) {
-      dispatch(getUser());
-    }
+    !(login && name) && dispatch(getUser());
   }, [dispatch, login, name]);
 
   return (
@@ -83,7 +81,7 @@ const EditProfile = () => {
             </>
           )}
         </Box>
-        <ButtonGroup variant="text" sx={{ ml: 'auto' }}>
+        <ButtonGroup variant="text" fullWidth>
           <Button
             variant="text"
             color="info"
@@ -105,7 +103,7 @@ const EditProfile = () => {
       <EditProfileForm login={login} name={name} />
       <ConfirmModal
         isOpen={isConfirmOpen}
-        title={t('deleteProfile')}
+        title={t('confirmModalTitle')}
         onClose={closeConfirmModal}
         onSubmit={deleteAccount}
       />

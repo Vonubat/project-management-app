@@ -4,12 +4,11 @@ import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
 import { Box, Collapse, Paper, Typography, useMediaQuery, Zoom } from '@mui/material';
 import { MediaQuery } from 'constants/constants';
-import { useAppSelector } from 'hooks/typedHooks';
-import { useBoardListInitialData } from 'hooks/useBoardListInitialData';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { useSocket } from 'hooks/useSocket';
 import useSocketReducers from 'hooks/useSocketReducers';
-import { boardListSelector } from 'store/boardListSlice';
-import { usersSelector } from 'store/usersSlice';
+import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
+import { getAllUsers, usersSelector } from 'store/usersSlice';
 import { BoardData } from 'types/boards';
 import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
 import { CustomFlipMove } from 'types/utilTypes';
@@ -41,7 +40,7 @@ export default function Boards() {
   const [searchValue, setSearchValue] = useState('');
   const socket = useSocket();
   const { boardsEventReducer, usersEventReducer } = useSocketReducers();
-  const [isUsersLoaded, setIsUserLoaded] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   const startListeners = () => {
     socket.on('boards', ({ action, ...payload }: BoardsContentSocketPayload) => {
@@ -54,21 +53,18 @@ export default function Boards() {
   };
 
   useEffect(() => {
-    if (isUsersLoaded) {
-      socket.connect();
-      startListeners();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isUsersLoaded]);
-
-  useBoardListInitialData();
+    dispatch(getBoardsByUser());
+    dispatch(getAllUsers());
+  }, [dispatch]);
 
   useEffect(() => {
-    if (users.length) {
-      setIsUserLoaded(true);
-    }
-  }, [users]);
+    if (!!users.length && !!boards.length) {
+      socket.connect();
+      startListeners();
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [!!users.length, !!boards.length]);
 
+  // TODO move this to useState and useEffect
   const filteredBoards = boards.filter(({ title }) =>
     title.toLowerCase().includes(searchValue.toLowerCase())
   );
