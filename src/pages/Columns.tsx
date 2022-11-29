@@ -36,7 +36,6 @@ const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPo
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 }>(({ theme, isBreakPoint }) => ({
   display: 'flex',
-  justifyContent: 'start',
   overflowX: 'auto',
   overflowY: 'hidden',
   height: isBreakPoint ? 'calc(100vh - 210px)' : 'calc(100vh - 370px)',

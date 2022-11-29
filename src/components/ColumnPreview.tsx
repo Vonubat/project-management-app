@@ -3,7 +3,7 @@ import { Box, LinearProgress } from '@mui/material';
 import { useAppSelector } from 'hooks/typedHooks';
 import { tasksSelector } from 'store/tasksSlice';
 
-import ColumnTextarea from './UI/ColumnTitle';
+import ColumnHeader from './UI/ColumnHeader';
 import TasksPreview from './TasksPreview';
 
 type ColumnPreviewProps = {
@@ -47,7 +47,7 @@ const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId }) => {
 
   return (
     <Box sx={{ ...style }}>
-      <ColumnTextarea value={columnTitle} columnId={columnId} />
+      <ColumnHeader title={columnTitle} columnId={columnId} />
       <TasksPreview columnId={columnId} />
       {isLoading && <LinearProgress sx={{ width: 1 }} />}
     </Box>
