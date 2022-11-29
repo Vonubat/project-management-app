@@ -12,10 +12,7 @@ type ColumnPreviewProps = {
 };
 
 const style = {
-  height: 'fit-content',
-  maxHeight: 'calc(100% - 30px)',
   py: 1,
-  mx: 2,
   maxWidth: 300,
   minWidth: 300,
   display: 'flex',

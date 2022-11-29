@@ -156,13 +156,14 @@ const Columns = () => {
               {columns.map(({ _id, title, order }: ColumnData) => (
                 <Draggable key={_id} draggableId={_id} index={order}>
                   {(provided) => (
-                    <div
+                    <Box
+                      sx={{ height: 'fit-content', maxHeight: 'calc(100% - 30px)', mx: 2 }}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
                       <ColumnPreview columnId={_id} columnTitle={title} />
-                    </div>
+                    </Box>
                   )}
                 </Draggable>
               ))}
