@@ -1,20 +1,13 @@
 import React, { FC, SyntheticEvent, useState } from 'react';
-import { ConnectableElement, useDrag, useDrop } from 'react-dnd';
 import { useTranslation } from 'react-i18next';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, Typography } from '@mui/material';
-import { DefaultColors, DndType, GRAY_700, TypeofModal } from 'constants/constants';
+import { DefaultColors, GRAY_700, TypeofModal } from 'constants/constants';
 import { useAppDispatch } from 'hooks/typedHooks';
 import { setCurrentColumnId } from 'store/columnsSlice';
 import { openModalForm } from 'store/modalSlice';
-import {
-  changeLocalTaskOrder,
-  changeTaskOrder,
-  deleteLocalTask,
-  deleteTask,
-  setCurrentTask,
-} from 'store/tasksSlice';
-import { DropTaskItem, TaskData } from 'types/tasks';
+import { changeTaskOrder, deleteLocalTask, deleteTask, setCurrentTask } from 'store/tasksSlice';
+import { TaskData } from 'types/tasks';
 import isTouchEnabled from 'utils/isTouchEnabled';
 
 import ConfirmModal from 'components/ConfirmModal';
@@ -32,13 +25,14 @@ const taskStyles = {
   maxHeight: 40,
   minHeight: 40,
   mx: 1,
-  my: 0.3,
+  my: 0.25,
   p: 0.625,
   borderRadius: '3px',
   fontSize: 20,
   color: GRAY_700,
   cursor: 'pointer',
   boxShadow: `${theme.shadows[3]}`,
+  bgcolor: 'white',
 };
 
 type Props = {
@@ -47,43 +41,12 @@ type Props = {
 };
 
 const Task: FC<Props> = ({ taskData }) => {
-  const { _id, columnId, title, order } = taskData;
+  const { columnId, title } = taskData;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
   const dispatch = useAppDispatch();
   const isTouchScreenDevice: boolean = isTouchEnabled();
-  const [{ isDragging }, drag] = useDrag({
-    type: DndType.task,
-    item: {
-      id: _id,
-      columnId,
-      order,
-    },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  });
-
-  const [{ isOver }, drop] = useDrop({
-    accept: DndType.task,
-    drop(item: DropTaskItem) {
-      if (item.columnId !== columnId || item.order !== order) {
-        dispatch(
-          changeLocalTaskOrder({
-            dragOrder: item.order,
-            dragColumnId: item.columnId,
-            dropOrder: order,
-            dropColumnId: columnId,
-          })
-        );
-        dispatch(changeTaskOrder());
-      }
-    },
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
-  });
 
   const submit = (e: SyntheticEvent) => {
     e.stopPropagation();
@@ -122,8 +85,7 @@ const Task: FC<Props> = ({ taskData }) => {
 
   return (
     <Box
-      ref={(node: ConnectableElement) => drag(drop(node))}
-      sx={{ ...taskStyles, bgcolor: isOver ? 'lightBlue' : 'white', opacity: isDragging ? 0 : 1 }}
+      sx={{ ...taskStyles }}
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
       onClick={openEditTaskModal}
@@ -131,7 +93,6 @@ const Task: FC<Props> = ({ taskData }) => {
       <Typography variant="h6" noWrap>
         {title}
       </Typography>
-
       {(isHovering || isTouchScreenDevice) && (
         <CustomIconBtn size="small" color={DefaultColors.error} cb={openConfirmModal}>
           <DeleteIcon />
