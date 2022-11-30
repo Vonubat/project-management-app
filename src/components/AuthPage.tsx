@@ -14,11 +14,6 @@ const boxStyles = {
   alignItems: 'center',
 };
 
-const avatarStyle = {
-  m: 1,
-  bgcolor: 'secondary.main',
-};
-
 const containerStyle = {
   backgroundColor: 'rgba(255, 255, 255, 0.8)',
   borderRadius: 1,
@@ -44,7 +39,7 @@ const AuthPage: FC<Props> = ({ icon, children, pageTitle }) => {
     <Page>
       <Container component="div" maxWidth="xs" sx={containerStyle}>
         <Box sx={boxStyles}>
-          <Avatar sx={avatarStyle}>{icon}</Avatar>
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}> {icon} </Avatar>
           <Typography component="h1" variant="h5">
             {pageTitle}
           </Typography>
