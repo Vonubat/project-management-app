@@ -42,6 +42,32 @@ const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPo
   gap: '1rem',
 }));
 
+const columnPrevWrapStyles = {
+  height: 'fit-content',
+  maxHeight: 'calc(100% - 30px)',
+  mx: 2,
+  py: 1,
+  maxWidth: 300,
+  minWidth: 300,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  boxShadow: 3,
+  borderRadius: '5px',
+  overflowX: 'hidden',
+  overflowY: 'auto',
+  backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  transition: '.1s linear',
+  '&::-webkit-scrollbar-thumb': {
+    borderRadius: 5,
+  },
+  '&::-webkit-scrollbar-track': {
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+  },
+};
+
 const Columns = () => {
   const isBreakPoint = useMediaQuery(MediaQuery.minWidth750);
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
@@ -165,7 +191,7 @@ const Columns = () => {
                 <Draggable key={_id} draggableId={_id} index={order}>
                   {(provided) => (
                     <Box
-                      sx={{ height: 'fit-content', maxHeight: 'calc(100% - 30px)', mx: 2 }}
+                      sx={{ ...columnPrevWrapStyles }}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}

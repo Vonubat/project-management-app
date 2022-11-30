@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, LinearProgress } from '@mui/material';
+import { LinearProgress } from '@mui/material';
 import { useAppSelector } from 'hooks/typedHooks';
 import { tasksSelector } from 'store/tasksSlice';
 
@@ -11,29 +11,6 @@ type ColumnPreviewProps = {
   columnId: string;
 };
 
-const style = {
-  py: 1,
-  maxWidth: 300,
-  minWidth: 300,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  boxShadow: 3,
-  borderRadius: '5px',
-  overflowX: 'hidden',
-  overflowY: 'auto',
-  backgroundColor: 'rgba(255, 255, 255, 0.7)',
-  transition: '.1s linear',
-  '&::-webkit-scrollbar-thumb': {
-    borderRadius: 5,
-  },
-  '&::-webkit-scrollbar-track': {
-    borderTopRightRadius: 5,
-    borderBottomRightRadius: 5,
-  },
-};
-
 const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId }) => {
   const { tasksLoadingArr } = useAppSelector(tasksSelector);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -43,11 +20,11 @@ const ColumnPreview: FC<ColumnPreviewProps> = ({ columnTitle, columnId }) => {
   }, [tasksLoadingArr, columnId]);
 
   return (
-    <Box sx={{ ...style }}>
+    <>
       <ColumnHeader title={columnTitle} columnId={columnId} />
       <TasksPreview columnId={columnId} />
       {isLoading && <LinearProgress sx={{ width: 1 }} />}
-    </Box>
+    </>
   );
 };
 
