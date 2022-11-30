@@ -44,7 +44,9 @@ const EditProfile = () => {
     <AuthPage icon={<PersonIcon />} pageTitle={t('pageTitle')}>
       <Box sx={{ my: 3 }}>
         <Grow in={!!(login && name)}>
-          <UserDataBox name={name} login={login} />
+          <div>
+            <UserDataBox name={name} login={login} />
+          </div>
         </Grow>{' '}
       </Box>
       <ButtonGroup variant="text" fullWidth>
