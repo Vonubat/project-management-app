@@ -3,8 +3,8 @@ import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautif
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { Box, Typography } from '@mui/material';
-import { TypeofModal } from 'constants/constants';
+import { Box, Typography, useMediaQuery } from '@mui/material';
+import { MediaQuery, TypeofModal } from 'constants/constants';
 import { StatusCode } from 'constants/constants';
 import { Path } from 'constants/routing';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
@@ -30,15 +30,20 @@ import EditTaskForm from 'components/forms/EditTaskForm';
 import ColumnsAddBtn from 'components/UI/ColumnsAddBtn';
 import ColumnsBackBtn from 'components/UI/ColumnsBackBtn';
 
-const StyledBox = styled(Box)(() => ({
+const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPoint' })<{
+  isBreakPoint: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+}>(({ theme, isBreakPoint }) => ({
   display: 'flex',
   overflowX: 'auto',
   overflowY: 'hidden',
-  height: 'calc(100vh - 12rem)',
+  height: isBreakPoint ? 'calc(100vh - 11.4rem)' : 'calc(100vh - 11rem)',
+  // height: isBreakPoint ? 'calc(100vh - 210px)' : 'calc(100vh - 370px)',
   gap: '1rem',
 }));
 
 const Columns = () => {
+  const isBreakPoint = useMediaQuery(MediaQuery.minWidth750);
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const { columns } = useAppSelector(columnsSelector);
   const { users } = useAppSelector(usersSelector);
@@ -151,7 +156,11 @@ const Columns = () => {
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="columns" direction="horizontal" type="COLUMN">
           {(provided) => (
-            <StyledBox {...provided.droppableProps} ref={provided.innerRef}>
+            <StyledBox
+              isBreakPoint={isBreakPoint}
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
               {columns.map(({ _id, title, order }: ColumnData) => (
                 <Draggable key={_id} draggableId={_id} index={order}>
                   {(provided) => (
