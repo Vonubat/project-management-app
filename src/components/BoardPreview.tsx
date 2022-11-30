@@ -2,7 +2,16 @@ import React, { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AdminPanelSettings, Delete, Edit, Logout } from '@mui/icons-material';
-import { Box, Button, IconButton, Paper, Typography, Zoom } from '@mui/material';
+import {
+  Avatar,
+  AvatarGroup,
+  Box,
+  Button,
+  IconButton,
+  Paper,
+  Typography,
+  Zoom,
+} from '@mui/material';
 import { TypeofModal } from 'constants/constants';
 import { Path } from 'constants/routing';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
@@ -26,13 +35,46 @@ enum ModalTypeEnum {
   showOwner,
 }
 
+function stringToColor(string: string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = '#';
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
+
+function stringAvatar(name: string) {
+  return {
+    sx: {
+      mr: 0.5,
+      fontSize: '1rem',
+      width: 24,
+      height: 24,
+      bgcolor: stringToColor(name),
+    },
+    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+  };
+}
+
 const BoardPreview: FC<Props> = ({ boardData }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const { _id, title, description, owner } = boardData;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<ModalTypeEnum>(0);
   const [boardRef, boardHovered] = useMouseHover<HTMLDivElement>();
-  const isTouchScreenDevice: boolean = isTouchEnabled();
+  const isTouchScreenDevice = isTouchEnabled();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { userId } = useAppSelector(authSelector);
@@ -92,13 +134,11 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
   }
 
   return (
-    // TODO check is disabled prop is needed
     <>
       <Button
         component="div"
         variant="contained"
         disableRipple
-        disabled={false}
         ref={boardRef}
         color={isOwner ? 'primary' : 'secondary'}
         onClick={() => navigate(`${Path.boards}/${_id}`)}
@@ -136,6 +176,33 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
               {description}
             </Typography>
           </Paper>
+          {users.length && (
+            <AvatarGroup
+              max={5}
+              spacing={1}
+              componentsProps={{
+                additionalAvatar: {
+                  sx: {
+                    width: 24,
+                    height: 24,
+                    fontSize: '1rem',
+                    bgcolor: 'secondary.main',
+                  },
+                },
+              }}
+            >
+              {boardData.users.map((uId) => (
+                <Avatar
+                  key={uId}
+                  {...stringAvatar(
+                    Object.values(users.find((u) => u._id === uId)!)
+                      .splice(1, 2)
+                      .join(' ')
+                  )}
+                />
+              ))}
+            </AvatarGroup>
+          )}
         </Box>
       </Button>
       <ConfirmModal isOpen={isOpen} onClose={closeModal} {...modalProps()} />
