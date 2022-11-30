@@ -9,7 +9,6 @@ import { clearAuthPageData } from 'store/authSlice';
 import Page from 'components/Page';
 
 const boxStyles = {
-  marginTop: 8,
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -18,6 +17,12 @@ const boxStyles = {
 const avatarStyle = {
   m: 1,
   bgcolor: 'secondary.main',
+};
+
+const containerStyle = {
+  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  borderRadius: 1,
+  p: 4,
 };
 
 type Props = {
@@ -37,7 +42,7 @@ const AuthPage: FC<Props> = ({ icon, children, pageTitle }) => {
 
   return (
     <Page>
-      <Container component="div" maxWidth="xs">
+      <Container component="div" maxWidth="xs" sx={containerStyle}>
         <Box sx={boxStyles}>
           <Avatar sx={avatarStyle}>{icon}</Avatar>
           <Typography component="h1" variant="h5">

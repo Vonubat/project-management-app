@@ -13,6 +13,7 @@ import { deleteUser, getUser, usersSelector } from 'store/usersSlice';
 import ConfirmModal from 'components/ConfirmModal';
 import EditProfileForm from 'components/forms/EditProfileForm';
 import Page from 'components/Page';
+import UserDataBox from 'components/UserDataBox';
 
 const boxStyles = {
   display: 'flex',
@@ -21,15 +22,9 @@ const boxStyles = {
 };
 
 const containerStyle = {
-  backgroundColor: 'rgba(255, 255, 255, 0.5)',
+  backgroundColor: 'rgba(255, 255, 255, 0.7)',
   borderRadius: 1,
-  p: 2,
-};
-
-//TODO refactor with AuthPage boxStyles
-const avatarStyle = {
-  m: 1,
-  bgcolor: 'secondary.main',
+  p: 4,
 };
 
 const EditProfile = () => {
@@ -62,29 +57,18 @@ const EditProfile = () => {
     <Page>
       <Container maxWidth="xs" sx={containerStyle}>
         <Box sx={boxStyles}>
-          <Avatar sx={avatarStyle}>
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <PersonIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             {t('pageTitle')}
           </Typography>
         </Box>
-        <Box sx={{ my: 3 }}>
-          {login && name && (
-            <>
-              <Typography variant="h5" gutterBottom align="center">
-                {t('userName')} {name}
-              </Typography>
-              <Typography variant="h5" gutterBottom align="center">
-                {t('login')} {login}
-              </Typography>
-            </>
-          )}
-        </Box>
+        <Box sx={{ my: 3 }}>{login && name && <UserDataBox name={name} login={login} />}</Box>
         <ButtonGroup variant="text" fullWidth>
           <Button
             variant="text"
-            color="info"
+            color="primary"
             startIcon={<EditIcon />}
             onClick={() => dispatch(openModalForm(userId as string))}
           >
@@ -92,7 +76,7 @@ const EditProfile = () => {
           </Button>
           <Button
             variant="text"
-            color="error"
+            color="secondary"
             startIcon={<DeleteForeverIcon />}
             onClick={openConfirmModal}
           >
