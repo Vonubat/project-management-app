@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material';
-import { cyan, green, orange, pink, teal } from '@mui/material/colors';
+import { cyan, lightGreen, orange, pink, red, teal } from '@mui/material/colors';
 import ScrollToTop from 'utils/ScrollToTop';
 
 import './i18n';
@@ -22,9 +22,7 @@ let theme = createTheme({
       main: pink[600],
     },
     error: {
-      light: '#f05e67',
-      main: '#b8293d',
-      dark: '#810017',
+      main: red[600],
     },
     warning: {
       main: orange[700],
@@ -33,7 +31,7 @@ let theme = createTheme({
       main: cyan[500],
     },
     success: {
-      main: green[500],
+      main: lightGreen[500],
     },
   },
 });
