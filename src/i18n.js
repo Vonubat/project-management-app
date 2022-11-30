@@ -62,6 +62,7 @@ const resources = {
       validationError: {
         required: 'This field is required',
         maxLength400: 'Input should be no more than 400 characters',
+        maxLength100: 'Input should be no more than 100 characters',
         maxLength15: 'Input should be no more than 15 characters',
         maxLength16: 'Input should be no more than 16 characters',
         minLength2: 'Input should be no less than 2 characters',
@@ -211,6 +212,7 @@ const resources = {
       validationError: {
         required: 'Это поле обязательно',
         maxLength400: 'Поле должно содержать не более 400 символов',
+        maxLength100: 'Поле должно содержать не более 100 символов',
         maxLength15: 'Поле должно содержать не более 15 символов',
         maxLength16: 'Поле должно содержать не более 16 символов',
         minLength2: 'Поле должно содержать не менее 2 символов',
