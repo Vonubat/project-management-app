@@ -27,7 +27,6 @@ import ColumnPreview from 'components/ColumnPreview';
 import AddColumnForm from 'components/forms/AddColumnForm';
 import AddTaskForm from 'components/forms/AddTaskForm';
 import EditTaskForm from 'components/forms/EditTaskForm';
-import Page from 'components/Page';
 import ColumnsAddBtn from 'components/UI/ColumnsAddBtn';
 import ColumnsBackBtn from 'components/UI/ColumnsBackBtn';
 
@@ -38,7 +37,9 @@ const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPo
   display: 'flex',
   overflowX: 'auto',
   overflowY: 'hidden',
-  height: isBreakPoint ? 'calc(100vh - 210px)' : 'calc(100vh - 370px)',
+  height: isBreakPoint ? 'calc(100vh - 10.75rem)' : 'calc(100vh - 286px)',
+  // height: isBreakPoint ? 'calc(100vh - 210px)' : 'calc(100vh - 370px)',
+  gap: '1rem',
 }));
 
 const Columns = () => {
@@ -143,7 +144,14 @@ const Columns = () => {
   };
 
   return (
-    <Page sx={{ my: '0rem' }}>
+    <Box
+      component="main"
+      sx={{
+        flex: '1',
+        backgroundImage: 'url(../bg6.jpg)',
+        backgroundSize: 'cover',
+      }}
+    >
       <ColumnsBackBtn />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="columns" direction="horizontal" type="COLUMN">
@@ -178,7 +186,7 @@ const Columns = () => {
       <AddColumnForm />
       <AddTaskForm />
       <EditTaskForm />
-    </Page>
+    </Box>
   );
 };
 

@@ -1,5 +1,3 @@
-// @import-normalize;
-
 body {
   margin: 0;
   padding: 0;
@@ -7,13 +5,7 @@ body {
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: rgb(25, 118, 210);
-  background: linear-gradient(
-    0deg,
-    rgba(25, 118, 210, 0.1) 0%,
-    rgba(25, 118, 210, 0.25) 50%,
-    rgba(25, 118, 210, 0.5) 100%
-  );
+  background:rgb(0, 53, 44);
   scroll-behavior: smooth;
 }
 
@@ -46,12 +38,12 @@ input:-webkit-autofill:active {
 
 /* scrollbar Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgb(25, 118, 210);
+  background: rgb(51, 112, 102);
 }
 
 /* scrollbar Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(25, 118, 210, 0.5);
+  background:rgb(0, 53, 44);
 }
 
 /* Board description scrollbar */

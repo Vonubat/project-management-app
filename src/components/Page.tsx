@@ -1,20 +1,12 @@
 import React, { FC } from 'react';
-import {
-  createTheme,
-  responsiveFontSizes,
-  styled,
-  SxProps,
-  Theme,
-  ThemeProvider,
-} from '@mui/material';
-
-export let theme = createTheme();
-theme = responsiveFontSizes(theme);
+import { styled, SxProps, Theme } from '@mui/material';
 
 const StyledMain = styled('main')({
   flex: 1,
-  marginTop: '5rem',
-  marginBottom: '1rem',
+  paddingTop: '5rem',
+  paddingBottom: '1rem',
+  backgroundImage: 'url(bg6.jpg)',
+  backgroundSize: 'cover',
 });
 
 type Props = {
@@ -23,11 +15,7 @@ type Props = {
 };
 
 const Page: FC<Props> = ({ children, sx }) => {
-  return (
-    <ThemeProvider theme={theme}>
-      <StyledMain sx={sx}>{children}</StyledMain>
-    </ThemeProvider>
-  );
+  return <StyledMain sx={sx}>{children}</StyledMain>;
 };
 
 export default Page;
