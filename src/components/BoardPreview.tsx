@@ -37,6 +37,14 @@ enum ModalTypeEnum {
   showOwner,
 }
 
+const titleStyles = {
+  width: 200,
+  wordBreak: 'break-word',
+  display: '-webkit-box',
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: 'vertical',
+};
+
 const BoardPreview: FC<Props> = ({ boardData }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const { _id, title, description, owner } = boardData;
@@ -135,11 +143,11 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
       >
         <Box display="flex" flexDirection="column" sx={{ width: 278, height: 200 }}>
           <Box display="flex" justifyContent="space-between" pb={0.5} pl={0.5} alignItems="center">
-            <Typography variant="h6" noWrap sx={{ width: 200 }}>
+            <Typography variant="h6" sx={titleStyles}>
               {title}
             </Typography>
             <Zoom in={isTouchScreenDevice || boardHovered}>
-              <Box>
+              <Box sx={{ height: '100%', display: 'flex', alignItems: 'flex-start' }}>
                 <IconButton
                   size="small"
                   color="inherit"

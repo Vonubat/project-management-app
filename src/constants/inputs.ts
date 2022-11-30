@@ -93,7 +93,7 @@ export const titleInput: InputOptions = {
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
     minLength: VALIDATION_RULE_MIN_LENGTH_3,
-    maxLength: VALIDATION_RULE_MAX_LENGTH_15,
+    maxLength: VALIDATION_RULE_MAX_LENGTH_100,
   },
 };
 
