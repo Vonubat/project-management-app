@@ -81,11 +81,8 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
   const { users } = useAppSelector(usersSelector);
   const isOwner = userId == owner;
   const ownerName = users.find((user) => user._id === owner)?.name;
-  const [boardUsers, setBoardUsers] = useState<{ name: string; login: string }[]>([]);
-  const [boardOwner, setBoarOwner] = useState<{ name: string; login: string }>({
-    name: '',
-    login: '',
-  });
+  const [boardUsers, setBoardUsers] = useState<string[]>([]);
+  const [boardOwner, setBoarOwner] = useState<string>('a a');
 
   function submitDel() {
     dispatch(deleteBoard(_id));
@@ -141,15 +138,18 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
   useEffect(() => {
     if (users.length) {
       setBoardUsers(
-        boardData.users.map((uId) => {
-          const { login, name } = users.find((u) => u._id === uId)!;
-          return { login, name };
-        })
+        boardData.users.map((uId) =>
+          Object.values(users.find((u) => u._id === uId)!)
+            .splice(1, 2)
+            .join(' ')
+        )
       );
 
-      const { name, login } = users.find((u) => u._id === boardData.owner)!;
-
-      setBoarOwner({ name, login });
+      setBoarOwner(
+        Object.values(users.find((u) => u._id === boardData.owner)!)
+          .splice(1, 2)
+          .join(' ')
+      );
     }
   }, [users, boardData.users, boardData.owner]);
 
@@ -197,9 +197,9 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
             </Typography>
           </Paper>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Tooltip title={`${boardOwner.name} ${boardOwner.login}`}>
+            <Tooltip title={boardOwner}>
               <Avatar
-                {...stringAvatar(`${boardOwner.name} ${boardOwner.login}`)}
+                {...stringAvatar(boardOwner)}
                 sx={{ height: 28, width: 28, fontSize: '1rem' }}
               />
             </Tooltip>
@@ -218,9 +218,9 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
                   },
                 }}
               >
-                {boardUsers.map(({ login, name }) => (
-                  <Tooltip key={login} title={`${name} ${login}`}>
-                    <Avatar {...stringAvatar(`${name} ${login}`)} />
+                {boardUsers.map((boardUser) => (
+                  <Tooltip key={boardUser} title={boardUser}>
+                    <Avatar {...stringAvatar(boardUser)} />
                   </Tooltip>
                 ))}
               </AvatarGroup>
