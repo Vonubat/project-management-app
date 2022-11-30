@@ -9,12 +9,9 @@ const RSLogo: FC = () => (
     <Box
       component="img"
       sx={{
+        pt: 1,
         height: 50,
-        width: 120,
-        transition: 'all 0.5s',
-        '&:hover': {
-          transform: 'scale(95%)',
-        },
+        width: 130,
       }}
       alt="RSLogoIcon"
       src={RSLogoIcon}

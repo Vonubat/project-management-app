@@ -37,7 +37,7 @@ const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPo
   display: 'flex',
   overflowX: 'auto',
   overflowY: 'hidden',
-  height: isBreakPoint ? 'calc(100vh - 10.75rem)' : 'calc(100vh - 286px)',
+  height: isBreakPoint ? 'calc(100vh - 11.4rem)' : 'calc(100vh - 11rem)',
   // height: isBreakPoint ? 'calc(100vh - 210px)' : 'calc(100vh - 370px)',
   gap: '1rem',
 }));
