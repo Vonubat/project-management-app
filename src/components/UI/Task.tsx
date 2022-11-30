@@ -149,8 +149,8 @@ const Task: FC<Props> = ({ taskData }) => {
             componentsProps={{
               additionalAvatar: {
                 sx: {
-                  width: 24,
-                  height: 24,
+                  width: 20,
+                  height: 20,
                   fontSize: '1rem',
                   bgcolor: 'secondary.main',
                 },
