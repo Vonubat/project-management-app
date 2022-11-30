@@ -176,7 +176,11 @@ const Columns = () => {
                 </Draggable>
               ))}
               {provided.placeholder}
-              <ColumnsAddBtn cb={() => dispatch(openModalForm(TypeofModal.addColumn))}>
+              <ColumnsAddBtn
+                cb={() => dispatch(openModalForm(TypeofModal.addColumn))}
+                sx={{ color: 'white' }}
+                variant={'contained'}
+              >
                 <Typography variant="h6">{t('addColumn')}</Typography>
               </ColumnsAddBtn>
             </StyledBox>
