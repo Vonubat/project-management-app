@@ -5,6 +5,8 @@ import { Container, Divider, Grid, Typography } from '@mui/material';
 import Link from '@mui/material/Link';
 import { Path } from 'constants/routing';
 
+import UserDataBox from './UserDataBox';
+
 type Props = {
   userData: {
     name: string;
@@ -21,15 +23,10 @@ const CreatedUserWindow: FC<Props> = ({ userData: { name, login } }) => {
       <Typography variant="h5" align="center" gutterBottom>
         {t('authPage.createdSuccessfully')}
       </Typography>
-      <Typography variant="subtitle1" align="center" gutterBottom>
-        {t('authPage.login')}: {login}
-      </Typography>
-      <Typography variant="subtitle1" align="center" gutterBottom>
-        {t('authPage.name')}: {name}
-      </Typography>
+      <UserDataBox name={name} login={login} />
       <Grid container justifyContent="center">
         <Grid item>
-          <Link component={RouterLink} to={`/${Path.signIn}`} variant="body2">
+          <Link component={RouterLink} to={`/${Path.signIn}`} variant="subtitle1" color="secondary">
             {t('authPage.logInToAccount')}
           </Link>
         </Grid>

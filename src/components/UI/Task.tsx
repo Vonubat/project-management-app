@@ -1,7 +1,7 @@
 import React, { FC, SyntheticEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, Typography } from '@mui/material';
+import { Box, createTheme, Typography } from '@mui/material';
 import { DefaultColors, GRAY_700, TypeofModal } from 'constants/constants';
 import { useAppDispatch } from 'hooks/typedHooks';
 import { setCurrentColumnId } from 'store/columnsSlice';
@@ -11,9 +11,10 @@ import { TaskData } from 'types/tasks';
 import isTouchEnabled from 'utils/isTouchEnabled';
 
 import ConfirmModal from 'components/ConfirmModal';
-import { theme } from 'components/Page';
 
 import CustomIconBtn from './CustomIconBtn';
+
+const theme = createTheme();
 
 const taskStyles = {
   display: 'flex',
