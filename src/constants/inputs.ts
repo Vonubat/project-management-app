@@ -15,11 +15,6 @@ const VALIDATION_RULE_MAX_LENGTH_400 = {
   message: 'maxLength400',
 };
 
-const VALIDATION_RULE_MAX_LENGTH_15 = {
-  value: 15,
-  message: 'maxLength15',
-};
-
 const VALIDATION_RULE_MAX_LENGTH_16 = {
   value: 16,
   message: 'maxLength16',
