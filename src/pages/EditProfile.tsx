@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import PersonIcon from '@mui/icons-material/Person';
-import { Avatar, Box, Button, ButtonGroup, Typography } from '@mui/material';
+import { Avatar, Box, Button, ButtonGroup, Grow, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { authSelector, logOut } from 'store/authSlice';
@@ -70,16 +70,16 @@ const EditProfile = () => {
           </Typography>
         </Box>
         <Box sx={{ my: 3 }}>
-          {login && name && (
-            <>
+          <Grow in={!!(login && name)}>
+            <div>
               <Typography variant="h5" gutterBottom align="center">
                 {t('userName')} {name}
               </Typography>
               <Typography variant="h5" gutterBottom align="center">
                 {t('login')} {login}
               </Typography>
-            </>
-          )}
+            </div>
+          </Grow>
         </Box>
         <ButtonGroup variant="text" fullWidth>
           <Button
