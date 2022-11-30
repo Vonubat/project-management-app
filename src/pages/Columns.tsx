@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
@@ -15,7 +14,9 @@ import useSocketReducers from 'hooks/useSocketReducers';
 import { boardListSelector, getBoardsByUser, setCurrentBoard } from 'store/boardListSlice';
 import { clearLocalColumns, columnsSelector } from 'store/columnsSlice';
 import { getColumnsInBoards } from 'store/columnsSlice';
+import { changeColumnOrder, changeLocalColumnOrder } from 'store/columnsSlice';
 import { openModalForm } from 'store/modalSlice';
+import { changeLocalTaskOrder, changeTaskOrder } from 'store/tasksSlice';
 import { clearAllLocalTasks } from 'store/tasksSlice';
 import { getTasksByBoardId } from 'store/tasksSlice';
 import { getAllUsers, usersSelector } from 'store/usersSlice';
@@ -38,7 +39,6 @@ const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPo
   overflowX: 'auto',
   overflowY: 'hidden',
   height: isBreakPoint ? 'calc(100vh - 210px)' : 'calc(100vh - 370px)',
-  gap: '1rem',
 }));
 
 const Columns = () => {
@@ -114,19 +114,67 @@ const Columns = () => {
     };
   }, [dispatch]);
 
+  const onDragEnd = async (results: DropResult) => {
+    if (!results.destination) return;
+    if (
+      results.destination.droppableId === results.source.droppableId &&
+      results.destination.index === results.source.index
+    )
+      return;
+    if (results.type === 'COLUMN') {
+      dispatch(
+        changeLocalColumnOrder({
+          dragOrder: results.source.index,
+          dropOrder: results.destination.index,
+        })
+      );
+      dispatch(changeColumnOrder());
+    } else if (results.type === 'TASK') {
+      dispatch(
+        changeLocalTaskOrder({
+          dragOrder: results.source.index,
+          dragColumnId: results.source.droppableId,
+          dropOrder: results.destination.index,
+          dropColumnId: results.destination.droppableId,
+        })
+      );
+      dispatch(changeTaskOrder());
+    }
+  };
+
   return (
     <Page sx={{ my: '0rem' }}>
       <ColumnsBackBtn />
-      <StyledBox isBreakPoint={isBreakPoint}>
-        <DndProvider backend={HTML5Backend}>
-          {columns.map(({ _id, title, order }: ColumnData) => (
-            <ColumnPreview key={_id} columnId={_id} columnTitle={title} order={order} />
-          ))}
-          <ColumnsAddBtn cb={() => dispatch(openModalForm(TypeofModal.addColumn))}>
-            <Typography variant="h6">{t('addColumn')}</Typography>
-          </ColumnsAddBtn>
-        </DndProvider>
-      </StyledBox>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="columns" direction="horizontal" type="COLUMN">
+          {(provided) => (
+            <StyledBox
+              isBreakPoint={isBreakPoint}
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {columns.map(({ _id, title, order }: ColumnData) => (
+                <Draggable key={_id} draggableId={_id} index={order}>
+                  {(provided) => (
+                    <Box
+                      sx={{ height: 'fit-content', maxHeight: 'calc(100% - 30px)', mx: 2 }}
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <ColumnPreview columnId={_id} columnTitle={title} />
+                    </Box>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+              <ColumnsAddBtn cb={() => dispatch(openModalForm(TypeofModal.addColumn))}>
+                <Typography variant="h6">{t('addColumn')}</Typography>
+              </ColumnsAddBtn>
+            </StyledBox>
+          )}
+        </Droppable>
+      </DragDropContext>
       <AddColumnForm />
       <AddTaskForm />
       <EditTaskForm />

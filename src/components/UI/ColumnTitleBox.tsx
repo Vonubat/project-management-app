@@ -18,7 +18,7 @@ type Props = {
 
 const TitleBox = styled(Box)({
   display: 'flex',
-  alignItems: 'start',
+  alignItems: 'center',
   flexFlow: 'row no-wrap',
   width: '93%',
 });
@@ -48,20 +48,21 @@ const ColumnTitleBox: FC<Props> = ({ title, columnId, onClick }) => {
     <>
       <TitleBox>
         <Typography
-          sx={{ mx: 'auto', maxWidth: '80%', wordBreak: 'break-word' }}
+          sx={{ mx: 'auto', maxWidth: '80%', wordBreak: 'break-word', cursor: 'pointer' }}
           onClick={onClick}
           variant="h6"
           color={GRAY_700}
           textAlign="center"
-          gutterBottom
         >
           {title}
         </Typography>
+
         <IconButton
           color="primary"
           aria-label="delete column"
           onClick={openConfirmModal}
           edge="end"
+          sx={{ alignSelf: 'start' }}
         >
           <DeleteIcon />
         </IconButton>
