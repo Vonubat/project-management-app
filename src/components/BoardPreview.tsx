@@ -170,7 +170,7 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
             {boardOwner && (
               <Tooltip title={boardOwner}>
                 <Avatar
-                  {...stringAvatar(boardOwner)}
+                  {...stringAvatar({ name: boardOwner, mx: 0.5, fontSize: '1rem', diameter: 24 })}
                   sx={{ height: 28, width: 28, fontSize: '1rem' }}
                 />
               </Tooltip>
@@ -192,7 +192,14 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
               >
                 {boardUsers.map((boardUser) => (
                   <Tooltip key={boardUser} title={boardUser}>
-                    <Avatar {...stringAvatar(boardUser)} />
+                    <Avatar
+                      {...stringAvatar({
+                        name: boardUser,
+                        mx: 0.5,
+                        fontSize: '1rem',
+                        diameter: 24,
+                      })}
+                    />
                   </Tooltip>
                 ))}
               </AvatarGroup>

@@ -1,14 +1,16 @@
-import React, { FC, SyntheticEvent, useState } from 'react';
+import React, { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, createTheme, Typography } from '@mui/material';
+import { Avatar, AvatarGroup, Box, createTheme, Tooltip, Typography } from '@mui/material';
 import { DefaultColors, GRAY_700, TypeofModal } from 'constants/constants';
-import { useAppDispatch } from 'hooks/typedHooks';
+import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { setCurrentColumnId } from 'store/columnsSlice';
 import { openModalForm } from 'store/modalSlice';
 import { changeTaskOrder, deleteLocalTask, deleteTask, setCurrentTask } from 'store/tasksSlice';
+import { usersSelector } from 'store/usersSlice';
 import { TaskData } from 'types/tasks';
 import isTouchEnabled from 'utils/isTouchEnabled';
+import { stringAvatar } from 'utils/stringAvatar';
 
 import ConfirmModal from 'components/ConfirmModal';
 
@@ -18,19 +20,11 @@ const theme = createTheme();
 
 const taskStyles = {
   display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  boxSizing: 'border-box',
-  minWidth: 280,
-  maxWidth: 280,
-  maxHeight: 40,
-  minHeight: 40,
+  flexDirection: 'column',
   mx: 1,
   my: 0.25,
   p: 0.625,
   borderRadius: '3px',
-  fontSize: 20,
-  color: GRAY_700,
   cursor: 'pointer',
   boxShadow: `${theme.shadows[3]}`,
   bgcolor: 'white',
@@ -47,7 +41,10 @@ const Task: FC<Props> = ({ taskData }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isHovering, setIsHovering] = useState(false);
   const dispatch = useAppDispatch();
-  const isTouchScreenDevice: boolean = isTouchEnabled();
+  const isTouchScreenDevice = isTouchEnabled();
+  const { users } = useAppSelector(usersSelector);
+  const [taskdUsers, setTaskUsers] = useState<string[]>([]);
+  const [taskOwner, setTaskOwner] = useState<string | null>(null);
 
   const submit = (e: SyntheticEvent) => {
     e.stopPropagation();
@@ -84,6 +81,24 @@ const Task: FC<Props> = ({ taskData }) => {
     setIsHovering(false);
   };
 
+  useEffect(() => {
+    if (users.length) {
+      setTaskUsers(
+        taskData.users.map((uId) =>
+          Object.values(users.find((u) => u._id === uId)!)
+            .splice(1, 2)
+            .join(' ')
+        )
+      );
+
+      setTaskOwner(
+        Object.values(users.find((u) => u._id === taskData.userId)!)
+          .splice(1, 2)
+          .join(' ')
+      );
+    }
+  }, [users, taskData]);
+
   return (
     <Box
       sx={{ ...taskStyles }}
@@ -91,14 +106,72 @@ const Task: FC<Props> = ({ taskData }) => {
       onMouseOut={handleMouseOut}
       onClick={openEditTaskModal}
     >
-      <Typography variant="h6" noWrap>
-        {title}
-      </Typography>
-      {(isHovering || isTouchScreenDevice) && (
-        <CustomIconBtn size="small" color={DefaultColors.error} cb={openConfirmModal}>
-          <DeleteIcon />
-        </CustomIconBtn>
-      )}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          boxSizing: 'border-box',
+          minWidth: 280,
+          maxWidth: 280,
+          borderRadius: '3px',
+          fontSize: 20,
+          color: GRAY_700,
+        }}
+      >
+        <Typography variant="h6" noWrap>
+          {title}
+        </Typography>
+        {(isHovering || isTouchScreenDevice) && (
+          <CustomIconBtn size="small" color={DefaultColors.error} cb={openConfirmModal}>
+            <DeleteIcon />
+          </CustomIconBtn>
+        )}
+      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        {taskOwner && (
+          <Tooltip title={taskOwner}>
+            <Avatar
+              {...stringAvatar({
+                name: taskOwner,
+                mx: 0.2,
+                fontSize: '0.8rem',
+                diameter: 20,
+              })}
+              sx={{ height: 20, width: 20, fontSize: '0.8rem' }}
+            />
+          </Tooltip>
+        )}
+        {taskdUsers.length ? (
+          <AvatarGroup
+            max={5}
+            spacing={1}
+            componentsProps={{
+              additionalAvatar: {
+                sx: {
+                  width: 24,
+                  height: 24,
+                  fontSize: '1rem',
+                  bgcolor: 'secondary.main',
+                },
+              },
+            }}
+          >
+            {taskdUsers.map((taskUser) => (
+              <Tooltip key={taskUser} title={taskUser}>
+                <Avatar
+                  {...stringAvatar({
+                    name: taskUser,
+                    mx: 0.2,
+                    fontSize: '0.8rem',
+                    diameter: 20,
+                  })}
+                />
+              </Tooltip>
+            ))}
+          </AvatarGroup>
+        ) : null}
+      </Box>
       <ConfirmModal
         title={t('delTask')}
         isOpen={isOpen}
