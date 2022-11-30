@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AdminPanelSettings, Delete, Edit, Logout } from '@mui/icons-material';
@@ -9,6 +9,7 @@ import {
   Button,
   IconButton,
   Paper,
+  Tooltip,
   Typography,
   Zoom,
 } from '@mui/material';
@@ -45,7 +46,6 @@ function stringToColor(string: string) {
   }
 
   let color = '#';
-
   for (i = 0; i < 3; i += 1) {
     const value = (hash >> (i * 8)) & 0xff;
     color += `00${value.toString(16)}`.slice(-2);
@@ -58,7 +58,7 @@ function stringToColor(string: string) {
 function stringAvatar(name: string) {
   return {
     sx: {
-      mr: 0.5,
+      mx: 0.5,
       fontSize: '1rem',
       width: 24,
       height: 24,
@@ -81,6 +81,11 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
   const { users } = useAppSelector(usersSelector);
   const isOwner = userId == owner;
   const ownerName = users.find((user) => user._id === owner)?.name;
+  const [boardUsers, setBoardUsers] = useState<{ name: string; login: string }[]>([]);
+  const [boardOwner, setBoarOwner] = useState<{ name: string; login: string }>({
+    name: '',
+    login: '',
+  });
 
   function submitDel() {
     dispatch(deleteBoard(_id));
@@ -133,6 +138,21 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
     event.stopPropagation();
   }
 
+  useEffect(() => {
+    if (users.length) {
+      setBoardUsers(
+        boardData.users.map((uId) => {
+          const { login, name } = users.find((u) => u._id === uId)!;
+          return { login, name };
+        })
+      );
+
+      const { name, login } = users.find((u) => u._id === boardData.owner)!;
+
+      setBoarOwner({ name, login });
+    }
+  }, [users, boardData.users, boardData.owner]);
+
   return (
     <>
       <Button
@@ -143,7 +163,7 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
         color={isOwner ? 'primary' : 'secondary'}
         onClick={() => navigate(`${Path.boards}/${_id}`)}
       >
-        <Box display="flex" flexDirection="column" sx={{ width: 278, height: 144 }}>
+        <Box display="flex" flexDirection="column" sx={{ width: 278, height: 200 }}>
           <Box display="flex" justifyContent="space-between" pb={0.5} pl={0.5} alignItems="center">
             <Typography variant="h6" noWrap sx={{ width: 200 }}>
               {title}
@@ -176,33 +196,36 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
               {description}
             </Typography>
           </Paper>
-          {users.length && (
-            <AvatarGroup
-              max={5}
-              spacing={1}
-              componentsProps={{
-                additionalAvatar: {
-                  sx: {
-                    width: 24,
-                    height: 24,
-                    fontSize: '1rem',
-                    bgcolor: 'secondary.main',
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Tooltip title={`${boardOwner.name} ${boardOwner.login}`}>
+              <Avatar
+                {...stringAvatar(`${boardOwner.name} ${boardOwner.login}`)}
+                sx={{ height: 28, width: 28, fontSize: '1rem' }}
+              />
+            </Tooltip>
+            {boardUsers.length ? (
+              <AvatarGroup
+                max={5}
+                spacing={1}
+                componentsProps={{
+                  additionalAvatar: {
+                    sx: {
+                      width: 24,
+                      height: 24,
+                      fontSize: '1rem',
+                      bgcolor: 'secondary.main',
+                    },
                   },
-                },
-              }}
-            >
-              {boardData.users.map((uId) => (
-                <Avatar
-                  key={uId}
-                  {...stringAvatar(
-                    Object.values(users.find((u) => u._id === uId)!)
-                      .splice(1, 2)
-                      .join(' ')
-                  )}
-                />
-              ))}
-            </AvatarGroup>
-          )}
+                }}
+              >
+                {boardUsers.map(({ login, name }) => (
+                  <Tooltip key={login} title={`${name} ${login}`}>
+                    <Avatar {...stringAvatar(`${name} ${login}`)} />
+                  </Tooltip>
+                ))}
+              </AvatarGroup>
+            ) : null}
+          </Box>
         </Box>
       </Button>
       <ConfirmModal isOpen={isOpen} onClose={closeModal} {...modalProps()} />
