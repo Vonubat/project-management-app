@@ -1,3 +1,10 @@
+type StringAvatarParam = {
+  name: string;
+  mx: number;
+  fontSize: string;
+  diameter: number;
+};
+
 function stringToColor(string: string) {
   let hash = 0;
   let i;
@@ -17,13 +24,13 @@ function stringToColor(string: string) {
   return color;
 }
 
-export function stringAvatar(name: string) {
+export function stringAvatar({ name, mx, diameter, fontSize }: StringAvatarParam) {
   return {
     sx: {
-      mx: 0.5,
-      fontSize: '1rem',
-      width: 24,
-      height: 24,
+      mx,
+      fontSize,
+      width: diameter,
+      height: diameter,
       bgcolor: stringToColor(name),
     },
     children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
