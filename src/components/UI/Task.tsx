@@ -151,7 +151,7 @@ const Task: FC<Props> = ({ taskData }) => {
                 sx: {
                   width: 20,
                   height: 20,
-                  fontSize: '1rem',
+                  fontSize: '0.8rem',
                   bgcolor: 'secondary.main',
                 },
               },
