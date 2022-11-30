@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
+import styled from '@emotion/styled';
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import Diversity1Icon from '@mui/icons-material/Diversity1';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
@@ -9,18 +10,19 @@ import {
   Box,
   Button,
   CardMedia,
+  Container,
+  Divider,
   Link,
   SxProps,
   Theme,
   Typography,
   useMediaQuery,
 } from '@mui/material';
+import { teal } from '@mui/material/colors';
 import { MediaQuery } from 'constants/constants';
 import { Path } from 'constants/routing';
 import { useAppSelector } from 'hooks/typedHooks';
 import { authSelector } from 'store/authSlice';
-
-import Page from 'components/Page';
 
 import AlexanderSUSAvatar from '../assets/avatars/alexandersus.png';
 import AntonShcherbaAvatar from '../assets/avatars/anton-shcherba.png';
@@ -43,7 +45,7 @@ const SectionWrapper: FC<Props> = ({ children, breakPoint, isReverse }) => (
       display: 'flex',
       flexDirection: breakPoint ? `row${isReverse ? '-reverse' : ''}` : 'column',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'space-between',
       gap: '2rem',
     }}
   >
@@ -136,106 +138,117 @@ const TeammateCard: FC<TeammateCardProps> = ({ avatar, name, role, link }) => (
   </Link>
 );
 
+const StyledDivider = styled(Divider)({
+  height: '1px',
+  backgroundColor: teal[900],
+});
+
 const Home = () => {
   const { isAuth } = useAppSelector(authSelector);
   const { t } = useTranslation('translation', { keyPrefix: 'homePage' });
   const isLargeScreen: boolean = useMediaQuery(MediaQuery.minWidth715);
 
   return (
-    <Page
+    <Box
+      component="main"
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyItems: 'center',
-        alignItems: 'center',
-        padding: '0 2rem',
-        gap: '10rem',
+        py: 5,
+        background: 'white',
       }}
     >
-      <SectionWrapper breakPoint={isLargeScreen}>
-        <ColumnWrapper breakPoint={isLargeScreen} width="40%">
-          <TextTitle>{t('sectionTitle_1')}</TextTitle>
-          <TextBody>{t('sectionBody_1')}</TextBody>
-          <Button
-            variant="contained"
-            sx={{ width: 'fit-content', whiteSpace: 'nowrap' }}
-            component={RouterLink}
-            to={isAuth ? Path.boards : Path.signUp}
-          >
-            {t('startButton')}
-          </Button>
-        </ColumnWrapper>
-        <Box
-          component="img"
-          src={Logo1}
-          sx={{ maxWidth: '450px', width: isLargeScreen ? '50%' : '100%' }}
-        />
-      </SectionWrapper>
-
-      <SectionWrapper breakPoint={isLargeScreen}>
-        <ColumnWrapper breakPoint={isLargeScreen} width="40%">
-          <Diversity1Icon sx={{ fontSize: 100 }} />
-          <TextTitle>{t('sectionTitle_2')}</TextTitle>
-          <TextBody>{t('sectionBody_2')}</TextBody>
-        </ColumnWrapper>
-        <VideoTutorial
-          source="https://assets.codepen.io/6093409/river.mp4"
-          breakPoint={isLargeScreen}
-          width="60%"
-        />
-      </SectionWrapper>
-
-      <SectionWrapper breakPoint={isLargeScreen} isReverse={true}>
-        <ColumnWrapper breakPoint={isLargeScreen} width="40%">
-          <PlaylistAddCheckIcon sx={{ fontSize: 100 }} />
-          <TextTitle>{t('sectionTitle_3')}</TextTitle>
-          <TextBody>{t('sectionBody_3')}</TextBody>
-        </ColumnWrapper>
-        <VideoTutorial
-          source="https://assets.codepen.io/6093409/river.mp4"
-          breakPoint={isLargeScreen}
-          width="60%"
-        />
-      </SectionWrapper>
-
-      <SectionWrapper breakPoint={isLargeScreen}>
-        <ColumnWrapper breakPoint={isLargeScreen} width="40%">
-          <DashboardCustomizeIcon sx={{ fontSize: 100 }} />
-          <TextTitle>{t('sectionTitle_4')}</TextTitle>
-          <TextBody>{t('sectionBody_4')}</TextBody>
-        </ColumnWrapper>
-        <VideoTutorial
-          source="https://assets.codepen.io/6093409/river.mp4"
-          breakPoint={isLargeScreen}
-          width="60%"
-        />
-      </SectionWrapper>
-
-      <ColumnWrapper>
-        <Box component="img" src={Logo2} sx={{ width: '100%' }}></Box>
-        <TextTitle sx={{ textAlign: 'center' }}>{t('team')}</TextTitle>
-        <TeammateCardWrapper>
-          <TeammateCard
-            avatar={VonubatAvatar}
-            name={t('vonubat')}
-            role={t('role')}
-            link="https://github.com/Vonubat"
+      <Container
+        maxWidth="lg"
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '5rem',
+        }}
+      >
+        <SectionWrapper breakPoint={isLargeScreen}>
+          <ColumnWrapper breakPoint={isLargeScreen} width="40%">
+            <TextTitle>{t('sectionTitle_1')}</TextTitle>
+            <TextBody>{t('sectionBody_1')}</TextBody>
+            <Button
+              variant="contained"
+              sx={{ width: 'fit-content', whiteSpace: 'nowrap' }}
+              component={RouterLink}
+              to={isAuth ? Path.boards : Path.signUp}
+            >
+              {t('startButton')}
+            </Button>
+          </ColumnWrapper>
+          <Box
+            component="img"
+            src={Logo1}
+            sx={{ maxWidth: '450px', width: isLargeScreen ? '50%' : '100%' }}
           />
-          <TeammateCard
-            avatar={AlexanderSUSAvatar}
-            name={t('AlexanderSUS')}
-            role={t('role')}
-            link="https://github.com/AlexanderSUS"
+        </SectionWrapper>
+        <StyledDivider />
+        <SectionWrapper breakPoint={isLargeScreen}>
+          <ColumnWrapper breakPoint={isLargeScreen} width="40%">
+            <Diversity1Icon sx={{ fontSize: 100 }} />
+            <TextTitle>{t('sectionTitle_2')}</TextTitle>
+            <TextBody>{t('sectionBody_2')}</TextBody>
+          </ColumnWrapper>
+          <VideoTutorial
+            source="https://assets.codepen.io/6093409/river.mp4"
+            breakPoint={isLargeScreen}
+            width="60%"
           />
-          <TeammateCard
-            avatar={AntonShcherbaAvatar}
-            name={t('AntonShcherba')}
-            role={t('role')}
-            link="https://github.com/Anton-Shcherba"
+        </SectionWrapper>
+        <StyledDivider />
+        <SectionWrapper breakPoint={isLargeScreen} isReverse={true}>
+          <ColumnWrapper breakPoint={isLargeScreen} width="40%">
+            <PlaylistAddCheckIcon sx={{ fontSize: 100 }} />
+            <TextTitle>{t('sectionTitle_3')}</TextTitle>
+            <TextBody>{t('sectionBody_3')}</TextBody>
+          </ColumnWrapper>
+          <VideoTutorial
+            source="https://assets.codepen.io/6093409/river.mp4"
+            breakPoint={isLargeScreen}
+            width="60%"
           />
-        </TeammateCardWrapper>
-      </ColumnWrapper>
-    </Page>
+        </SectionWrapper>
+        <StyledDivider />
+        <SectionWrapper breakPoint={isLargeScreen}>
+          <ColumnWrapper breakPoint={isLargeScreen} width="40%">
+            <DashboardCustomizeIcon sx={{ fontSize: 100 }} />
+            <TextTitle>{t('sectionTitle_4')}</TextTitle>
+            <TextBody>{t('sectionBody_4')}</TextBody>
+          </ColumnWrapper>
+          <VideoTutorial
+            source="https://assets.codepen.io/6093409/river.mp4"
+            breakPoint={isLargeScreen}
+            width="60%"
+          />
+        </SectionWrapper>
+        <StyledDivider />
+        <ColumnWrapper>
+          <Box component="img" src={Logo2} sx={{ width: '100%' }}></Box>
+          <TextTitle sx={{ textAlign: 'center' }}>{t('team')}</TextTitle>
+          <TeammateCardWrapper>
+            <TeammateCard
+              avatar={VonubatAvatar}
+              name={t('vonubat')}
+              role={t('role')}
+              link="https://github.com/Vonubat"
+            />
+            <TeammateCard
+              avatar={AlexanderSUSAvatar}
+              name={t('AlexanderSUS')}
+              role={t('role')}
+              link="https://github.com/AlexanderSUS"
+            />
+            <TeammateCard
+              avatar={AntonShcherbaAvatar}
+              name={t('AntonShcherba')}
+              role={t('role')}
+              link="https://github.com/Anton-Shcherba"
+            />
+          </TeammateCardWrapper>
+        </ColumnWrapper>
+      </Container>
+    </Box>
   );
 };
 
