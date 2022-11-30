@@ -23,6 +23,7 @@ import { openModalForm, setBoardParams } from 'store/modalSlice';
 import { usersSelector } from 'store/usersSlice';
 import { BoardData } from 'types/boards';
 import isTouchEnabled from 'utils/isTouchEnabled';
+import { stringAvatar } from 'utils/stringAvatar';
 
 import ConfirmModal from './ConfirmModal';
 
@@ -34,38 +35,6 @@ enum ModalTypeEnum {
   del,
   leave,
   showOwner,
-}
-
-function stringToColor(string: string) {
-  let hash = 0;
-  let i;
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = '#';
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-}
-
-function stringAvatar(name: string) {
-  return {
-    sx: {
-      mx: 0.5,
-      fontSize: '1rem',
-      width: 24,
-      height: 24,
-      bgcolor: stringToColor(name),
-    },
-    children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-  };
 }
 
 const BoardPreview: FC<Props> = ({ boardData }) => {
@@ -82,7 +51,7 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
   const isOwner = userId == owner;
   const ownerName = users.find((user) => user._id === owner)?.name;
   const [boardUsers, setBoardUsers] = useState<string[]>([]);
-  const [boardOwner, setBoarOwner] = useState<string>('a a');
+  const [boardOwner, setBoarOwner] = useState<string | null>(null);
 
   function submitDel() {
     dispatch(deleteBoard(_id));
@@ -145,11 +114,12 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
         )
       );
 
-      setBoarOwner(
-        Object.values(users.find((u) => u._id === boardData.owner)!)
-          .splice(1, 2)
-          .join(' ')
-      );
+      if (boardData.owner)
+        setBoarOwner(
+          Object.values(users.find((u) => u._id === boardData.owner)!)
+            .splice(1, 2)
+            .join(' ')
+        );
     }
   }, [users, boardData.users, boardData.owner]);
 
@@ -197,12 +167,14 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
             </Typography>
           </Paper>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Tooltip title={boardOwner}>
-              <Avatar
-                {...stringAvatar(boardOwner)}
-                sx={{ height: 28, width: 28, fontSize: '1rem' }}
-              />
-            </Tooltip>
+            {boardOwner && (
+              <Tooltip title={boardOwner}>
+                <Avatar
+                  {...stringAvatar(boardOwner)}
+                  sx={{ height: 28, width: 28, fontSize: '1rem' }}
+                />
+              </Tooltip>
+            )}
             {boardUsers.length ? (
               <AvatarGroup
                 max={5}
