@@ -148,7 +148,7 @@ const Columns = () => {
       component="main"
       sx={{
         flex: '1',
-        backgroundImage: 'url(../bg6.jpg)',
+        backgroundImage: 'url(../background.webp)',
         backgroundSize: 'cover',
       }}
     >

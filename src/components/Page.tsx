@@ -5,7 +5,7 @@ const StyledMain = styled('main')({
   flex: 1,
   paddingTop: '5rem',
   paddingBottom: '1rem',
-  backgroundImage: 'url(bg6.jpg)',
+  backgroundImage: 'url(background.webp)',
   backgroundSize: 'cover',
 });
 
