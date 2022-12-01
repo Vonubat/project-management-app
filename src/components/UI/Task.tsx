@@ -43,8 +43,20 @@ const Task: FC<Props> = ({ taskData }) => {
   const dispatch = useAppDispatch();
   const isTouchScreenDevice = isTouchEnabled();
   const { users } = useAppSelector(usersSelector);
-  const [taskdUsers, setTaskUsers] = useState<string[]>([]);
-  const [taskOwner, setTaskOwner] = useState<string | null>(null);
+  const [taskUsers, setTaskUsers] = useState<string[]>(
+    users.length
+      ? taskData.users.map((uId) =>
+          Object.values(users.find((u) => u._id === uId)!)
+            .splice(1, 2)
+            .join(' ')
+        )
+      : []
+  );
+  const [taskOwner] = useState<string>(
+    Object.values(users.find((u) => u._id === taskData.userId)!)
+      .splice(1, 2)
+      .join(' ')
+  );
 
   const submit = (e: SyntheticEvent) => {
     e.stopPropagation();
@@ -89,12 +101,6 @@ const Task: FC<Props> = ({ taskData }) => {
             .splice(1, 2)
             .join(' ')
         )
-      );
-
-      setTaskOwner(
-        Object.values(users.find((u) => u._id === taskData.userId)!)
-          .splice(1, 2)
-          .join(' ')
       );
     }
   }, [users, taskData]);
@@ -142,7 +148,7 @@ const Task: FC<Props> = ({ taskData }) => {
             />
           </Tooltip>
         )}
-        {taskdUsers.length ? (
+        {taskUsers.length ? (
           <AvatarGroup
             max={5}
             spacing={1}
@@ -157,7 +163,7 @@ const Task: FC<Props> = ({ taskData }) => {
               },
             }}
           >
-            {taskdUsers.map((taskUser) => (
+            {taskUsers.map((taskUser) => (
               <Tooltip key={taskUser} title={taskUser}>
                 <Avatar
                   {...stringAvatar({
