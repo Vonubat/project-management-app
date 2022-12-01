@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import PersonIcon from '@mui/icons-material/Person';
-import { Box, Button, ButtonGroup } from '@mui/material';
+import { Box, Button, ButtonGroup, Grow } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { authSelector, logOut } from 'store/authSlice';
 import { openModalForm } from 'store/modalSlice';
@@ -42,7 +42,13 @@ const EditProfile = () => {
 
   return (
     <AuthPage icon={<PersonIcon />} pageTitle={t('pageTitle')}>
-      <Box sx={{ my: 3 }}>{login && name && <UserDataBox name={name} login={login} />}</Box>
+      <Box sx={{ my: 3 }}>
+        <Grow in={!!(login && name)}>
+          <div>
+            <UserDataBox name={name} login={login} />
+          </div>
+        </Grow>{' '}
+      </Box>
       <ButtonGroup variant="text" fullWidth>
         <Button
           variant="text"

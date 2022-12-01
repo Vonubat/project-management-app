@@ -1,8 +1,18 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AdminPanelSettings, Delete, Edit, Logout } from '@mui/icons-material';
-import { Box, Button, IconButton, Paper, Typography, Zoom } from '@mui/material';
+import {
+  Avatar,
+  AvatarGroup,
+  Box,
+  Button,
+  IconButton,
+  Paper,
+  Tooltip,
+  Typography,
+  Zoom,
+} from '@mui/material';
 import { TypeofModal } from 'constants/constants';
 import { Path } from 'constants/routing';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
@@ -13,6 +23,7 @@ import { openModalForm, setBoardParams } from 'store/modalSlice';
 import { usersSelector } from 'store/usersSlice';
 import { BoardData } from 'types/boards';
 import isTouchEnabled from 'utils/isTouchEnabled';
+import { stringAvatar } from 'utils/stringAvatar';
 
 import ConfirmModal from './ConfirmModal';
 
@@ -26,19 +37,29 @@ enum ModalTypeEnum {
   showOwner,
 }
 
+const titleStyles = {
+  width: 200,
+  wordBreak: 'break-word',
+  display: '-webkit-box',
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: 'vertical',
+};
+
 const BoardPreview: FC<Props> = ({ boardData }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'boardList' });
   const { _id, title, description, owner } = boardData;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<ModalTypeEnum>(0);
   const [boardRef, boardHovered] = useMouseHover<HTMLDivElement>();
-  const isTouchScreenDevice: boolean = isTouchEnabled();
+  const isTouchScreenDevice = isTouchEnabled();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { userId } = useAppSelector(authSelector);
   const { users } = useAppSelector(usersSelector);
   const isOwner = userId == owner;
   const ownerName = users.find((user) => user._id === owner)?.name;
+  const [boardUsers, setBoardUsers] = useState<string[]>([]);
+  const [boardOwner, setBoarOwner] = useState<string | null>(null);
 
   function submitDel() {
     dispatch(deleteBoard(_id));
@@ -91,25 +112,42 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
     event.stopPropagation();
   }
 
+  useEffect(() => {
+    if (users.length) {
+      setBoardUsers(
+        boardData.users.map((uId) =>
+          Object.values(users.find((u) => u._id === uId)!)
+            .splice(1, 2)
+            .join(' ')
+        )
+      );
+
+      if (boardData.owner)
+        setBoarOwner(
+          Object.values(users.find((u) => u._id === boardData.owner)!)
+            .splice(1, 2)
+            .join(' ')
+        );
+    }
+  }, [users, boardData.users, boardData.owner]);
+
   return (
-    // TODO check is disabled prop is needed
     <>
       <Button
         component="div"
         variant="contained"
         disableRipple
-        disabled={false}
         ref={boardRef}
         color={isOwner ? 'primary' : 'secondary'}
         onClick={() => navigate(`${Path.boards}/${_id}`)}
       >
-        <Box display="flex" flexDirection="column" sx={{ width: 278, height: 144 }}>
+        <Box display="flex" flexDirection="column" sx={{ width: 278, height: 200 }}>
           <Box display="flex" justifyContent="space-between" pb={0.5} pl={0.5} alignItems="center">
-            <Typography variant="h6" noWrap sx={{ width: 200 }}>
+            <Typography variant="h6" sx={titleStyles}>
               {title}
             </Typography>
             <Zoom in={isTouchScreenDevice || boardHovered}>
-              <Box>
+              <Box sx={{ height: '100%', display: 'flex', alignItems: 'flex-start' }}>
                 <IconButton
                   size="small"
                   color="inherit"
@@ -136,6 +174,45 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
               {description}
             </Typography>
           </Paper>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            {boardOwner && (
+              <Tooltip title={boardOwner}>
+                <Avatar
+                  {...stringAvatar({ name: boardOwner, mx: 0.5, fontSize: '1rem', diameter: 24 })}
+                  sx={{ height: 28, width: 28, fontSize: '1rem' }}
+                />
+              </Tooltip>
+            )}
+            {boardUsers.length ? (
+              <AvatarGroup
+                max={5}
+                spacing={1}
+                componentsProps={{
+                  additionalAvatar: {
+                    sx: {
+                      width: 24,
+                      height: 24,
+                      fontSize: '1rem',
+                      bgcolor: 'secondary.main',
+                    },
+                  },
+                }}
+              >
+                {boardUsers.map((boardUser) => (
+                  <Tooltip key={boardUser} title={boardUser}>
+                    <Avatar
+                      {...stringAvatar({
+                        name: boardUser,
+                        mx: 0.5,
+                        fontSize: '1rem',
+                        diameter: 24,
+                      })}
+                    />
+                  </Tooltip>
+                ))}
+              </AvatarGroup>
+            ) : null}
+          </Box>
         </Box>
       </Button>
       <ConfirmModal isOpen={isOpen} onClose={closeModal} {...modalProps()} />
