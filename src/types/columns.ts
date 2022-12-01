@@ -25,11 +25,6 @@ export type AddColumnFields = {
   title: string;
 };
 
-export type DropColumnItem = {
-  order: number;
-  id: string;
-};
-
 export type DndColumnData = {
   dragOrder: number;
   dropOrder: number;

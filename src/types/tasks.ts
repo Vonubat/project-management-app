@@ -50,12 +50,6 @@ export type UpdateTaskSetData = Array<{
   columnId: string;
 }>;
 
-export type DropTaskItem = {
-  id: string;
-  order: number;
-  columnId: string;
-};
-
 export type DndTaskData = {
   dragOrder: number;
   dragColumnId: string;
