@@ -37,6 +37,23 @@ enum ModalTypeEnum {
   showOwner,
 }
 
+const avatarStyle = {
+  mx: 0.5,
+  fontSize: '1rem',
+  diameter: 24,
+};
+
+const componentProps = {
+  additionalAvatar: {
+    sx: {
+      width: 24,
+      height: 24,
+      fontSize: '1rem',
+      bgcolor: 'secondary.main',
+    },
+  },
+};
+
 const titleStyles = {
   width: 200,
   wordBreak: 'break-word',
@@ -115,21 +132,17 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
   useEffect(() => {
     if (users.length) {
       setBoardUsers(
-        boardData.users.map((uId) =>
-          Object.values(users.find((u) => u._id === uId)!)
-            .splice(1, 2)
-            .join(' ')
-        )
+        boardData.users.reduce((acc, uId) => {
+          const found = users.find((u) => u._id === uId);
+          found && acc.push(Object.values(found).splice(1, 2).join(' '));
+          return acc;
+        }, [] as string[])
       );
 
-      if (boardData.owner)
-        setBoarOwner(
-          Object.values(users.find((u) => u._id === boardData.owner)!)
-            .splice(1, 2)
-            .join(' ')
-        );
+      const foundOwner = users.find((u) => u._id === boardData.owner);
+      foundOwner && setBoarOwner(Object.values(foundOwner).splice(1, 2).join(' '));
     }
-  }, [users, boardData.users, boardData.owner]);
+  }, [users, boardData]);
 
   return (
     <>
@@ -177,41 +190,16 @@ const BoardPreview: FC<Props> = ({ boardData }) => {
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             {boardOwner && (
               <Tooltip title={boardOwner}>
-                <Avatar
-                  {...stringAvatar({ name: boardOwner, mx: 0.5, fontSize: '1rem', diameter: 24 })}
-                  sx={{ height: 28, width: 28, fontSize: '1rem' }}
-                />
+                <Avatar {...stringAvatar({ name: boardOwner, ...avatarStyle })} />
               </Tooltip>
             )}
-            {boardUsers.length ? (
-              <AvatarGroup
-                max={5}
-                spacing={1}
-                componentsProps={{
-                  additionalAvatar: {
-                    sx: {
-                      width: 24,
-                      height: 24,
-                      fontSize: '1rem',
-                      bgcolor: 'secondary.main',
-                    },
-                  },
-                }}
-              >
-                {boardUsers.map((boardUser) => (
-                  <Tooltip key={boardUser} title={boardUser}>
-                    <Avatar
-                      {...stringAvatar({
-                        name: boardUser,
-                        mx: 0.5,
-                        fontSize: '1rem',
-                        diameter: 24,
-                      })}
-                    />
-                  </Tooltip>
-                ))}
-              </AvatarGroup>
-            ) : null}
+            <AvatarGroup max={5} spacing={1} componentsProps={componentProps}>
+              {boardUsers.map((name) => (
+                <Tooltip key={name} title={name}>
+                  <Avatar {...stringAvatar({ name, ...avatarStyle })} />
+                </Tooltip>
+              ))}
+            </AvatarGroup>
           </Box>
         </Box>
       </Button>
