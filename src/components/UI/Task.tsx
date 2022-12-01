@@ -30,6 +30,23 @@ const taskStyles = {
   bgcolor: 'white',
 };
 
+const avatarStyle = {
+  mx: 0.2,
+  fontSize: '0.8rem',
+  diameter: 20,
+};
+
+const componentProps = {
+  additionalAvatar: {
+    sx: {
+      width: 20,
+      height: 20,
+      fontSize: '0.8rem',
+      bgcolor: 'secondary.main',
+    },
+  },
+};
+
 type Props = {
   children?: React.ReactNode;
   taskData: TaskData;
@@ -43,15 +60,14 @@ const Task: FC<Props> = ({ taskData }) => {
   const dispatch = useAppDispatch();
   const isTouchScreenDevice = isTouchEnabled();
   const { users } = useAppSelector(usersSelector);
-  const [taskUsers, setTaskUsers] = useState<string[]>(
-    users.length
-      ? taskData.users.map((uId) =>
-          Object.values(users.find((u) => u._id === uId)!)
-            .splice(1, 2)
-            .join(' ')
-        )
-      : []
-  );
+  const [taskUsers, setTaskUsers] = useState<string[]>([
+    ...taskData.users.reduce((acc, uId) => {
+      const found = users.find((u) => u._id === uId);
+      found && acc.push(Object.values(found).splice(1, 2).join(' '));
+      return acc;
+    }, [] as string[]),
+  ]);
+
   const [taskOwner] = useState<string>(
     Object.values(users.find((u) => u._id === taskData.userId)!)
       .splice(1, 2)
@@ -96,11 +112,11 @@ const Task: FC<Props> = ({ taskData }) => {
   useEffect(() => {
     if (users.length) {
       setTaskUsers(
-        taskData.users.map((uId) =>
-          Object.values(users.find((u) => u._id === uId)!)
-            .splice(1, 2)
-            .join(' ')
-        )
+        taskData.users.reduce((acc, uId) => {
+          const found = users.find((u) => u._id === uId);
+          found && acc.push(Object.values(found).splice(1, 2).join(' '));
+          return acc;
+        }, [] as string[])
       );
     }
   }, [users, taskData]);
@@ -135,48 +151,16 @@ const Task: FC<Props> = ({ taskData }) => {
         )}
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        {taskOwner && (
-          <Tooltip title={taskOwner}>
-            <Avatar
-              {...stringAvatar({
-                name: taskOwner,
-                mx: 0.2,
-                fontSize: '0.8rem',
-                diameter: 20,
-              })}
-              sx={{ height: 20, width: 20, fontSize: '0.8rem' }}
-            />
-          </Tooltip>
-        )}
-        {taskUsers.length ? (
-          <AvatarGroup
-            max={5}
-            spacing={1}
-            componentsProps={{
-              additionalAvatar: {
-                sx: {
-                  width: 20,
-                  height: 20,
-                  fontSize: '0.8rem',
-                  bgcolor: 'secondary.main',
-                },
-              },
-            }}
-          >
-            {taskUsers.map((taskUser) => (
-              <Tooltip key={taskUser} title={taskUser}>
-                <Avatar
-                  {...stringAvatar({
-                    name: taskUser,
-                    mx: 0.2,
-                    fontSize: '0.8rem',
-                    diameter: 20,
-                  })}
-                />
-              </Tooltip>
-            ))}
-          </AvatarGroup>
-        ) : null}
+        <Tooltip title={taskOwner}>
+          <Avatar {...stringAvatar({ name: taskOwner, ...avatarStyle })} />
+        </Tooltip>
+        <AvatarGroup max={5} spacing={1} componentsProps={componentProps}>
+          {taskUsers.map((name) => (
+            <Tooltip key={name} title={name}>
+              <Avatar {...stringAvatar({ name, ...avatarStyle })} />
+            </Tooltip>
+          ))}
+        </AvatarGroup>
       </Box>
       <ConfirmModal
         title={t('delTask')}
