@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
-// import styled from '@emotion/styled';
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import Diversity1Icon from '@mui/icons-material/Diversity1';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
@@ -11,14 +10,12 @@ import {
   Button,
   CardMedia,
   Container,
-  // Divider,
   Link,
   SxProps,
   Theme,
   Typography,
   useMediaQuery,
 } from '@mui/material';
-// import { teal } from '@mui/material/colors';
 import { MediaQuery } from 'constants/constants';
 import { Path } from 'constants/routing';
 import { useAppSelector } from 'hooks/typedHooks';
@@ -141,11 +138,6 @@ const TeammateCard: FC<TeammateCardProps> = ({ avatar, name, role, link }) => (
   </Link>
 );
 
-/* const StyledDivider = styled(Divider)({
-  height: '1px',
-  backgroundColor: teal[900],
-}); */
-
 const Home = () => {
   const { isAuth } = useAppSelector(authSelector);
   const { t } = useTranslation('translation', { keyPrefix: 'homePage' });
@@ -186,7 +178,6 @@ const Home = () => {
             sx={{ maxWidth: '450px', width: isLargeScreen ? '50%' : '100%' }}
           />
         </SectionWrapper>
-        {/* <StyledDivider /> */}
         <SectionWrapper breakPoint={isLargeScreen}>
           <ColumnWrapper breakPoint={isLargeScreen} width="40%">
             <Diversity1Icon sx={{ fontSize: 100 }} />
@@ -195,7 +186,6 @@ const Home = () => {
           </ColumnWrapper>
           <VideoTutorial source={Tutorial1} breakPoint={isLargeScreen} width="60%" />
         </SectionWrapper>
-        {/* <StyledDivider /> */}
         <SectionWrapper breakPoint={isLargeScreen} isReverse={true}>
           <ColumnWrapper breakPoint={isLargeScreen} width="40%">
             <PlaylistAddCheckIcon sx={{ fontSize: 100 }} />
@@ -204,7 +194,6 @@ const Home = () => {
           </ColumnWrapper>
           <VideoTutorial source={Tutorial2} breakPoint={isLargeScreen} width="60%" />
         </SectionWrapper>
-        {/* <StyledDivider /> */}
         <SectionWrapper breakPoint={isLargeScreen}>
           <ColumnWrapper breakPoint={isLargeScreen} width="40%">
             <DashboardCustomizeIcon sx={{ fontSize: 100 }} />
@@ -213,7 +202,6 @@ const Home = () => {
           </ColumnWrapper>
           <VideoTutorial source={Tutorial3} breakPoint={isLargeScreen} width="60%" />
         </SectionWrapper>
-        {/* <StyledDivider /> */}
         <ColumnWrapper>
           <Box component="img" src={Logo2} sx={{ width: '100%' }}></Box>
           <TextTitle sx={{ textAlign: 'center' }}>{t('team')}</TextTitle>
