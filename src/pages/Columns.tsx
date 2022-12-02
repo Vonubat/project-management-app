@@ -143,27 +143,17 @@ const Columns = () => {
 
   const onDragEnd = async ({ destination, source, type }: DropResult) => {
     if (!destination) return;
-    if (destination.droppableId === source.droppableId && destination.index === source.index) {
-      return;
-    }
+
+    const { index: dropOrder, droppableId: dropColumnId } = destination;
+    const { index: dragOrder, droppableId: dragColumnId } = source;
+
+    if (dropColumnId === dragColumnId && dropOrder === dragOrder) return;
 
     if (type === DndType.column) {
-      dispatch(
-        changeLocalColumnOrder({
-          dragOrder: source.index,
-          dropOrder: destination.index,
-        })
-      );
+      dispatch(changeLocalColumnOrder({ dragOrder, dropOrder }));
       dispatch(changeColumnOrder());
     } else if (type === DndType.task) {
-      dispatch(
-        changeLocalTaskOrder({
-          dragOrder: source.index,
-          dragColumnId: source.droppableId,
-          dropOrder: destination.index,
-          dropColumnId: destination.droppableId,
-        })
-      );
+      dispatch(changeLocalTaskOrder({ dragOrder, dragColumnId, dropOrder, dropColumnId }));
       dispatch(changeTaskOrder());
     }
   };
