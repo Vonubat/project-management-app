@@ -39,7 +39,7 @@ https://project-management-system-app.netlify.app/
 - [x] Fix and update snackbar appearance
 - [x] Implement websocket connection
 - [x] Add notifications appearance on socket events
-- [ ] Enhance error handling on backend and frontend side
+- [x] Add user badges for boards and tasks
 
 ### Tasks list (Anton-Shcherba)
 
