@@ -3,8 +3,8 @@ import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautif
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { Box, Typography, useMediaQuery } from '@mui/material';
-import { MediaQuery, TypeofModal } from 'constants/constants';
+import { Box, createTheme, Typography, useMediaQuery } from '@mui/material';
+import { DndType, MediaQuery, TypeofModal } from 'constants/constants';
 import { StatusCode } from 'constants/constants';
 import { Path } from 'constants/routing';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
@@ -16,7 +16,7 @@ import { clearLocalColumns, columnsSelector } from 'store/columnsSlice';
 import { getColumnsInBoards } from 'store/columnsSlice';
 import { changeColumnOrder, changeLocalColumnOrder } from 'store/columnsSlice';
 import { openModalForm } from 'store/modalSlice';
-import { changeLocalTaskOrder, changeTaskOrder } from 'store/tasksSlice';
+import { changeLocalTaskOrder, changeTaskOrder, tasksSelector } from 'store/tasksSlice';
 import { clearAllLocalTasks } from 'store/tasksSlice';
 import { getTasksByBoardId } from 'store/tasksSlice';
 import { getAllUsers, usersSelector } from 'store/usersSlice';
@@ -30,6 +30,8 @@ import EditTaskForm from 'components/forms/EditTaskForm';
 import ColumnsAddBtn from 'components/UI/ColumnsAddBtn';
 import ColumnsBackBtn from 'components/UI/ColumnsBackBtn';
 
+const theme = createTheme();
+
 const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPoint' })<{
   isBreakPoint: boolean;
 }>(({ isBreakPoint }) => ({
@@ -37,6 +39,7 @@ const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPo
   overflowX: 'auto',
   overflowY: 'hidden',
   height: isBreakPoint ? 'calc(100vh - 11.4rem)' : 'calc(100vh - 11rem)',
+  padding: `0 ${isBreakPoint ? theme.spacing(2) : 0}`,
 }));
 
 const columnPrevWrapStyles = {
@@ -69,6 +72,7 @@ const Columns = () => {
   const isBreakPoint = useMediaQuery(MediaQuery.minWidth750);
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const { columns } = useAppSelector(columnsSelector);
+  const { tasks } = useAppSelector(tasksSelector);
   const { users } = useAppSelector(usersSelector);
   const { boards } = useAppSelector(boardListSelector);
   const { boardId } = useParams();
@@ -138,30 +142,21 @@ const Columns = () => {
     };
   }, [dispatch]);
 
-  const onDragEnd = async (results: DropResult) => {
-    if (!results.destination) return;
-    if (
-      results.destination.droppableId === results.source.droppableId &&
-      results.destination.index === results.source.index
-    )
-      return;
-    if (results.type === 'COLUMN') {
-      dispatch(
-        changeLocalColumnOrder({
-          dragOrder: results.source.index,
-          dropOrder: results.destination.index,
-        })
-      );
+  const onDragEnd = async ({ destination, source, type }: DropResult) => {
+    if (!destination) return;
+
+    const { index: dropOrder, droppableId: dropColumnId } = destination;
+    const { index: dragOrder, droppableId: dragColumnId } = source;
+
+    if (dropColumnId === dragColumnId && dropOrder === dragOrder) return;
+
+    if (type === DndType.column && columns[dragOrder]) {
+      dispatch(changeLocalColumnOrder({ dragOrder, dropOrder }));
       dispatch(changeColumnOrder());
-    } else if (results.type === 'TASK') {
-      dispatch(
-        changeLocalTaskOrder({
-          dragOrder: results.source.index,
-          dragColumnId: results.source.droppableId,
-          dropOrder: results.destination.index,
-          dropColumnId: results.destination.droppableId,
-        })
-      );
+    }
+
+    if (type === DndType.task && tasks[dragColumnId] && tasks[dragColumnId][dragOrder]) {
+      dispatch(changeLocalTaskOrder({ dragOrder, dragColumnId, dropOrder, dropColumnId }));
       dispatch(changeTaskOrder());
     }
   };
@@ -177,10 +172,9 @@ const Columns = () => {
     >
       <ColumnsBackBtn />
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="columns" direction="horizontal" type="COLUMN">
+        <Droppable droppableId="columns" direction="horizontal" type={DndType.column}>
           {(provided) => (
             <StyledBox
-              sx={{ px: 2 }}
               isBreakPoint={isBreakPoint}
               {...provided.droppableProps}
               ref={provided.innerRef}

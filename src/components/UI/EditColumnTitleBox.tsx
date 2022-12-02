@@ -23,6 +23,14 @@ const EditColumnTitleBox: FC<Props> = ({ closeEditBox, title, columnId }) => {
   const inputRef: RefObject<HTMLInputElement> = useRef<HTMLInputElement>(null);
   const boxRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const repairTitleAndCloseEditBox = () => {
+    closeEditBox();
+    if (inputRef.current) {
+      inputRef.current.value = title;
+    }
+  };
+
   const submitChange = useCallback(() => {
     const newTitle = inputRef.current!.value.trim();
 
@@ -30,25 +38,26 @@ const EditColumnTitleBox: FC<Props> = ({ closeEditBox, title, columnId }) => {
       dispatch(setCurrentColumnId(columnId));
       dispatch(updateLocalColumn(newTitle));
       dispatch(updateColumn(newTitle));
+      closeEditBox();
+    } else {
+      repairTitleAndCloseEditBox();
     }
-
-    closeEditBox();
-  }, [closeEditBox, columnId, title, dispatch]);
+  }, [closeEditBox, repairTitleAndCloseEditBox, columnId, title, dispatch]);
 
   const handleKeydown = useCallback(
     (e: KeyboardEvent) => {
-      (e.key === 'Esc' || e.key === 'Escape') && closeEditBox();
+      (e.key === 'Esc' || e.key === 'Escape') && repairTitleAndCloseEditBox();
       e.key === 'Enter' && submitChange();
     },
-    [closeEditBox, submitChange]
+    [submitChange, repairTitleAndCloseEditBox]
   );
 
   const handleClickOutSide = useCallback(
     (event: MouseEvent) => {
       const target = event.target as unknown as globalThis.Node;
-      boxRef.current && !boxRef.current.contains(target) && closeEditBox();
+      boxRef.current && !boxRef.current.contains(target) && repairTitleAndCloseEditBox();
     },
-    [closeEditBox]
+    [repairTitleAndCloseEditBox]
   );
 
   useEffect(() => {

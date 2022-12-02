@@ -154,13 +154,13 @@ const tasksSlice = createSlice({
       if (dragColumnId === dropColumnId) {
         moveItem(state.tasks[dragColumnId], dragOrder, dropOrder);
 
-        state.tasks[dragColumnId] = state.tasks[dragColumnId].map((c, order) => ({ ...c, order }));
+        state.tasks[dragColumnId] = state.tasks[dragColumnId].map((t, order) => ({ ...t, order }));
       } else {
         const [dragTask] = state.tasks[dragColumnId].splice(dragOrder, 1);
 
         if (state.tasks[dragColumnId].length) {
-          state.tasks[dragColumnId] = state.tasks[dragColumnId].map((c, order) => ({
-            ...c,
+          state.tasks[dragColumnId] = state.tasks[dragColumnId].map((t, order) => ({
+            ...t,
             order,
           }));
         } else {
@@ -169,8 +169,8 @@ const tasksSlice = createSlice({
 
         if (state.tasks[dropColumnId]) {
           state.tasks[dropColumnId].splice(dropOrder, 0, { ...dragTask, columnId: dropColumnId });
-          state.tasks[dropColumnId] = state.tasks[dropColumnId].map((c, order) => ({
-            ...c,
+          state.tasks[dropColumnId] = state.tasks[dropColumnId].map((t, order) => ({
+            ...t,
             order,
           }));
         } else {
