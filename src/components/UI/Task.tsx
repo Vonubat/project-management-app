@@ -56,6 +56,10 @@ type Props = {
 };
 
 const Task: FC<Props> = ({ taskData }) => {
+  if (!taskData.userId) {
+    console.log(taskData);
+  }
+
   const { columnId, title } = taskData;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -65,16 +69,16 @@ const Task: FC<Props> = ({ taskData }) => {
   const { users } = useAppSelector(usersSelector);
   const { isLoading } = useAppSelector(notificationSelector);
   const [taskUsers, setTaskUsers] = useState<string[]>(
-    users.length
-      ? taskData.users.reduce((acc, uId) => {
-          const found = users.find((u) => u._id === uId);
-          found && acc.push(Object.values(found).splice(1, 2).join(' '));
-          return acc;
-        }, [] as string[])
-      : []
+    // users.length
+    //   ? taskData.users.reduce((acc, uId) => {
+    //       const found = users.find((u) => u._id === uId);
+    //       found && acc.push(Object.values(found).splice(1, 2).join(' '));
+    //       return acc;
+    //     }, [] as string[])
+    []
   );
   const [taskOwner, setTaskOwner] = useState<string | null>(
-    users.length
+    users.length && taskData.userId
       ? Object.values(users.find((u) => u._id === taskData.userId)!)
           .splice(1, 2)
           .join(' ')
