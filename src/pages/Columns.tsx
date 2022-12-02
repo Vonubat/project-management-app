@@ -56,7 +56,6 @@ const columnPrevWrapStyles = {
   overflowX: 'hidden',
   overflowY: 'auto',
   backgroundColor: 'rgba(255, 255, 255, 0.7)',
-  transition: '.1s linear',
   '&::-webkit-scrollbar-thumb': {
     borderRadius: 5,
   },
