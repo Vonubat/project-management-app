@@ -7,6 +7,7 @@ import { DefaultColors, GRAY_700, TypeofModal } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { setCurrentColumnId } from 'store/columnsSlice';
 import { openModalForm } from 'store/modalSlice';
+import { notificationSelector } from 'store/notificationSlice';
 import { changeTaskOrder, deleteLocalTask, deleteTask, setCurrentTask } from 'store/tasksSlice';
 import { usersSelector } from 'store/usersSlice';
 import { TaskData } from 'types/tasks';
@@ -58,17 +59,12 @@ const Task: FC<Props> = ({ taskData }) => {
   const { columnId, title } = taskData;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isHovering, setIsHovering] = useState(false);
+  const [isHovering, setIsHovering] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const isTouchScreenDevice = isTouchEnabled();
   const { users } = useAppSelector(usersSelector);
-  const [taskUsers, setTaskUsers] = useState<string[]>([
-    ...taskData.users.reduce((acc, uId) => {
-      const found = users.find((u) => u._id === uId);
-      found && acc.push(Object.values(found).splice(1, 2).join(' '));
-      return acc;
-    }, [] as string[]),
-  ]);
+  const { isLoading } = useAppSelector(notificationSelector);
+  const [taskUsers, setTaskUsers] = useState<string[]>([]);
 
   const [taskOwner] = useState<string>(
     Object.values(users.find((u) => u._id === taskData.userId)!)
@@ -122,7 +118,7 @@ const Task: FC<Props> = ({ taskData }) => {
   }, [users, taskData]);
 
   return (
-    <Draggable draggableId={taskData._id} index={taskData.order}>
+    <Draggable draggableId={taskData._id} index={taskData.order} isDragDisabled={isLoading}>
       {(provided) => (
         <Box
           {...provided.draggableProps}
