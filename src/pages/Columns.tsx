@@ -32,21 +32,19 @@ import ColumnsBackBtn from 'components/UI/ColumnsBackBtn';
 
 const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'isBreakPoint' })<{
   isBreakPoint: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-}>(({ theme, isBreakPoint }) => ({
+}>(({ isBreakPoint }) => ({
   display: 'flex',
   overflowX: 'auto',
   overflowY: 'hidden',
   height: isBreakPoint ? 'calc(100vh - 11.4rem)' : 'calc(100vh - 11rem)',
-  // height: isBreakPoint ? 'calc(100vh - 210px)' : 'calc(100vh - 370px)',
-  gap: '1rem',
 }));
 
 const columnPrevWrapStyles = {
   height: 'fit-content',
-  maxHeight: 'calc(100% - 30px)',
+  boxSizing: 'border-box',
+  maxHeight: 'calc(100% - 16px)',
   mx: 2,
-  py: 1,
+  p: 1,
   maxWidth: 300,
   minWidth: 300,
   display: 'flex',
@@ -183,6 +181,7 @@ const Columns = () => {
         <Droppable droppableId="columns" direction="horizontal" type="COLUMN">
           {(provided) => (
             <StyledBox
+              sx={{ px: 2 }}
               isBreakPoint={isBreakPoint}
               {...provided.droppableProps}
               ref={provided.innerRef}
