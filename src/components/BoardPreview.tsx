@@ -39,16 +39,16 @@ enum ModalTypeEnum {
 
 const avatarStyle = {
   mx: 0.5,
-  fontSize: '1rem',
-  diameter: 24,
+  fontSize: '0.73rem',
+  diameter: 22,
 };
 
 const componentProps = {
   additionalAvatar: {
     sx: {
-      width: 24,
-      height: 24,
-      fontSize: '1rem',
+      width: 22,
+      height: 22,
+      fontSize: '0.73rem',
       bgcolor: 'secondary.main',
     },
   },

@@ -34,16 +34,16 @@ const taskStyles = {
 
 const avatarStyle = {
   mx: 0.2,
-  fontSize: '0.8rem',
-  diameter: 20,
+  fontSize: '0.73rem',
+  diameter: 22,
 };
 
 const componentProps = {
   additionalAvatar: {
     sx: {
-      width: 20,
-      height: 20,
-      fontSize: '0.8rem',
+      width: 22,
+      height: 22,
+      fontSize: '0.73rem',
       bgcolor: 'secondary.main',
     },
   },
