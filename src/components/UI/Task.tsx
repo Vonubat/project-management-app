@@ -64,8 +64,22 @@ const Task: FC<Props> = ({ taskData }) => {
   const isTouchScreenDevice = isTouchEnabled();
   const { users } = useAppSelector(usersSelector);
   const { isLoading } = useAppSelector(notificationSelector);
-  const [taskUsers, setTaskUsers] = useState<string[]>([]);
-  const [taskOwner, setTaskOwner] = useState<string | null>(null);
+  const [taskUsers, setTaskUsers] = useState<string[]>(
+    users.length
+      ? taskData.users.reduce((acc, uId) => {
+          const found = users.find((u) => u._id === uId);
+          found && acc.push(Object.values(found).splice(1, 2).join(' '));
+          return acc;
+        }, [] as string[])
+      : []
+  );
+  const [taskOwner, setTaskOwner] = useState<string | null>(
+    users.length
+      ? Object.values(users.find((u) => u._id === taskData.userId)!)
+          .splice(1, 2)
+          .join(' ')
+      : null
+  );
 
   const submit = (e: SyntheticEvent) => {
     e.stopPropagation();
@@ -110,10 +124,12 @@ const Task: FC<Props> = ({ taskData }) => {
         }, [] as string[])
       );
 
-      const foundOwner = users.find((u) => u._id === taskData.userId);
-      foundOwner && setTaskOwner(Object.values(foundOwner).splice(1, 2).join(' '));
+      if (!taskOwner) {
+        const foundOwner = users.find((u) => u._id === taskData.userId);
+        foundOwner && setTaskOwner(Object.values(foundOwner).splice(1, 2).join(' '));
+      }
     }
-  }, [users, taskData]);
+  }, [users, taskData, taskOwner]);
 
   return (
     <Draggable draggableId={taskData._id} index={taskData.order} isDragDisabled={isLoading}>
