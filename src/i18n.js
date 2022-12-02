@@ -61,6 +61,7 @@ const resources = {
       },
       validationError: {
         required: 'This field is required',
+        noEmptySpace: `Entered value can't start/end or contain only white spacing`,
         maxLength400: 'Input should be no more than 400 characters',
         maxLength100: 'Input should be no more than 100 characters',
         maxLength40: 'Input should be no more than 40 characters',
@@ -212,6 +213,8 @@ const resources = {
       },
       validationError: {
         required: 'Это поле обязательно',
+        noEmptySpace:
+          'Введенное значение не может начинаться/заканчиваться или содержать только пробелы',
         maxLength400: 'Поле должно содержать не более 400 символов',
         maxLength100: 'Поле должно содержать не более 100 символов',
         maxLength40: 'Поле должно содержать не более 40 символов',
@@ -239,7 +242,7 @@ const resources = {
         add: 'Добавить доску',
         edit: 'Изменить доску',
         delBoard: 'Вы действительно хотите удалить доску?',
-        leaveBoard: 'Вы уверны что хотите удалить себя из списка пользователей доски?',
+        leaveBoard: 'Вы уверены что хотите удалить себя из списка пользователей доски?',
         ownerBoard: 'Владелец доски',
         title: 'Заголовок',
         description: 'Описание',
