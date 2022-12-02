@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Box, Typography, useMediaQuery } from '@mui/material';
-import { MediaQuery, TypeofModal } from 'constants/constants';
+import { DndType, MediaQuery, TypeofModal } from 'constants/constants';
 import { StatusCode } from 'constants/constants';
 import { Path } from 'constants/routing';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
@@ -138,28 +138,27 @@ const Columns = () => {
     };
   }, [dispatch]);
 
-  const onDragEnd = async (results: DropResult) => {
-    if (!results.destination) return;
-    if (
-      results.destination.droppableId === results.source.droppableId &&
-      results.destination.index === results.source.index
-    )
+  const onDragEnd = async ({ destination, source, type }: DropResult) => {
+    if (!destination) return;
+    if (destination.droppableId === source.droppableId && destination.index === source.index) {
       return;
-    if (results.type === 'COLUMN') {
+    }
+
+    if (type === DndType.column) {
       dispatch(
         changeLocalColumnOrder({
-          dragOrder: results.source.index,
-          dropOrder: results.destination.index,
+          dragOrder: source.index,
+          dropOrder: destination.index,
         })
       );
       dispatch(changeColumnOrder());
-    } else if (results.type === 'TASK') {
+    } else if (type === DndType.task) {
       dispatch(
         changeLocalTaskOrder({
-          dragOrder: results.source.index,
-          dragColumnId: results.source.droppableId,
-          dropOrder: results.destination.index,
-          dropColumnId: results.destination.droppableId,
+          dragOrder: source.index,
+          dragColumnId: source.droppableId,
+          dropOrder: destination.index,
+          dropColumnId: destination.droppableId,
         })
       );
       dispatch(changeTaskOrder());
@@ -177,7 +176,7 @@ const Columns = () => {
     >
       <ColumnsBackBtn />
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="columns" direction="horizontal" type="COLUMN">
+        <Droppable droppableId="columns" direction="horizontal" type={DndType.column}>
           {(provided) => (
             <StyledBox
               sx={{ px: 2 }}
