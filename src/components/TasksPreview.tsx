@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { Droppable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 import { Box, styled, Typography } from '@mui/material';
 import { TypeofModal } from 'constants/constants';
@@ -20,6 +20,7 @@ const StyledBox = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  width: '100%',
 });
 
 const TasksPreview: FC<Props> = ({ columnId }) => {
@@ -37,17 +38,7 @@ const TasksPreview: FC<Props> = ({ columnId }) => {
       {(provided) => (
         <StyledBox {...provided.droppableProps} ref={provided.innerRef}>
           {tasks[columnId]?.map((task) => (
-            <Draggable key={task._id} draggableId={task._id} index={task.order}>
-              {(provided) => (
-                <div
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  ref={provided.innerRef}
-                >
-                  <Task taskData={task} />
-                </div>
-              )}
-            </Draggable>
+            <Task key={task._id} taskData={task} />
           ))}
           {provided.placeholder}
           <ColumnsAddBtn sx={{ mt: 3 }} cb={openModal}>

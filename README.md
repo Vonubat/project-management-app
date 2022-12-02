@@ -19,7 +19,8 @@ https://project-management-system-app.netlify.app/
 - [x] Refactor, fixes various parts of app.
 - [x] Add PageNotFound (404 route).
 - [x] Add functionality of tasks assigning to another users.
-- [ ] Capture the feature video tutorials for welcome page.
+- [x] Capture the feature video tutorials for welcome page.
+- [x] Add Speed Dial for GitHub profiles links in Footer
 - [ ] Create templates of columns/tasks for new users.
 
 ### Tasks list (AlexanderSUS)
@@ -39,7 +40,7 @@ https://project-management-system-app.netlify.app/
 - [x] Fix and update snackbar appearance
 - [x] Implement websocket connection
 - [x] Add notifications appearance on socket events
-- [ ] Enhance error handling on backend and frontend side
+- [x] Add user badges for boards and tasks
 
 ### Tasks list (Anton-Shcherba)
 

@@ -38,6 +38,7 @@ export default function Boards() {
   const { boards } = useAppSelector(boardListSelector);
   const { users } = useAppSelector(usersSelector);
   const [searchValue, setSearchValue] = useState('');
+  const [filteredBoards, setFilteredBoards] = useState<BoardData[]>([]);
   const socket = useSocket();
   const { boardsEventReducer, usersEventReducer } = useSocketReducers();
   const dispatch = useAppDispatch();
@@ -64,10 +65,12 @@ export default function Boards() {
     } // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [!!users.length, !!boards.length]);
 
-  // TODO move this to useState and useEffect
-  const filteredBoards = boards.filter(({ title }) =>
-    title.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  useEffect(() => {
+    boards.length &&
+      setFilteredBoards(
+        boards.filter(({ title }) => title.toLowerCase().includes(searchValue.toLowerCase()))
+      );
+  }, [boards, searchValue]);
 
   return (
     <Page>

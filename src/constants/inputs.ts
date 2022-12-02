@@ -5,6 +5,11 @@ const VALIDATION_RULE_REQUIRED = {
   message: 'required',
 };
 
+const VALIDATION_RULE_MAX_LENGTH_40 = {
+  value: 40,
+  message: 'maxLength40',
+};
+
 const VALIDATION_RULE_MAX_LENGTH_100 = {
   value: 100,
   message: 'maxLength100',
@@ -114,7 +119,7 @@ export const columnTitleInput: InputOptions = {
   rows: 3,
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
-    maxLength: VALIDATION_RULE_MAX_LENGTH_100,
+    maxLength: VALIDATION_RULE_MAX_LENGTH_40,
   },
 };
 
