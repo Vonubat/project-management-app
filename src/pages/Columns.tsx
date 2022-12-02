@@ -16,7 +16,7 @@ import { clearLocalColumns, columnsSelector } from 'store/columnsSlice';
 import { getColumnsInBoards } from 'store/columnsSlice';
 import { changeColumnOrder, changeLocalColumnOrder } from 'store/columnsSlice';
 import { openModalForm } from 'store/modalSlice';
-import { changeLocalTaskOrder, changeTaskOrder } from 'store/tasksSlice';
+import { changeLocalTaskOrder, changeTaskOrder, tasksSelector } from 'store/tasksSlice';
 import { clearAllLocalTasks } from 'store/tasksSlice';
 import { getTasksByBoardId } from 'store/tasksSlice';
 import { getAllUsers, usersSelector } from 'store/usersSlice';
@@ -72,6 +72,7 @@ const Columns = () => {
   const isBreakPoint = useMediaQuery(MediaQuery.minWidth750);
   const { t } = useTranslation('translation', { keyPrefix: 'columns' });
   const { columns } = useAppSelector(columnsSelector);
+  const { tasks } = useAppSelector(tasksSelector);
   const { users } = useAppSelector(usersSelector);
   const { boards } = useAppSelector(boardListSelector);
   const { boardId } = useParams();
@@ -149,10 +150,12 @@ const Columns = () => {
 
     if (dropColumnId === dragColumnId && dropOrder === dragOrder) return;
 
-    if (type === DndType.column) {
+    if (type === DndType.column && columns[dragOrder]) {
       dispatch(changeLocalColumnOrder({ dragOrder, dropOrder }));
       dispatch(changeColumnOrder());
-    } else if (type === DndType.task) {
+    }
+
+    if (type === DndType.task && tasks[dragColumnId] && tasks[dragColumnId][dragOrder]) {
       dispatch(changeLocalTaskOrder({ dragOrder, dragColumnId, dropOrder, dropColumnId }));
       dispatch(changeTaskOrder());
     }
