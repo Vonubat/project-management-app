@@ -1,4 +1,5 @@
 import React, { FC, SyntheticEvent, useEffect, useState } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Avatar, AvatarGroup, Box, createTheme, Tooltip, Typography } from '@mui/material';
@@ -21,13 +22,14 @@ const theme = createTheme();
 const taskStyles = {
   display: 'flex',
   flexDirection: 'column',
-  mx: 1,
   my: 0.25,
   p: 0.625,
   borderRadius: '3px',
   cursor: 'pointer',
   boxShadow: `${theme.shadows[3]}`,
   bgcolor: 'white',
+  boxSizing: 'border-box',
+  width: '100%',
 };
 
 const avatarStyle = {
@@ -79,9 +81,7 @@ const Task: FC<Props> = ({ taskData }) => {
     dispatch(setCurrentTask(taskData));
     dispatch(deleteLocalTask());
     dispatch(deleteTask());
-    // TODO find solution to not emit event
     dispatch(changeTaskOrder());
-    //
     closeConfirmModal(e);
   };
 
@@ -122,53 +122,59 @@ const Task: FC<Props> = ({ taskData }) => {
   }, [users, taskData]);
 
   return (
-    <Box
-      sx={{ ...taskStyles }}
-      onMouseOver={handleMouseOver}
-      onMouseOut={handleMouseOut}
-      onClick={openEditTaskModal}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          boxSizing: 'border-box',
-          minWidth: 280,
-          maxWidth: 280,
-          borderRadius: '3px',
-          fontSize: 20,
-          color: GRAY_700,
-        }}
-      >
-        <Typography variant="h6" noWrap>
-          {title}
-        </Typography>
-        {(isHovering || isTouchScreenDevice) && (
-          <CustomIconBtn size="small" color={DefaultColors.error} cb={openConfirmModal}>
-            <DeleteIcon />
-          </CustomIconBtn>
-        )}
-      </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Tooltip title={taskOwner}>
-          <Avatar {...stringAvatar({ name: taskOwner, ...avatarStyle })} />
-        </Tooltip>
-        <AvatarGroup max={5} spacing={1} componentsProps={componentProps}>
-          {taskUsers.map((name) => (
-            <Tooltip key={name} title={name}>
-              <Avatar {...stringAvatar({ name, ...avatarStyle })} />
+    <Draggable draggableId={taskData._id} index={taskData.order}>
+      {(provided) => (
+        <Box
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+          sx={{ ...taskStyles }}
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseOut}
+          onClick={openEditTaskModal}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              boxSizing: 'border-box',
+
+              borderRadius: '3px',
+              fontSize: 20,
+              color: GRAY_700,
+            }}
+          >
+            <Typography variant="h6" noWrap>
+              {title}
+            </Typography>
+            {(isHovering || isTouchScreenDevice) && (
+              <CustomIconBtn size="small" color={DefaultColors.error} cb={openConfirmModal}>
+                <DeleteIcon />
+              </CustomIconBtn>
+            )}
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Tooltip title={taskOwner}>
+              <Avatar {...stringAvatar({ name: taskOwner, ...avatarStyle })} />
             </Tooltip>
-          ))}
-        </AvatarGroup>
-      </Box>
-      <ConfirmModal
-        title={t('delTask')}
-        isOpen={isOpen}
-        onSubmit={submit}
-        onClose={closeConfirmModal}
-      />
-    </Box>
+            <AvatarGroup max={5} spacing={1} componentsProps={componentProps}>
+              {taskUsers.map((name) => (
+                <Tooltip key={name} title={name}>
+                  <Avatar {...stringAvatar({ name, ...avatarStyle })} />
+                </Tooltip>
+              ))}
+            </AvatarGroup>
+          </Box>
+          <ConfirmModal
+            title={t('delTask')}
+            isOpen={isOpen}
+            onSubmit={submit}
+            onClose={closeConfirmModal}
+          />
+        </Box>
+      )}
+    </Draggable>
   );
 };
 
