@@ -65,12 +65,7 @@ const Task: FC<Props> = ({ taskData }) => {
   const { users } = useAppSelector(usersSelector);
   const { isLoading } = useAppSelector(notificationSelector);
   const [taskUsers, setTaskUsers] = useState<string[]>([]);
-
-  const [taskOwner] = useState<string>(
-    Object.values(users.find((u) => u._id === taskData.userId)!)
-      .splice(1, 2)
-      .join(' ')
-  );
+  const [taskOwner, setTaskOwner] = useState<string | null>(null);
 
   const submit = (e: SyntheticEvent) => {
     e.stopPropagation();
@@ -114,6 +109,9 @@ const Task: FC<Props> = ({ taskData }) => {
           return acc;
         }, [] as string[])
       );
+
+      const foundOwner = users.find((u) => u._id === taskData.userId);
+      foundOwner && setTaskOwner(Object.values(foundOwner).splice(1, 2).join(' '));
     }
   }, [users, taskData]);
 
@@ -135,7 +133,6 @@ const Task: FC<Props> = ({ taskData }) => {
               justifyContent: 'space-between',
               alignItems: 'center',
               boxSizing: 'border-box',
-
               borderRadius: '3px',
               fontSize: 20,
               color: GRAY_700,
@@ -150,10 +147,12 @@ const Task: FC<Props> = ({ taskData }) => {
               </CustomIconBtn>
             )}
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Tooltip title={taskOwner}>
-              <Avatar {...stringAvatar({ name: taskOwner, ...avatarStyle })} />
-            </Tooltip>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', height: 22 }}>
+            {taskOwner ? (
+              <Tooltip title={taskOwner}>
+                <Avatar {...stringAvatar({ name: taskOwner, ...avatarStyle })} />
+              </Tooltip>
+            ) : null}
             <AvatarGroup max={5} spacing={1} componentsProps={componentProps}>
               {taskUsers.map((name) => (
                 <Tooltip key={name} title={name}>
