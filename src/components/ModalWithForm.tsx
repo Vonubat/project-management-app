@@ -1,17 +1,7 @@
 import React, { FC, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import {
-  Box,
-  Button,
-  Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  SxProps,
-  Theme,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { DefaultColors } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { closeModalForm, modalSelector } from 'store/modalSlice';
@@ -21,10 +11,9 @@ type Props = {
   modalTitle: string;
   children: ReactNode;
   onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
-  sx?: SxProps<Theme>;
 };
 
-const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, sx, uniqueId }) => {
+const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, uniqueId }) => {
   const isOpenKey: `isOpen_${string}` = `isOpen_${uniqueId}`;
   const isSubmitDisabledKey: `isSubmitDisabled_${string}` = `isSubmitDisabled_${uniqueId}`;
   const { t } = useTranslation('translation', { keyPrefix: 'modalForm' });
@@ -34,33 +23,25 @@ const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, sx, uniqueId
   const closeModal = () => dispatch(closeModalForm(uniqueId));
 
   return (
-    <Dialog open={isOpen}>
-      <DialogContent
-        sx={{
-          ...sx,
-          p: 2,
-        }}
-      >
-        <Typography variant="h5" align="center">
-          {modalTitle}
-        </Typography>
-        <Container component="div" maxWidth="xs">
-          <Box component="form" onSubmit={onSubmit} sx={{ mt: 1 }}>
-            {children}
-            <DialogActions sx={{ p: 0, pt: 2 }}>
-              <Button onClick={closeModal}>{t('cancel')}</Button>
-              <Button
-                type="submit"
-                disabled={isSubmitDisabled}
-                color={DefaultColors.success}
-                endIcon={<CheckCircleIcon />}
-              >
-                {t('submit')}
-              </Button>
-            </DialogActions>
-          </Box>
-        </Container>
+    <Dialog open={isOpen} onClose={closeModal}>
+      <DialogTitle> {modalTitle}</DialogTitle>
+      <DialogContent>
+        <Box component="form" id="modal-form" onSubmit={onSubmit} sx={{ mt: 1 }}>
+          {children}
+        </Box>
       </DialogContent>
+      <DialogActions>
+        <Button onClick={closeModal}>{t('cancel')}</Button>
+        <Button
+          type="submit"
+          disabled={isSubmitDisabled}
+          color={DefaultColors.success}
+          endIcon={<CheckCircleIcon />}
+          form="modal-form"
+        >
+          {t('submit')}
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
