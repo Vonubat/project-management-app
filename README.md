@@ -19,7 +19,7 @@ https://project-management-system-app.netlify.app/
 - [x] Refactor, fixes various parts of app.
 - [x] Add PageNotFound (404 route).
 - [x] Add functionality of tasks assigning to another users.
-- [ ] Capture the feature video tutorials for welcome page.
+- [x] Capture the feature video tutorials for welcome page.
 - [ ] Create templates of columns/tasks for new users.
 
 ### Tasks list (AlexanderSUS)
