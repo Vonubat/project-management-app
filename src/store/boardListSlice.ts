@@ -123,6 +123,12 @@ const boardListSlice = createSlice({
     deleteLocalBoard: (state, { payload }: PayloadAction<string>) => {
       state.boards = state.boards.filter((b) => b._id !== payload);
     },
+    clearBoardsState: (state) => {
+      state.boards = initialBoardsState.boards;
+      state.isAddBoardLoading = initialBoardsState.isAddBoardLoading;
+      state.usersLoading = initialBoardsState.usersLoading;
+      state.currentBoardId = initialBoardsState.currentBoardId;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getBoardsByUser.fulfilled, (state, { payload }) => {
@@ -146,7 +152,12 @@ const boardListSlice = createSlice({
 });
 
 export default boardListSlice.reducer;
-export const { setBoardLoading, setCurrentBoard, updateLocalBoard, deleteLocalBoard } =
-  boardListSlice.actions;
+export const {
+  setBoardLoading,
+  setCurrentBoard,
+  updateLocalBoard,
+  deleteLocalBoard,
+  clearBoardsState,
+} = boardListSlice.actions;
 
 export const boardListSelector = (state: { boardListStore: BoardsState }) => state.boardListStore;
