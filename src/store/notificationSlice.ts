@@ -1,5 +1,5 @@
 import { createSlice, isFulfilled, isPending, isRejected, PayloadAction } from '@reduxjs/toolkit';
-import { Severity } from 'constants/constants';
+import { Severity, StatusCode, UNAUTHORIZED_MESSAGE } from 'constants/constants';
 import { Notification } from 'types/notification';
 import { getTranslationString } from 'utils/getTranslationString';
 
@@ -49,6 +49,15 @@ const notificationSlice = createSlice({
       if (action.payload) {
         state.alertList.push({
           message: `responseError.error${action.payload}`,
+          severity,
+        });
+
+        return;
+      }
+
+      if (action.error.message === UNAUTHORIZED_MESSAGE) {
+        state.alertList.push({
+          message: `responseError.error${StatusCode.unauthorized}`,
           severity,
         });
 

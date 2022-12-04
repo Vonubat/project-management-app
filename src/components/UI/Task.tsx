@@ -56,10 +56,6 @@ type Props = {
 };
 
 const Task: FC<Props> = ({ taskData }) => {
-  if (!taskData.userId) {
-    console.log(taskData);
-  }
-
   const { columnId, title } = taskData;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
