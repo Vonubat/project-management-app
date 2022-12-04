@@ -28,7 +28,7 @@ const ControlledFormInput: FC<Props> = ({
             autoComplete="off"
             type={type}
             error={!!error}
-            helperText={!!error ? t(`validationError.${error.message}`) : ''}
+            helperText={!!error ? t(`validationError.${error.message}`) : ' '}
             multiline={!!rows}
             rows={rows}
             {...field}
