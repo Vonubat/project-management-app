@@ -38,7 +38,7 @@ export default function Boards() {
   const { boards } = useAppSelector(boardListSelector);
   const { users } = useAppSelector(usersSelector);
   const [searchValue, setSearchValue] = useState('');
-  const [filteredBoards, setFilteredBoards] = useState<BoardData[]>([]);
+  const [filteredBoards, setFilteredBoards] = useState<BoardData[]>(boards);
   const socket = useSocket();
   const { boardsEventReducer, usersEventReducer } = useSocketReducers();
   const dispatch = useAppDispatch();
