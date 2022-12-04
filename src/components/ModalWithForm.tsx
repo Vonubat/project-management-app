@@ -1,7 +1,15 @@
 import React, { FC, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@mui/material';
 import { DefaultColors } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { closeModalForm, modalSelector } from 'store/modalSlice';
@@ -24,24 +32,26 @@ const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, uniqueId }) 
 
   return (
     <Dialog open={isOpen} onClose={closeModal}>
-      <DialogTitle> {modalTitle}</DialogTitle>
-      <DialogContent>
-        <Box component="form" id="modal-form" onSubmit={onSubmit} sx={{ mt: 1 }}>
-          {children}
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={closeModal}>{t('cancel')}</Button>
-        <Button
-          type="submit"
-          disabled={isSubmitDisabled}
-          color={DefaultColors.success}
-          endIcon={<CheckCircleIcon />}
-          form="modal-form"
-        >
-          {t('submit')}
-        </Button>
-      </DialogActions>
+      <Container maxWidth="xs">
+        <DialogTitle> {modalTitle}</DialogTitle>
+        <DialogContent>
+          <Box component="form" id="modal-form" onSubmit={onSubmit} sx={{ mt: 1 }}>
+            {children}
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeModal}>{t('cancel')}</Button>
+          <Button
+            type="submit"
+            disabled={isSubmitDisabled}
+            color={DefaultColors.success}
+            endIcon={<CheckCircleIcon />}
+            form="modal-form"
+          >
+            {t('submit')}
+          </Button>
+        </DialogActions>
+      </Container>
     </Dialog>
   );
 };
