@@ -66,10 +66,13 @@ export default function Boards() {
   }, [!!users.length, !!boards.length]);
 
   useEffect(() => {
-    boards.length &&
+    if (boards.length) {
       setFilteredBoards(
         boards.filter(({ title }) => title.toLowerCase().includes(searchValue.toLowerCase()))
       );
+    } else {
+      setFilteredBoards([]);
+    }
   }, [boards, searchValue]);
 
   return (
