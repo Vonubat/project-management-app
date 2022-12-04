@@ -83,7 +83,9 @@ export default function Boards() {
           </Paper>
         </Zoom>
         <Collapse in={filteredBoards.length === 0 && boards.length > 1}>
-          <Typography align="center">{t('notFound')}</Typography>
+          <Typography fontSize={'1.8rem'} align="center">
+            {t('notFound')}
+          </Typography>
         </Collapse>
         <StyledBox>
           {filteredBoards.map((board) => (
