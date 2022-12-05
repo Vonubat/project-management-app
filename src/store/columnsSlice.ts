@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
+import { StatusCode } from 'constants/constants';
 import ColumnsService from 'services/columnsService';
 import { ColumnData, DndColumnData } from 'types/columns';
 import { AsyncThunkConfig } from 'types/store';
@@ -59,7 +60,8 @@ export const updateColumn = createAsyncThunk<ColumnData, string, AsyncThunkConfi
 
     try {
       const currentColumn = getState().columnsStore.columns.find((c) => c._id === currentColumnId);
-      if (!currentColumn) throw new Error('COLUMN ID IS NOT DEFINED'); // TODO HANDLE THIS CASE
+
+      if (!currentColumn) return rejectWithValue(StatusCode.notFound);
 
       const res = await ColumnsService.updateColumn(currentBoardId, currentColumnId, {
         title,
@@ -81,7 +83,6 @@ export const updateColumn = createAsyncThunk<ColumnData, string, AsyncThunkConfi
   }
 );
 
-//TODO check if we can use currentColumnId
 export const deleteColumn = createAsyncThunk<ColumnData, string, AsyncThunkConfig>(
   'columns/delete',
   async (columnId, { rejectWithValue, getState, dispatch }) => {
@@ -157,7 +158,6 @@ const columnsSlice = createSlice({
       const updateIndex = state.columns.findIndex((c) => c._id === state.currentColumnId);
       state.columns[updateIndex] = { ...state.columns[updateIndex], title: payload };
     },
-    //TODO check can we use currentColumnId
     deleteLocalColumn: (state, { payload }: PayloadAction<string>) => {
       state.columns = state.columns
         .filter((c) => c._id !== payload)
