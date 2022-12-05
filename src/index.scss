@@ -1,0 +1,61 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: rgb(0, 53, 44);
+  scroll-behavior: smooth;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* scrollbar width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* scrollbar Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* scrollbar Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(51, 112, 102);
+}
+
+/* scrollbar Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(0, 77, 64);
+}
+
+/* Board description scrollbar */
+.alternative-scroll {
+  &::-webkit-scrollbar-track {
+    background: white;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgb(201, 204, 212);
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgb(161, 161, 173);
+  }
+}
