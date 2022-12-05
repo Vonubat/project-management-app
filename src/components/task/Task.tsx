@@ -3,7 +3,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Avatar, AvatarGroup, Box, createTheme, Tooltip, Typography } from '@mui/material';
-import { DefaultColors, GRAY_700, TypeofModal } from 'constants/constants';
+import { DefaultColors, FAKE_TASK_OWNER, GRAY_700, TypeofModal } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { setCurrentColumnId } from 'store/columnsSlice';
 import { openModalForm } from 'store/modalSlice';
@@ -75,7 +75,7 @@ const Task: FC<Props> = ({ taskData }) => {
   );
   const [taskOwner, setTaskOwner] = useState<string | null>(
     users.length
-      ? Object.values(users.find((u) => u._id === taskData.userId)!)
+      ? Object.values(users.find((u) => u._id === taskData.userId) || FAKE_TASK_OWNER)
           .splice(1, 2)
           .join(' ')
       : null
@@ -124,7 +124,7 @@ const Task: FC<Props> = ({ taskData }) => {
         }, [] as string[])
       );
 
-      if (!taskOwner) {
+      if (!taskOwner || taskOwner.startsWith(FAKE_TASK_OWNER.name)) {
         const foundOwner = users.find((u) => u._id === taskData.userId);
         foundOwner && setTaskOwner(Object.values(foundOwner).splice(1, 2).join(' '));
       }

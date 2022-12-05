@@ -106,3 +106,9 @@ export const EMPTY_TASK = {
 };
 
 export const UNAUTHORIZED_MESSAGE = 'Request failed with status code 403';
+
+export const FAKE_TASK_OWNER = {
+  _id: 'fakeId',
+  login: 'A0',
+  name: 'A0',
+};
