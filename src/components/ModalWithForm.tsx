@@ -1,5 +1,7 @@
 import React, { FC, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { DefaultColors } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
@@ -30,10 +32,16 @@ const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, uniqueId }) 
         </Box>
       </DialogContent>
       <DialogActions sx={{ mx: 2 }}>
-        <Button variant="contained" color={DefaultColors.error} onClick={closeModal}>
+        <Button color={DefaultColors.error} endIcon={<CancelIcon />} onClick={closeModal}>
           {t('cancel')}
         </Button>
-        <Button variant="contained" type="submit" disabled={isSubmitDisabled} form="modal-form">
+        <Button
+          type="submit"
+          disabled={isSubmitDisabled}
+          form="modal-form"
+          color={DefaultColors.success}
+          endIcon={<CheckCircleIcon />}
+        >
           {t('submit')}
         </Button>
       </DialogActions>

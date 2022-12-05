@@ -135,37 +135,46 @@ const useSocketReducers = () => {
       }, new Set<string>())
       .has(initUser);
 
+    const initUserData = users.find((u) => u._id === initUser);
+    const initUserName = initUserData?.name || t('someone');
     const initUsersBoards = boards.filter((b) => b.owner === initUser).map((b) => b._id);
 
-    dispatch(getAllUsers())
-      .unwrap()
-      .then((payload) => {
-        const initUserData = payload.find((u) => u._id === initUser);
-        const initUserName = initUserData?.name || t('someone');
+    dispatch(getAllUsers());
 
-        switch (action) {
-          case SocketAction.add:
-            dispatch(showNotification({ message: `${initUserName} ${t('createAccount')}` }));
-            break;
-          case SocketAction.update:
-            if (!isInitUserCollaborator) break;
-            dispatch(showNotification({ message: `${initUserName} ${t('updateAccount')}` }));
-            break;
-          case SocketAction.delete:
-            if (!isInitUserCollaborator) break;
+    switch (action) {
+      case SocketAction.add:
+        dispatch(
+          showNotification({
+            message: `${initUserName} ${t('createAccount')}`,
+          })
+        );
+        break;
+      case SocketAction.update:
+        if (!isInitUserCollaborator) break;
+        dispatch(
+          showNotification({
+            message: `${initUserName} ${t('updateAccount')}`,
+          })
+        );
+        break;
+      case SocketAction.delete:
+        if (!isInitUserCollaborator) break;
 
-            if (boardId && initUsersBoards.includes(boardId)) {
-              navigate(Path.boards);
-            } else if (boardId) {
-              dispatch(getTasksByBoardId(boardId));
-            }
-
-            dispatch(showNotification({ message: `${initUserName} ${t('deleteAccount')}` }));
-            break;
-          default:
-            break;
+        if (boardId && initUsersBoards.includes(boardId)) {
+          navigate(Path.boards);
+        } else if (boardId) {
+          dispatch(getTasksByBoardId(boardId));
         }
-      });
+
+        dispatch(
+          showNotification({
+            message: `${initUserName} ${t('deleteAccount')}`,
+          })
+        );
+        break;
+      default:
+        break;
+    }
   };
 
   return { boardsEventReducer, usersEventReducer, tasksEventReducer, columnsEventReducer };
