@@ -1,7 +1,8 @@
 import React, { FC, useState } from 'react';
 import { Box, Collapse } from '@mui/material';
 
-import ColumnTitleBox from './ColumnTitleBox';
+import ColumnTitleBox from '../column/ColumnTitleBox';
+
 import EditColumnTitleBox from './EditColumnTitleBox';
 type Props = {
   columnId: string;

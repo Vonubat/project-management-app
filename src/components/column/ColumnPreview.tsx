@@ -3,8 +3,9 @@ import { LinearProgress } from '@mui/material';
 import { useAppSelector } from 'hooks/typedHooks';
 import { tasksSelector } from 'store/tasksSlice';
 
-import ColumnHeader from './UI/ColumnHeader';
-import TasksPreview from './TasksPreview';
+import TasksPreview from '../task/TasksPreview';
+
+import ColumnHeader from './ColumnHeader';
 
 type ColumnPreviewProps = {
   columnTitle: string;

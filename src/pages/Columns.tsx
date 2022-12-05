@@ -23,12 +23,12 @@ import { getAllUsers, usersSelector } from 'store/usersSlice';
 import { ColumnData } from 'types/columns';
 import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
 
-import ColumnPreview from 'components/ColumnPreview';
+import ColumnPreview from 'components/column/ColumnPreview';
+import ColumnsAddBtn from 'components/column/ColumnsAddBtn';
+import ColumnsBackBtn from 'components/column/ColumnsBackBtn';
 import AddColumnForm from 'components/forms/AddColumnForm';
 import AddTaskForm from 'components/forms/AddTaskForm';
 import EditTaskForm from 'components/forms/EditTaskForm';
-import ColumnsAddBtn from 'components/UI/ColumnsAddBtn';
-import ColumnsBackBtn from 'components/UI/ColumnsBackBtn';
 
 const theme = createTheme();
 

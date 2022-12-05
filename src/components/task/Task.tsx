@@ -16,7 +16,7 @@ import { stringAvatar } from 'utils/stringAvatar';
 
 import ConfirmModal from 'components/ConfirmModal';
 
-import CustomIconBtn from './CustomIconBtn';
+import CustomIconBtn from '../CustomIconBtn';
 
 const theme = createTheme();
 
