@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { SocketAction } from 'constants/constants';
 import { Path } from 'constants/routing';
 import { authSelector } from 'store/authSlice';
-import { getBoardsByUser } from 'store/boardListSlice';
+import { boardListSelector, getBoardsByUser } from 'store/boardListSlice';
 import { deleteLocalColumn, getColumnsInBoards } from 'store/columnsSlice';
 import { showNotification } from 'store/notificationSlice';
 import { deleteLocalTaskById, getTasksByBoardId } from 'store/tasksSlice';
@@ -39,6 +39,7 @@ type UsersEventReducerParams = {
 const useSocketReducers = () => {
   const { userId } = useAppSelector(authSelector);
   const { users } = useAppSelector(usersSelector);
+  const { boards } = useAppSelector(boardListSelector);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation('translation', { keyPrefix: 'socketEvent' });
@@ -125,24 +126,46 @@ const useSocketReducers = () => {
       ids: [initUser],
     } = payload;
 
-    if (initUser === userId || !boardId) return;
+    if (initUser === userId) return;
 
-    dispatch(getAllUsers());
+    const isInitUserCollaborator = boards
+      .reduce((acc, board) => {
+        [board.owner, ...board.users].forEach((id) => acc.add(id));
+        return acc;
+      }, new Set<string>())
+      .has(initUser);
 
-    switch (action) {
-      case SocketAction.add:
-        dispatch(showNotification({ message: `${t('someone')} ${t('createAccount')}` }));
-        break;
-      case SocketAction.update:
-        dispatch(showNotification({ message: `${t('someone')} ${t('updateAccount')}` }));
-        break;
-      case SocketAction.delete:
-        boardId && dispatch(getTasksByBoardId(boardId));
-        dispatch(showNotification({ message: `${t('someone')} ${t('deleteAccount')}` }));
-        break;
-      default:
-        break;
-    }
+    const initUsersBoards = boards.filter((b) => b.owner === initUser).map((b) => b._id);
+
+    dispatch(getAllUsers())
+      .unwrap()
+      .then((payload) => {
+        const initUserData = payload.find((u) => u._id === initUser);
+        const initUserName = initUserData?.name || t('someone');
+
+        switch (action) {
+          case SocketAction.add:
+            dispatch(showNotification({ message: `${initUserName} ${t('createAccount')}` }));
+            break;
+          case SocketAction.update:
+            if (!isInitUserCollaborator) break;
+            dispatch(showNotification({ message: `${initUserName} ${t('updateAccount')}` }));
+            break;
+          case SocketAction.delete:
+            if (!isInitUserCollaborator) break;
+
+            if (boardId && initUsersBoards.includes(boardId)) {
+              navigate(Path.boards);
+            } else if (boardId) {
+              dispatch(getTasksByBoardId(boardId));
+            }
+
+            dispatch(showNotification({ message: `${initUserName} ${t('deleteAccount')}` }));
+            break;
+          default:
+            break;
+        }
+      });
   };
 
   return { boardsEventReducer, usersEventReducer, tasksEventReducer, columnsEventReducer };

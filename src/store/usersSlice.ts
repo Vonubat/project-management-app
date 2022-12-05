@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
+import { StatusCode } from 'constants/constants';
 import UsersService from 'services/usersService';
 import { SignUpOkResponseData, SignUpRequestData } from 'types/auth';
 import { AsyncThunkConfig } from 'types/store';
@@ -18,14 +19,12 @@ export const getUser = createAsyncThunk<SignUpOkResponseData, void, AsyncThunkCo
   async (_, { getState, rejectWithValue }) => {
     const { userId } = getState().authStore;
 
+    if (!userId) return rejectWithValue(StatusCode.unauthorized);
+
     try {
-      if (userId) {
-        const res = await UsersService.getUser(userId);
+      const res = await UsersService.getUser(userId);
 
-        return res.data;
-      }
-
-      throw new Error('error'); //TODO handle this case
+      return res.data;
     } catch (err) {
       const error = err as AxiosError;
 
@@ -110,7 +109,14 @@ const userSliceInitialState: UsersState = {
 const usersSlice = createSlice({
   name: 'users',
   initialState: userSliceInitialState,
-  reducers: {},
+  reducers: {
+    clearUsersState: (state) => {
+      state.name = userSliceInitialState.name;
+      state.login = userSliceInitialState.login;
+      state.userId = userSliceInitialState.userId;
+      state.users = userSliceInitialState.users;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getUser.fulfilled, (state, { payload: { name, login, _id } }) => {
       state.name = name;
@@ -133,6 +139,8 @@ const usersSlice = createSlice({
     });
   },
 });
+
+export const { clearUsersState } = usersSlice.actions;
 
 export default usersSlice.reducer;
 

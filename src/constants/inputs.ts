@@ -30,11 +30,6 @@ const VALIDATION_RULE_MIN_LENGTH_2 = {
   message: 'minLength2',
 };
 
-const VALIDATION_RULE_MIN_LENGTH_3 = {
-  value: 3,
-  message: 'minLength3',
-};
-
 const VALIDATION_RULE_MIN_LENGTH_8 = {
   value: 8,
   message: 'minLength8',
@@ -68,7 +63,7 @@ export const loginInput: InputOptions = {
   type: 'text',
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
-    minLength: VALIDATION_RULE_MIN_LENGTH_3,
+    minLength: VALIDATION_RULE_MIN_LENGTH_2,
     maxLength: VALIDATION_RULE_MAX_LENGTH_16,
     pattern: VALIDATION_RULE_PASSWORD_PATTERN,
   },
@@ -92,7 +87,6 @@ export const titleInput: InputOptions = {
   type: 'text',
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
-    minLength: VALIDATION_RULE_MIN_LENGTH_3,
     maxLength: VALIDATION_RULE_MAX_LENGTH_100,
   },
 };

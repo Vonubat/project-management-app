@@ -51,3 +51,5 @@ https://project-management-system-app.netlify.app/
 - [x] Create search layout for adding users
 - [x] Implementation of animation on the BoardList page
 - [x] Implementation search for a task by task name
+- [x] Implemented animated with drag and drop
+- [x] Made changes to the appearance and animation of some components

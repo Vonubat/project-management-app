@@ -6,8 +6,9 @@ import PersonIcon from '@mui/icons-material/Person';
 import { Box, Button, ButtonGroup, Grow } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { authSelector, logOut } from 'store/authSlice';
+import { clearBoardsState } from 'store/boardListSlice';
 import { openModalForm } from 'store/modalSlice';
-import { deleteUser, getUser, usersSelector } from 'store/usersSlice';
+import { clearUsersState, deleteUser, getUser, usersSelector } from 'store/usersSlice';
 
 import AuthPage from 'components/AuthPage';
 import ConfirmModal from 'components/ConfirmModal';
@@ -32,6 +33,8 @@ const EditProfile = () => {
   const deleteAccount = async () => {
     dispatch(deleteUser()).then(() => {
       dispatch(logOut());
+      dispatch(clearBoardsState());
+      dispatch(clearUsersState());
     });
     closeConfirmModal();
   };

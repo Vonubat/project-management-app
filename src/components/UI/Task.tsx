@@ -7,6 +7,7 @@ import { DefaultColors, GRAY_700, TypeofModal } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { setCurrentColumnId } from 'store/columnsSlice';
 import { openModalForm } from 'store/modalSlice';
+import { notificationSelector } from 'store/notificationSlice';
 import { changeTaskOrder, deleteLocalTask, deleteTask, setCurrentTask } from 'store/tasksSlice';
 import { usersSelector } from 'store/usersSlice';
 import { TaskData } from 'types/tasks';
@@ -58,22 +59,26 @@ const Task: FC<Props> = ({ taskData }) => {
   const { columnId, title } = taskData;
   const { t } = useTranslation('translation', { keyPrefix: 'tasks' });
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isHovering, setIsHovering] = useState(false);
+  const [isHovering, setIsHovering] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const isTouchScreenDevice = isTouchEnabled();
   const { users } = useAppSelector(usersSelector);
-  const [taskUsers, setTaskUsers] = useState<string[]>([
-    ...taskData.users.reduce((acc, uId) => {
-      const found = users.find((u) => u._id === uId);
-      found && acc.push(Object.values(found).splice(1, 2).join(' '));
-      return acc;
-    }, [] as string[]),
-  ]);
-
-  const [taskOwner] = useState<string>(
-    Object.values(users.find((u) => u._id === taskData.userId)!)
-      .splice(1, 2)
-      .join(' ')
+  const { isLoading } = useAppSelector(notificationSelector);
+  const [taskUsers, setTaskUsers] = useState<string[]>(
+    users.length
+      ? taskData.users.reduce((acc, uId) => {
+          const found = users.find((u) => u._id === uId);
+          found && acc.push(Object.values(found).splice(1, 2).join(' '));
+          return acc;
+        }, [] as string[])
+      : []
+  );
+  const [taskOwner, setTaskOwner] = useState<string | null>(
+    users.length
+      ? Object.values(users.find((u) => u._id === taskData.userId)!)
+          .splice(1, 2)
+          .join(' ')
+      : null
   );
 
   const submit = (e: SyntheticEvent) => {
@@ -118,11 +123,16 @@ const Task: FC<Props> = ({ taskData }) => {
           return acc;
         }, [] as string[])
       );
+
+      if (!taskOwner) {
+        const foundOwner = users.find((u) => u._id === taskData.userId);
+        foundOwner && setTaskOwner(Object.values(foundOwner).splice(1, 2).join(' '));
+      }
     }
-  }, [users, taskData]);
+  }, [users, taskData, taskOwner]);
 
   return (
-    <Draggable draggableId={taskData._id} index={taskData.order}>
+    <Draggable draggableId={taskData._id} index={taskData.order} isDragDisabled={isLoading}>
       {(provided) => (
         <Box
           {...provided.draggableProps}
@@ -139,7 +149,6 @@ const Task: FC<Props> = ({ taskData }) => {
               justifyContent: 'space-between',
               alignItems: 'center',
               boxSizing: 'border-box',
-
               borderRadius: '3px',
               fontSize: 20,
               color: GRAY_700,
@@ -154,10 +163,12 @@ const Task: FC<Props> = ({ taskData }) => {
               </CustomIconBtn>
             )}
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Tooltip title={taskOwner}>
-              <Avatar {...stringAvatar({ name: taskOwner, ...avatarStyle })} />
-            </Tooltip>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', height: 22 }}>
+            {taskOwner ? (
+              <Tooltip title={taskOwner}>
+                <Avatar {...stringAvatar({ name: taskOwner, ...avatarStyle })} />
+              </Tooltip>
+            ) : null}
             <AvatarGroup max={5} spacing={1} componentsProps={componentProps}>
               {taskUsers.map((name) => (
                 <Tooltip key={name} title={name}>

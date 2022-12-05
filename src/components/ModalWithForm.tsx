@@ -23,7 +23,7 @@ const ModalWithForm: FC<Props> = ({ modalTitle, children, onSubmit, uniqueId }) 
   const closeModal = () => dispatch(closeModalForm(uniqueId));
 
   return (
-    <Dialog open={isOpen} onClose={closeModal}>
+    <Dialog open={isOpen} onClose={closeModal} maxWidth="xs" fullWidth>
       <DialogTitle> {modalTitle}</DialogTitle>
       <DialogContent>
         <Box component="form" id="modal-form" onSubmit={onSubmit} sx={{ mt: 1 }}>

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 import { Box, styled, Typography } from '@mui/material';
-import { TypeofModal } from 'constants/constants';
+import { DndType, TypeofModal } from 'constants/constants';
 import { useAppDispatch, useAppSelector } from 'hooks/typedHooks';
 import { setCurrentColumnId } from 'store/columnsSlice';
 import { openModalForm } from 'store/modalSlice';
@@ -34,7 +34,7 @@ const TasksPreview: FC<Props> = ({ columnId }) => {
   };
 
   return (
-    <Droppable droppableId={columnId} key={columnId} type="TASK">
+    <Droppable droppableId={columnId} key={columnId} type={DndType.task}>
       {(provided) => (
         <StyledBox {...provided.droppableProps} ref={provided.innerRef}>
           {tasks[columnId]?.map((task) => (

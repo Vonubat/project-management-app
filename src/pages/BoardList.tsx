@@ -38,7 +38,7 @@ export default function Boards() {
   const { boards } = useAppSelector(boardListSelector);
   const { users } = useAppSelector(usersSelector);
   const [searchValue, setSearchValue] = useState('');
-  const [filteredBoards, setFilteredBoards] = useState<BoardData[]>([]);
+  const [filteredBoards, setFilteredBoards] = useState<BoardData[]>(boards);
   const socket = useSocket();
   const { boardsEventReducer, usersEventReducer } = useSocketReducers();
   const dispatch = useAppDispatch();
@@ -59,17 +59,16 @@ export default function Boards() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!!users.length && !!boards.length) {
+    if (!!users.length) {
       socket.connect();
       startListeners();
     } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [!!users.length, !!boards.length]);
+  }, [!!users.length]);
 
   useEffect(() => {
-    boards.length &&
-      setFilteredBoards(
-        boards.filter(({ title }) => title.toLowerCase().includes(searchValue.toLowerCase()))
-      );
+    setFilteredBoards(
+      boards.filter(({ title }) => title.toLowerCase().includes(searchValue.toLowerCase()))
+    );
   }, [boards, searchValue]);
 
   return (
@@ -84,7 +83,9 @@ export default function Boards() {
           </Paper>
         </Zoom>
         <Collapse in={filteredBoards.length === 0 && boards.length > 1}>
-          <Typography align="center">{t('notFound')}</Typography>
+          <Typography fontSize={'1.8rem'} align="center">
+            {t('notFound')}
+          </Typography>
         </Collapse>
         <StyledBox>
           {filteredBoards.map((board) => (

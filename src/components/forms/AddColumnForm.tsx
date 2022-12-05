@@ -8,6 +8,7 @@ import { createColumn } from 'store/columnsSlice';
 import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalSlice';
 import { AddColumnFields } from 'types/columns';
 import { FormControl } from 'types/formInput';
+import { trimFields } from 'utils/trimFields';
 
 import ControlledFormInput from 'components/ControlledFormInput';
 import ModalWithForm from 'components/ModalWithForm';
@@ -22,6 +23,8 @@ const AddColumnForm: FC = () => {
     control,
     handleSubmit,
     reset,
+    resetField,
+    trigger,
     formState: { isValid },
   } = useForm<AddColumnFields>({
     mode: 'onChange',
@@ -31,7 +34,19 @@ const AddColumnForm: FC = () => {
   const formControl = control as FormControl;
 
   const onSubmit = (data: AddColumnFields) => {
-    dispatch(createColumn(data));
+    let isFieldsValid = true;
+
+    Object.entries(trimFields(data)).forEach(([key, value]) => {
+      if (!value.length) {
+        resetField(key as keyof AddColumnFields);
+        trigger(key as keyof AddColumnFields);
+        isFieldsValid = false;
+      }
+    });
+
+    if (!isFieldsValid) return;
+
+    dispatch(createColumn(trimFields(data)));
     dispatch(closeModalForm(TypeofModal.addColumn));
   };
 
