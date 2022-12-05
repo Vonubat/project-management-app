@@ -8,8 +8,9 @@ import { setCurrentColumnId } from 'store/columnsSlice';
 import { openModalForm } from 'store/modalSlice';
 import { tasksSelector } from 'store/tasksSlice';
 
-import ColumnsAddBtn from './UI/ColumnsAddBtn';
-import Task from './UI/Task';
+import ColumnsAddBtn from '../column/ColumnsAddBtn';
+
+import Task from './Task';
 
 type Props = {
   children?: React.ReactNode;

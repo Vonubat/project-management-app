@@ -16,8 +16,8 @@ import { FormControl } from 'types/formInput';
 import { trimFields } from 'utils/trimFields';
 
 import ControlledFormInput from 'components/ControlledFormInput';
+import CustomPaper from 'components/CustomPaper';
 import ModalWithForm from 'components/ModalWithForm';
-import CustomPaper from 'components/UI/CustomPaper';
 import UserSearchBar from 'components/UserSearchBar';
 
 const EditBoardForm: FC = () => {

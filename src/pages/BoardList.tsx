@@ -13,7 +13,7 @@ import { BoardData } from 'types/boards';
 import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
 import { CustomFlipMove } from 'types/utilTypes';
 
-import BoardPreview from 'components/BoardPreview';
+import BoardPreview from 'components/board/BoardPreview';
 import EditBoardForm from 'components/forms/EditBoardForm';
 import Page from 'components/Page';
 import SearchBar from 'components/SearchBar';
