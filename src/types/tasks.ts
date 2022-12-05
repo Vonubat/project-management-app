@@ -35,7 +35,6 @@ export type TaskParamsCreate = {
 export type TaskFields = {
   title: string;
   description: string;
-  // users: UserData['_id'][];
 };
 
 export type CurrentTaskInfo = {
