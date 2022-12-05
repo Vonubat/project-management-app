@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
+import { StatusCode } from 'constants/constants';
 import UsersService from 'services/usersService';
 import { SignUpOkResponseData, SignUpRequestData } from 'types/auth';
 import { AsyncThunkConfig } from 'types/store';
@@ -18,14 +19,12 @@ export const getUser = createAsyncThunk<SignUpOkResponseData, void, AsyncThunkCo
   async (_, { getState, rejectWithValue }) => {
     const { userId } = getState().authStore;
 
+    if (!userId) return rejectWithValue(StatusCode.unauthorized);
+
     try {
-      if (userId) {
-        const res = await UsersService.getUser(userId);
+      const res = await UsersService.getUser(userId);
 
-        return res.data;
-      }
-
-      throw new Error('error'); //TODO handle this case
+      return res.data;
     } catch (err) {
       const error = err as AxiosError;
 

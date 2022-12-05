@@ -13,6 +13,7 @@ import { closeModalForm, modalSelector, setIsSubmitDisabled } from 'store/modalS
 import { usersSelector } from 'store/usersSlice';
 import { EditBoardFormFields } from 'types/boards';
 import { FormControl } from 'types/formInput';
+import { trimFields } from 'utils/trimFields';
 
 import ControlledFormInput from 'components/ControlledFormInput';
 import ModalWithForm from 'components/ModalWithForm';
@@ -31,6 +32,8 @@ const EditBoardForm: FC = () => {
     control,
     handleSubmit,
     reset,
+    trigger,
+    resetField,
     formState: { isValid },
   } = useForm<EditBoardFormFields>({
     defaultValues: {
@@ -44,6 +47,19 @@ const EditBoardForm: FC = () => {
   const formControl = control as FormControl;
 
   const onSubmit = (data: EditBoardFormFields) => {
+    let isFieldsValid = true;
+
+    Object.entries(trimFields(data)).forEach(([key, value]) => {
+      if (!value.length) {
+        resetField(key as keyof EditBoardFormFields);
+        trigger(key as keyof EditBoardFormFields);
+
+        isFieldsValid = false;
+      }
+    });
+
+    if (!isFieldsValid) return;
+
     const boardParams = { ...data, owner: userId as string, users: checkedUsersID };
     if (boardData) {
       dispatch(updateBoard([boardData._id, boardParams]));

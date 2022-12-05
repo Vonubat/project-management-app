@@ -15,6 +15,7 @@ import { usersSelector } from 'store/usersSlice';
 import { FormControl } from 'types/formInput';
 import { TaskFields } from 'types/tasks';
 import { UserWithCheck } from 'types/users';
+import { trimFields } from 'utils/trimFields';
 
 import ControlledFormInput from 'components/ControlledFormInput';
 import ModalWithForm from 'components/ModalWithForm';
@@ -36,6 +37,8 @@ const AddTaskForm: FC = () => {
     control,
     handleSubmit,
     reset,
+    resetField,
+    trigger,
     formState: { isValid },
   } = useForm<TaskFields>({
     mode: 'onChange',
@@ -45,6 +48,19 @@ const AddTaskForm: FC = () => {
   const formControl = control as FormControl;
 
   const onSubmit = (data: TaskFields) => {
+    let isFieldsValid = true;
+
+    Object.entries(trimFields(data)).forEach(([key, value]) => {
+      if (!value.length) {
+        resetField(key as keyof TaskFields);
+        trigger(key as keyof TaskFields);
+
+        isFieldsValid = false;
+      }
+    });
+
+    if (!isFieldsValid) return;
+
     dispatch(setTasksLoading(columnId));
     dispatch(
       createTask({

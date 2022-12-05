@@ -139,7 +139,7 @@ const resources = {
         btn: `Let's start again`,
       },
       socketEvent: {
-        someone: 'SomeOne',
+        someone: 'Someone',
         deleteBoard: 'just delete a board',
         deleteColumn: 'just delete a column',
         deleteTask: 'just delete a task',

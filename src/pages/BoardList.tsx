@@ -59,11 +59,11 @@ export default function Boards() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!!users.length && !!boards.length) {
+    if (!!users.length) {
       socket.connect();
       startListeners();
     } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [!!users.length, !!boards.length]);
+  }, [!!users.length]);
 
   useEffect(() => {
     setFilteredBoards(
