@@ -93,7 +93,6 @@ interface BoardsState {
   boards: BoardData[];
   isAddBoardLoading: boolean;
   boardLoadingArr: string[];
-  usersLoading: boolean;
   currentBoardId: string;
 }
 
@@ -101,7 +100,6 @@ const initialBoardsState: BoardsState = {
   boards: [],
   isAddBoardLoading: false,
   boardLoadingArr: [],
-  usersLoading: false,
   currentBoardId: '',
 };
 
@@ -126,7 +124,6 @@ const boardListSlice = createSlice({
     clearBoardsState: (state) => {
       state.boards = initialBoardsState.boards;
       state.isAddBoardLoading = initialBoardsState.isAddBoardLoading;
-      state.usersLoading = initialBoardsState.usersLoading;
       state.currentBoardId = initialBoardsState.currentBoardId;
     },
   },
@@ -145,7 +142,6 @@ const boardListSlice = createSlice({
     });
 
     builder.addMatcher(isRejectedAction, (state) => {
-      state.usersLoading = false;
       state.boardLoadingArr = [];
     });
   },
