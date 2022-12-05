@@ -9,7 +9,6 @@ import { showNotification } from 'store/notificationSlice';
 import { deleteLocalTaskById, getTasksByBoardId } from 'store/tasksSlice';
 import { getAllUsers, usersSelector } from 'store/usersSlice';
 import { BoardsContentSocketPayload, UsersSocketPayload } from 'types/socket';
-import { Set } from 'typescript';
 
 import { useAppDispatch, useAppSelector } from './typedHooks';
 
