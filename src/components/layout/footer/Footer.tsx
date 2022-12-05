@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { styled } from '@mui/material';
 
-import RSLogo from './UI/RSLogo';
-import SpeedDialGithub from './UI/SpeedDialGithub';
+import RSLogo from './RSLogo';
+import SpeedDialGithub from './SpeedDialGithub';
 
 const StyledFooter = styled('footer')({
   position: 'relative',

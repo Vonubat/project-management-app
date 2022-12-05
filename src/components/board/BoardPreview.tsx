@@ -25,7 +25,7 @@ import { BoardData } from 'types/boards';
 import isTouchEnabled from 'utils/isTouchEnabled';
 import { stringAvatar } from 'utils/stringAvatar';
 
-import ConfirmModal from './ConfirmModal';
+import ConfirmModal from '../ConfirmModal';
 
 type Props = {
   boardData: BoardData;
