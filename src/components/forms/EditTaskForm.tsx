@@ -14,6 +14,7 @@ import { usersSelector } from 'store/usersSlice';
 import { FormControl } from 'types/formInput';
 import { TaskFields } from 'types/tasks';
 import { UserWithCheck } from 'types/users';
+import { trimFields } from 'utils/trimFields';
 
 import ControlledFormInput from 'components/ControlledFormInput';
 import ModalWithForm from 'components/ModalWithForm';
@@ -37,6 +38,8 @@ const EditTaskForm: FC = () => {
     control,
     handleSubmit,
     reset,
+    resetField,
+    trigger,
     formState: { isValid },
   } = useForm<TaskFields>({
     defaultValues: {
@@ -50,6 +53,19 @@ const EditTaskForm: FC = () => {
   const formControl = control as FormControl;
 
   const onSubmit = (data: TaskFields) => {
+    let isFieldsValid = true;
+
+    Object.entries(trimFields(data)).forEach(([key, value]) => {
+      if (!value.length) {
+        resetField(key as keyof TaskFields);
+        trigger(key as keyof TaskFields);
+
+        isFieldsValid = false;
+      }
+    });
+
+    if (!isFieldsValid) return;
+
     const updateParams = {
       taskId,
       data: { ...data, users: boardUsers.filter((u) => u.checked).map((u) => u._id) },

@@ -50,11 +50,6 @@ const VALIDATION_RULE_NAME_PATTERN = {
   message: 'namePattern',
 };
 
-const VALIDATION_ONLY_SPACES = {
-  value: /^[^\s]+(?:$|.*[^\s]+$)/,
-  message: 'noEmptySpace',
-};
-
 export const nameInput: InputOptions = {
   name: 'name',
   label: 'authPage.name',
@@ -99,7 +94,6 @@ export const titleInput: InputOptions = {
     required: VALIDATION_RULE_REQUIRED,
     minLength: VALIDATION_RULE_MIN_LENGTH_3,
     maxLength: VALIDATION_RULE_MAX_LENGTH_100,
-    pattern: VALIDATION_ONLY_SPACES,
   },
 };
 
@@ -111,7 +105,6 @@ export const descriptionInput: InputOptions = {
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
     maxLength: VALIDATION_RULE_MAX_LENGTH_400,
-    pattern: VALIDATION_ONLY_SPACES,
   },
 };
 
@@ -127,7 +120,6 @@ export const columnTitleInput: InputOptions = {
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
     maxLength: VALIDATION_RULE_MAX_LENGTH_40,
-    pattern: VALIDATION_ONLY_SPACES,
   },
 };
 
@@ -139,7 +131,6 @@ export const taskTitleInput: InputOptions = {
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
     maxLength: VALIDATION_RULE_MAX_LENGTH_100,
-    pattern: VALIDATION_ONLY_SPACES,
   },
 };
 
@@ -151,7 +142,6 @@ export const taskDescriptionInput: InputOptions = {
   validationOptions: {
     required: VALIDATION_RULE_REQUIRED,
     maxLength: VALIDATION_RULE_MAX_LENGTH_400,
-    pattern: VALIDATION_ONLY_SPACES,
   },
 };
 
